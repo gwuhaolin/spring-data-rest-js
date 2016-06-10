@@ -1,6 +1,10 @@
 {
   "name": "spring-data-rest.js",
   "description": "js lib for java spring data rest service,work for node.js and commonjs in browser,use fetch API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gwuhaolin/spring-data-rest.js.git"
+  },
   "keywords": [
     "spring",
     "spring data rest",

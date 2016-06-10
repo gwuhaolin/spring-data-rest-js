@@ -241,8 +241,18 @@ exports.extend = function (entityName) {
     var baseURL = exports.config.restBasePath + '/' + entityName;
     baseURL = baseURL.replace(/\/+/, '/');
 
-    function Entity() {
+    /**
+     * js entity manager shin to spring data rest entity
+     * @param {Object|null} initData init json object data to build entity
+     * @returns {Entity}
+     * @constructor
+     */
+    function Entity(initData) {
         var self = this;
+        if (initData instanceof Object) {
+            self.id = parseIdFromData(initData);
+            self._data = initData;
+        }
         /**
          * springRest data entity id.
          * if id is set means this is a exists entity and can use methods:[save,exists,delete]
@@ -253,8 +263,70 @@ exports.extend = function (entityName) {
         /**
          * store one entity's data
          * @type {object}
+         * @private
          */
-        self.data = null;
+        self._data = null;
+        /**
+         * track modify field
+         * @type {Array}
+         * @private
+         */
+        self._modifyFileds = [];
+
+        /**
+         *
+         * @param key
+         * @returns {*}
+         */
+        self.get = function (key) {
+            return self._data[key];
+        };
+        /**
+         *
+         * @param key
+         * @param value
+         */
+        self.set = function (key, value) {
+            self._modifyFileds.push(key);
+            self._data[key] = value;
+        };
+
+        self.href = function () {
+            return exports.config.restBasePath + entityName + '/' + self.id
+        };
+
+        function parseIdFromData(data) {
+            if (data) {
+                var id = data['_links']['self']['href'].split(/\//);
+                id = id[self.id.length - 1];
+                return id;
+            }
+            return null;
+        }
+
+        function translateRelationEntity(data) {
+            if (data instanceof Object) {
+                var json = {};
+                for (var key in data) {
+                    if (data.hasOwnProperty(key)) {
+                        var value = data[key];
+                        json[key] = translateRelationEntity(value);
+                    }
+                }
+                return json;
+            } else if (data instanceof Array) {
+                var arr = [];
+                for (var one in data) {
+                    //noinspection JSUnfilteredForInLoop
+                    arr.push(translateRelationEntity(one));
+                }
+                return arr;
+            } else if (data instanceof Entity) {
+                return data.href();
+            } else {
+                return data;
+            }
+        }
 
         /**
          * create or update entity
@@ -264,11 +336,22 @@ exports.extend = function (entityName) {
          */
         self.save = function () {
             if (self.id) {//update
-                var change = self.data;//TODO get change
-                return exports.patch(baseURL + '/' + self.id).body(change).data();
+                var change = {};
+                for (var key in self._modifyFileds) {
+                    if (self._modifyFileds.hasOwnProperty(key)) {
+                        change[key] = self._data[key];
+                    }
+                }
+                return exports.patch(baseURL + '/' + self.id).body(translateRelationEntity(change)).data();
             } else {//create
-                return exports.post(baseURL).body(self.data).data();
-                //TODO set id prop
+                return new Promise(function (resolve, reject) {
+                    exports.post(baseURL).body(translateRelationEntity(self._data)).data().then(function (data) {
+                        self.id = parseIdFromData(data);
+                        resolve(data);
+                    }).catch(function (err) {
+                        reject(err);
+                    });
+                });
             }
         };
 
@@ -288,7 +371,7 @@ exports.extend = function (entityName) {
             return new Promise(function (resole, reject) {
                 if (self.id) {
                     Entity.findOne(self.id).then(function (json) {
-                        self.data = json;
+                        self._data = json;
                         resole(json);
                     }).catch(function (err) {
                         reject(err);
@@ -307,14 +390,14 @@ exports.extend = function (entityName) {
         self.follow = function (keys) {
             return new Promise(function (resole, reject) {
                 function doFollow() {
-                    exports.mock(self.data).follow(keys).then(function (data) {
+                    exports.mock(self._data).follow(keys).then(function (data) {
                         resole(data);
                     }).catch(function (err) {
                         reject(err);
                     })
                 }
 
-                if (self.data) {
+                if (self._data) {
                     doFollow();
                 } else {
                     if (self.id) {
@@ -333,10 +416,16 @@ exports.extend = function (entityName) {
 
     /**
      * get entity json data by id
-     * @returns {Promise} resolve(json), reject(Request)
+     * @returns {Promise} resolve(Entity), reject(Request)
      */
     Entity.findOne = function (id) {
-        return exports.get(baseURL + '/' + id).data();
+        return new Promise(function (resolve, reject) {
+            exports.get(baseURL + '/' + id).data().then(function (data) {
+                resolve(new Entity(data));
+            }).catch(function (err) {
+                reject(err);
+            })
+        });
     };
 
     /**
@@ -346,10 +435,24 @@ exports.extend = function (entityName) {
      * @param {number} opts.size the page size requested (defaults to 20).
      * @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
      * etc:name,age,desc
-     * @returns {Promise} resolve(), reject(Request)
+     * @returns {Promise} resolve(Entity[]), reject(Request)
+     * resolve array of Entity with prop page store page info
      */
     Entity.findAll = function (opts) {
-        return exports.get(baseURL).query(opts).data();
+        return new Promise(function (resolve, reject) {
+            exports.get(baseURL).query(opts).data().then(function (data) {
+                var re = [];
+                re.page = data.page;
+                var arr = data['_embedded'][entityName];
+                for (var one in arr) {
+                    //noinspection JSUnfilteredForInLoop
+                    re.push(new Entity(one));
+                }
+                resolve(re);
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
     };
 
     /**
