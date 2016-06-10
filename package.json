@@ -1,0 +1,14 @@
+{
+  "name": "spring-data-rest.js",
+  "description": "js lib for java spring data rest service,work for browser and node.js",
+  "keywords": [
+    "spring",
+    "spring data rest",
+    "hypermedia-driven HTTP resources",
+    "restful"
+  ],
+  "version": "0.0.1",
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1"
+  }
+}
