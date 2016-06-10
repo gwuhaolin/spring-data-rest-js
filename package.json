@@ -1,6 +1,6 @@
 {
   "name": "spring-data-rest.js",
-  "description": "js lib for java spring data rest service,work for browser and node.js",
+  "description": "js lib for java spring data rest service,work for node.js and commonjs in browser,use fetch API",
   "keywords": [
     "spring",
     "spring data rest",
