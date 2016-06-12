@@ -1,9 +1,9 @@
 {
-  "name": "spring-data-rest.js",
+  "name": "spring-data-rest-js",
   "description": "js lib for java spring data rest service,work for node.js and commonjs in browser,use fetch API",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gwuhaolin/spring-data-rest.js.git"
+    "url": "git+https://github.com/gwuhaolin/spring-data-rest-js.git"
   },
   "keywords": [
     "spring",
@@ -11,7 +11,7 @@
     "hypermedia-driven HTTP resources",
     "restful"
   ],
-  "version": "0.0.2",
+  "version": "0.0.1",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1"
   },
