@@ -74,7 +74,11 @@ Request.prototype.body = function (obj) {
 /**
  * send request
  * get response's data
- * @returns {Promise} resolve(data), reject()
+ * @returns {Promise} resolve(json|null|string), reject(Request)
+ * resolve:
+ *      if response content-type is null,then resolve null
+ *      if response content-type has string json,then read response data as json and resolve pure json
+ *      else read response data as text and resolve plain text
  */
 Request.prototype.data = function () {
     var self = this;
@@ -92,12 +96,15 @@ Request.prototype.data = function () {
                 self.response = response;
                 if (response.ok) {
                     var contentType = response.headers.get('content-type');
-                    if (contentType != null && /.*json.*/.test(contentType)) {
-                        //noinspection JSUnresolvedFunction
-                        return response.json();
+                    if (contentType == null) {
+                        return Promise.resolve();
                     } else {
-                        self.error = 'unknown content-type:' + contentType;
-                        return Promise.resolve(self);
+                        if (/.*json.*/.test(contentType)) {
+                            //noinspection JSUnresolvedFunction
+                            return response.json();
+                        } else {
+                            return response.text();
+                        }
                     }
                 } else {
                     return Promise.reject(response.statusText);

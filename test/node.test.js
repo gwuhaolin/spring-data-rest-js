@@ -48,15 +48,47 @@ describe('class:Request', ()=> {
 
     describe('method:data', ()=> {
 
-        it('ok', (done)=> {
+        it('response json type', (done)=> {
             let classroom = new Classroom({name: 'D1143'});
             classroom.save().then(function () {
                 return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).data();
             }).then(function (data) {
+                assert.equal(data.constructor, Object);
                 assert.equal(data.name, 'D1143');
                 done();
             }).catch(function (err) {
                 done(err);
+            });
+        });
+
+        it('response status ok with null', (done)=> {
+            let classroom = new Classroom({name: 'D1143'});
+            classroom.save().then(function () {
+                return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).data();
+            }).then(function (data) {
+                assert.equal(data.constructor, Object);
+                assert.equal(data.name, 'D1143');
+                done();
+            }).catch(function (err) {
+                done(err);
+            });
+        });
+
+        it('response status ok with string', (done)=> {
+            springRest.request.get(`${springRest.request.config.restBasePath}`).data().then((str)=> {
+                assert.equal(str.constructor, String);
+                done();
+            }).catch(err=> {
+                done(err);
+            });
+        });
+
+        it('response 404 error', (done)=> {
+            springRest.request.get(`${springRest.request.config.restBasePath}$%404`).data().then(()=> {
+                done('should be 404 error');
+            }).catch(err=> {
+                assert.equal(err.response.status, 404);
+                done();
             });
         });
 
@@ -168,7 +200,7 @@ describe('class:Entity', ()=> {
 
     });
 
-    describe('method:follow',()=>{
+    describe('method:follow', ()=> {
 
         it('follow', (done)=> {
             let student = new Student({name: '吴浩麟', age: 23});
