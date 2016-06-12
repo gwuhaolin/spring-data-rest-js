@@ -1,13 +1,12 @@
-language: java
-jdk:
-  - oraclejdk8
-
 language: node_js
 node_js:
   - "6"
+jdk:
+  - oraclejdk8
 
 install:
   - npm install -g mocha
+  - npm install
   - git clone https://github.com/gwuhaolin/spring-data-rest-js-backend.git
   - cd spring-data-rest-js-backend
   - nohup mvn spring-boot:run &
