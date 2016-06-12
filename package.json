@@ -14,5 +14,8 @@
   "version": "0.0.1",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1"
+  },
+  "scripts": {
+    "test": "mocha"
   }
 }

@@ -1,0 +1,9 @@
+language: node_js
+node_js:
+  - "6"
+
+before_script:
+  - npm install -g mocha
+  - git clone https://github.com/gwuhaolin/spring-data-rest-js-backend.git
+  - cd spring-data-rest-js-backend
+  - mvn spring-boot:run

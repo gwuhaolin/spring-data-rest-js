@@ -1,4 +1,5 @@
 # Spring Data Rest JavaScript Library
+[![Build Status](https://travis-ci.org/gwuhaolin/ShuXun.svg)](https://travis-ci.org/gwuhaolin/ShuXun)
 
 [Spring Data Rest](http://projects.springRest.io/springRest-data-rest/) is makes it easy to build hypermedia-driven REST web services. This lib provider
 useful util to play with the service in js.
@@ -14,7 +15,7 @@ let springRest = require('spring-data-rest.js');
 
 ## Request
 
-### Build Request
+#### Build Request
 **add query param in url**
 ```javascript
 let request = springRest.request.get(springRest.request.config.restBasePath).query({page: 0, size: 2});
@@ -28,7 +29,7 @@ assert.deepEqual(request.options.body, JSON.stringify(param));
 assert.equal(request.options.headers['Content-Type'], 'application/json');
 ```
 
-### Config Request
+#### Config Request
 ```javascript
 springRest.request.config = {
     /**
@@ -47,7 +48,7 @@ springRest.request.config = {
 };
 ```
 
-### Fetch API Global Option
+#### Fetch API Global Option
 fetch API request options
 see [detail](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 ```javascript
@@ -65,7 +66,7 @@ springRest.request.config.globalOptions = {
 }
 ```
 
-### Get Response
+#### Get Response
 request return response in `Promise`,if request success `Promise` will resolve json data,if will reject a `Request` object will `Request.error` store error reason
 
 **get response data**
@@ -100,7 +101,7 @@ let student = new Student({name: '吴浩麟', age: 23});
 ## Entity
 
 **extend**
-gte a class by entity path name
+get a class by entity path name
 ```javascript
 let Student = springRest.extend('students');
 let Academy = springRest.extend('academies');
@@ -193,7 +194,7 @@ let name = 'Ace';
 });
 ```
 
-### Entity static methods
+#### Entity static methods
 **findOne**
 get an entity instance by id
 ```javascript
@@ -255,8 +256,8 @@ Student.findOne(42).then(()=>{}).catch(req=>{
 ```
 
 ## Example
-[example javascript in mocha test](https://github.com/gwuhaolin/spring-data-rest.js/blob/master/test/node.test.js)
-[example java spring data rest code](https://github.com/gwuhaolin/spring-data-rest-js-backend)
+- [example javascript in mocha test](https://github.com/gwuhaolin/spring-data-rest.js/blob/master/test/node.test.js)
+- [example java spring data rest code](https://github.com/gwuhaolin/spring-data-rest-js-backend)
 
 ## Browser Support
 require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API,use isomorphic-fetch as polyfill.
