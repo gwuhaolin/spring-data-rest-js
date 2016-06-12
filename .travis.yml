@@ -6,9 +6,10 @@ language: java
 jdk:
   - oraclejdk8
 
-before_script:
+install:
   - npm install -g mocha
   - git clone https://github.com/gwuhaolin/spring-data-rest-js-backend.git
   - cd spring-data-rest-js-backend
-  - mvn spring-boot:run
+  - nohup mvn spring-boot:run &
+  - sleep 100
 script: mocha
