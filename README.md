@@ -256,8 +256,8 @@ Student.findOne(42).then(()=>{}).catch(req=>{
 ```
 
 ## Example
-- [example javascript in mocha test](https://github.com/gwuhaolin/spring-data-rest.js/blob/master/test/node.test.js)
-- [example java spring data rest code](https://github.com/gwuhaolin/spring-data-rest-js-backend)
+- [javascript in mocha test](https://github.com/gwuhaolin/spring-data-rest.js/blob/master/test/node.test.js)
+- [java spring data rest code](https://github.com/gwuhaolin/spring-data-rest-js-backend)
 
 ## Browser Support
 require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API,use isomorphic-fetch as polyfill.
