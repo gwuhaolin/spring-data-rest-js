@@ -74,8 +74,8 @@ request return response in `Promise`,if request success `Promise` will resolve j
 let classroom = new Classroom({name: 'D1143'});
     classroom.save().then(function () {
     return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
-}).then(function (data) {
-    assert.equal(data.name, 'D1143');
+}).then(function (json) {
+    assert.equal(json.name, 'D1143');
     done();
 }).catch(function (err) {
     done(err);
@@ -89,8 +89,8 @@ let student = new Student({name: '吴浩麟', age: 23});
     student.set('academy', academy);
     student.save().then(()=> {
     return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
-}).then((data)=> {
-    assert.equal(data.name, '计算机学院');
+}).then((json)=> {
+    assert.equal(json.name, '计算机学院');
     done();
 }).catch(err=> {
     done(err);
@@ -116,8 +116,8 @@ let student = new Student();
    student.save().then(()=> {
    assert(student.id != null);
    return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).send();
-}).then((data)=> {
-   assert.equal(data.name, 'Tom');
+}).then((json)=> {
+   assert.equal(json.name, 'Tom');
    done();
 }).catch(err=> {
    done(err);
@@ -183,9 +183,9 @@ let name = 'Ace';
    ace.save().then(()=> {
    student.id = ace.id;
    return student.fetch();
-}).then(data=> {
-   assert.equal(data.name, name);
-   assert.equal(data.age, age);
+}).then(json=> {
+   assert.equal(json.name, name);
+   assert.equal(json.age, age);
    assert.equal(student.get('name'), name);
    assert.equal(student.get('age'), age);
    done();
@@ -228,16 +228,16 @@ method param opts = {
 ```javascript
 let size = 13;
 let pageIndex = 1;
-Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (arr) {
-    assert(Array.isArray(arr));
-    assert.equal(arr.length, size);
-    assert.equal(arr.page.number, pageIndex);
-    assert.equal(arr.page.size, size);
-    assert.equal(springRest.extend.isEntity(arr[0]), true);
-    assert.equal(arr[0].constructor, Student);
+Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (jsonArr) {
+    assert(Array.isArray(jsonArr));
+    assert.equal(jsonArr.length, size);
+    assert.equal(jsonArr.page.number, pageIndex);
+    assert.equal(jsonArr.page.size, size);
+    assert.equal(springRest.extend.isEntity(jsonArr[0]), true);
+    assert.equal(jsonArr[0].constructor, Student);
     for (let i = 1; i < size - 2; i++) {
-        assert.equal(arr[i].get('age') > arr[i + 1].get('age'), true);
-        assert.equal(arr[i - 1].get('age') > arr[i].get('age'), true);
+        assert.equal(jsonArr[i].get('age') > jsonArr[i + 1].get('age'), true);
+        assert.equal(jsonArr[i - 1].get('age') > jsonArr[i].get('age'), true);
     }
     done();
 }).catch(req=> {
