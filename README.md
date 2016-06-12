@@ -1,5 +1,5 @@
 # Spring Data Rest JavaScript Library
-[![Build Status](https://travis-ci.org/gwuhaolin/ShuXun.svg)](https://travis-ci.org/gwuhaolin/ShuXun)
+[![Build Status](https://travis-ci.org/gwuhaolin/spring-data-rest.js.svg?branch=master)](https://travis-ci.org/gwuhaolin/spring-data-rest.js)
 
 [Spring Data Rest](http://projects.springRest.io/springRest-data-rest/) is makes it easy to build hypermedia-driven REST web services. This lib provider
 useful util to play with the service in js.
