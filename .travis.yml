@@ -12,4 +12,5 @@ install:
   - cd spring-data-rest-js-backend
   - nohup mvn spring-boot:run &
   - sleep 100
+  - cd ../
 script: mocha
