@@ -70,6 +70,11 @@ function translateRelationEntity(data) {
     });
 }
 
+/**
+ * build an Entity Class
+ * @param entityName spring data rest entity path
+ * @returns {Entity} an Entity Class can new Class() to instance entity
+ */
 function extend(entityName) {
 
     function Entity(initData) {
