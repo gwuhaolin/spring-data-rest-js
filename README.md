@@ -6,7 +6,7 @@ useful util to play with the service in js.
 
 ## Installation
 ```sh
-$ npm install springRest-data-rest.js --save
+$ npm install spring-data-rest.js --save
 ```
 then use it in commonjs env
 ```javascript
