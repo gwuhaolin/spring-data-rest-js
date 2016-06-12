@@ -28,54 +28,36 @@ describe('class:Request', ()=> {
 
     });
 
-    describe('method:follow', ()=> {
+    describe('method:send', ()=> {
 
-        it('ok', (done)=> {
-            let student = new Student({name: '吴浩麟', age: 23});
-            let academy = new Academy({name: '计算机学院'});
-            student.set('academy', academy);
-            student.save().then(()=> {
-                return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
-            }).then((data)=> {
-                assert.equal(data.name, '计算机学院');
+        it('response json type', (done)=> {
+            let classroom = new Classroom({name: 'D1143'});
+            classroom.save().then(function () {
+                return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
+            }).then(json=> {
+                assert.equal(json.constructor, Object);
+                assert.equal(json.name, 'D1143');
                 done();
             }).catch(err=> {
                 done(err);
             });
         });
 
-    });
-
-    describe('method:data', ()=> {
-
-        it('response json type', (done)=> {
-            let classroom = new Classroom({name: 'D1143'});
-            classroom.save().then(function () {
-                return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).data();
-            }).then(function (data) {
-                assert.equal(data.constructor, Object);
-                assert.equal(data.name, 'D1143');
-                done();
-            }).catch(function (err) {
-                done(err);
-            });
-        });
-
         it('response status ok with null', (done)=> {
             let classroom = new Classroom({name: 'D1143'});
-            classroom.save().then(function () {
-                return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).data();
-            }).then(function (data) {
-                assert.equal(data.constructor, Object);
-                assert.equal(data.name, 'D1143');
+            classroom.save().then(()=> {
+                return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
+            }).then(json=> {
+                assert.equal(json.constructor, Object);
+                assert.equal(json.name, 'D1143');
                 done();
-            }).catch(function (err) {
+            }).catch(err=> {
                 done(err);
             });
         });
 
         it('response status ok with string', (done)=> {
-            springRest.request.get(`${springRest.request.config.restBasePath}`).data().then((str)=> {
+            springRest.request.get(`http://localhost:8080/returnString`).send().then((str)=> {
                 assert.equal(str.constructor, String);
                 done();
             }).catch(err=> {
@@ -84,11 +66,29 @@ describe('class:Request', ()=> {
         });
 
         it('response 404 error', (done)=> {
-            springRest.request.get(`${springRest.request.config.restBasePath}$%404`).data().then(()=> {
+            springRest.request.get(`${springRest.request.config.restBasePath}$%404`).send().then(()=> {
                 done('should be 404 error');
             }).catch(err=> {
                 assert.equal(err.response.status, 404);
                 done();
+            });
+        });
+
+    });
+
+    describe('method:follow', ()=> {
+
+        it('ok', (done)=> {
+            let student = new Student({name: '吴浩麟', age: 23});
+            let academy = new Academy({name: '计算机学院'});
+            student.set('academy', academy);
+            student.save().then(()=> {
+                return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
+            }).then((json)=> {
+                assert.equal(json.name, '计算机学院');
+                done();
+            }).catch(err=> {
+                done(err);
             });
         });
 
@@ -100,10 +100,10 @@ describe('class:Request', ()=> {
             let student = new Student({name: 'HalWu', age: 18});
             let academy = new Academy({name: 'Physics Academy'});
             student.set('academy', academy);
-            student.save().then((data)=> {
-                return springRest.request.mockRequest(data).follow(['self', 'academy', 'self', 'self']);
-            }).then((data)=> {
-                assert.equal(data.name, 'Physics Academy');
+            student.save().then((json)=> {
+                return springRest.request.mockRequest(json).follow(['self', 'academy', 'self', 'self']);
+            }).then((json)=> {
+                assert.equal(json.name, 'Physics Academy');
                 done();
             }).catch(err=> {
                 done(err);
@@ -114,8 +114,8 @@ describe('class:Request', ()=> {
             let student = new Student({name: 'HalWu', age: 18});
             let academy = new Academy({name: 'Physics Academy'});
             student.set('academy', academy);
-            student.save().then((data)=> {
-                return springRest.request.mockRequest(data).follow(['self404', 'academy', 'self', 'self']);
+            student.save().then((json)=> {
+                return springRest.request.mockRequest(json).follow(['self404', 'academy', 'self', 'self']);
             }).then(()=> {
                 done('should be 404');
             }).catch(()=> {
@@ -137,9 +137,9 @@ describe('class:Entity', ()=> {
             student.set('name', 'Tom');
             student.save().then(()=> {
                 assert(student.id != null);
-                return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).data();
-            }).then((data)=> {
-                assert.equal(data.name, 'Tom');
+                return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).send();
+            }).then((json)=> {
+                assert.equal(json.name, 'Tom');
                 done();
             }).catch(err=> {
                 done(err);
@@ -187,9 +187,9 @@ describe('class:Entity', ()=> {
             ace.save().then(()=> {
                 student.id = ace.id;
                 return student.fetch();
-            }).then(data=> {
-                assert.equal(data.name, name);
-                assert.equal(data.age, age);
+            }).then(json=> {
+                assert.equal(json.name, name);
+                assert.equal(json.age, age);
                 assert.equal(student.get('name'), name);
                 assert.equal(student.get('age'), age);
                 done();
@@ -208,8 +208,8 @@ describe('class:Entity', ()=> {
             student.set('academy', academy);
             student.save().then(()=> {
                 return student.follow(['academy']);
-            }).then((data)=> {
-                assert.equal(data.name, '计算机学院');
+            }).then((json)=> {
+                assert.equal(json.name, '计算机学院');
                 done();
             }).catch(err=> {
                 done(err);

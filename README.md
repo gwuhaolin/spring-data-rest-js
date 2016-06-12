@@ -6,11 +6,11 @@ useful util to play with the service in js.
 
 ## Installation
 ```sh
-$ npm install spring-data-rest.js --save
+$ npm install spring-data-rest-js --save
 ```
 then use it in commonjs env
 ```javascript
-let springRest = require('spring-data-rest.js');
+let springRest = require('spring-data-rest-js');
 ```
 
 ## Request
@@ -73,7 +73,7 @@ request return response in `Promise`,if request success `Promise` will resolve j
 ```javascript
 let classroom = new Classroom({name: 'D1143'});
     classroom.save().then(function () {
-    return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).data();
+    return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
 }).then(function (data) {
     assert.equal(data.name, 'D1143');
     done();
@@ -115,7 +115,7 @@ let student = new Student();
    student.set('name', 'Tom');
    student.save().then(()=> {
    assert(student.id != null);
-   return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).data();
+   return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).send();
 }).then((data)=> {
    assert.equal(data.name, 'Tom');
    done();

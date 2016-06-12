@@ -80,7 +80,7 @@ Request.prototype.body = function (obj) {
  *      if response content-type has string json,then read response data as json and resolve pure json
  *      else read response data as text and resolve plain text
  */
-Request.prototype.data = function () {
+Request.prototype.send = function () {
     var self = this;
     return new Promise(function (resolve, reject) {
         if (self.hasSend) {
@@ -135,7 +135,7 @@ Request.prototype.follow = function (keys) {
                 var url = links[key];
                 if (url) {
                     url = url['href'];
-                    exports.get(url).data().then(function (data) {
+                    exports.get(url).send().then(function (data) {
                         doFollow(data);
                     }).catch(function (self) {
                         reject(self);
@@ -149,7 +149,7 @@ Request.prototype.follow = function (keys) {
             }
         }
 
-        self.data().then(function (data) {
+        self.send().then(function (data) {
             doFollow(data);
         }).catch(function (self) {
             reject(self);
