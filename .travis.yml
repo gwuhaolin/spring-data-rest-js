@@ -11,3 +11,4 @@ before_script:
   - git clone https://github.com/gwuhaolin/spring-data-rest-js-backend.git
   - cd spring-data-rest-js-backend
   - mvn spring-boot:run
+  - mocha
