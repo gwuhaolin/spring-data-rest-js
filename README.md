@@ -262,3 +262,8 @@ Student.findOne(42).then(()=>{}).catch(req=>{
 ## Browser Support
 require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API,use isomorphic-fetch as polyfill.
 [Browser Support](https://github.com/github/fetch#browser-support)
+
+## License
+[MIT](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2016 HalWu
