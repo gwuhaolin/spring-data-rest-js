@@ -260,7 +260,7 @@ Student.findOne(42).then(()=>{}).catch(req=>{
 - [java spring data rest code](https://github.com/gwuhaolin/spring-data-rest-js-backend)
 
 ## Browser Support
-require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API,use isomorphic-fetch as polyfill.
+require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API,use [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) as polyfill.
 [Browser Support](https://github.com/github/fetch#browser-support)
 
 ## License
