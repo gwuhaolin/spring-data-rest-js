@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+/node_modules/
+.idea/
+test/
+.travis.yml
+README.md
+.gitignore
