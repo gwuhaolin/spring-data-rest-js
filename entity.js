@@ -340,7 +340,7 @@ function extend(entityName) {
      */
     Entity.findAll = function (opts) {
         return new Promise(function (resolve, reject) {
-            request.get(Entity.entityBaseURL).query(opts).send().then(function (json) {
+            request.get(Entity.entityBaseURL).queryParam(opts).send().then(function (json) {
                 var re = [];
                 re.page = json.page;
                 var arr = json['_embedded'][Entity.entityName];

@@ -78,14 +78,14 @@ describe('class:Request', ()=> {
 
     });
 
-    describe('method:query', ()=> {
+    describe('method:queryParam', ()=> {
 
         it('ok', ()=> {
             let param1 = {name: '中'};
             let param2 = {age: 23, academy: 'physics'};
-            let request = springRest.request.get(springRest.request.config.baseURL).query(param1);
+            let request = springRest.request.get(springRest.request.config.baseURL).queryParam(param1);
             assert.equal(request.options.url, springRest.request.config.baseURL + '?name=中');
-            request.query(param2);
+            request.queryParam(param2);
             assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&academy=physics');
         });
     });

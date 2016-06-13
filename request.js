@@ -74,7 +74,7 @@ function Request(options) {
  * @param {Object} obj
  * @returns {Request}
  */
-Request.prototype.query = function (obj) {
+Request.prototype.queryParam = function (obj) {
     var arr = [];
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
