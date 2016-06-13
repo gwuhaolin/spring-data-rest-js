@@ -44,7 +44,6 @@ describe('class:Request', ()=> {
                 }).catch(err=> {
                     done(err);
                 });
-
             });
 
             after(()=> {

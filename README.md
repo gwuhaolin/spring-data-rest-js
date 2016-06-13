@@ -44,7 +44,19 @@ springRest.request.config = {
      * springRestRest data rest base url
      * @type {string}
      */
-    restBasePath: 'http://api.hostname/rest'
+    restBasePath: 'http://api.hostname/rest',
+    /**
+     * call before send fetch request
+     * default do nothing
+     * @param {Request} request Request ref
+     */
+    fetchStartHook: null,
+    /**
+     * call after fetch request end
+     * default do nothing
+     * @param {Request} request Request ref
+     */
+    fetchEndHook: null
 };
 ```
 
@@ -97,6 +109,39 @@ let student = new Student({name: '吴浩麟', age: 23});
 });
 ```
 
+**fetch global hook**
+
+before send fetch request
+```javascript
+let flag = 'old';
+let request = springRest.request.get(springRest.request.config.restBasePath);
+springRest.request.config.fetchStartHook = function (req) {
+    assert.equal(req, request);
+    flag = 'new';
+};
+request.send().then(()=> {
+    assert.equal(flag, 'new');
+    done();
+}).catch(err=> {
+    done(err);
+});
+```
+
+fetch request is finished
+```javascript
+let flag = 'old';
+let request = springRest.request.get(springRest.request.config.restBasePath);
+springRest.request.config.fetchEndHook = function (req) {
+    assert.equal(req, request);
+    flag = 'new';
+};
+request.send().then(()=> {
+    assert.equal(flag, 'new');
+    done();
+}).catch(err=> {
+    done(err);
+});
+```
 
 ## Entity
 
