@@ -10,6 +10,13 @@ let Classroom = springRest.entity.extend('classrooms');
 
 describe('class:Request', ()=> {
 
+    it('auto revise url', function () {
+        let req = springRest.request.get('//hello/name//');
+        assert.equal(req.options.url, `http://localhost:8080/hello/name/`);
+        let req2 = springRest.request.get('https://google.com//hello/name');
+        assert.equal(req2.options.url, `https://google.com/hello/name`);
+    });
+
     describe('attr:config', ()=> {
 
         describe('attr:config.globalFetchOptions', ()=> {
@@ -22,7 +29,7 @@ describe('class:Request', ()=> {
                     }
                 };
                 let req = springRest.request.get('/hello');
-                assert.equal(req.options.url, `/hello`);
+                assert.equal(req.options.url, `http://localhost:8080/hello`);
                 assert.equal(req.options.credentials, 'same-origin');
                 assert.deepEqual(req.options.headers, {
                     'X': 'x'

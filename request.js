@@ -9,7 +9,6 @@ var config = {
 
     /**
      * fetch request base url
-     * notice: must end with /
      * @type {string}
      */
     baseURL: '/',
@@ -219,11 +218,19 @@ Request.prototype.follow = function (keys) {
 function buildHttpMethodFunction(method) {
 
     /**
-     * make http request user fetch API
-     * @param {string} url full url string
+     * make http request user fetch API.
+     * if path param is a complete url then fetch ues path as url,
+     * else path is not a complete url string but just a path then fetch url=config.baseURL+path
+     * url string will been auto revised, etc: http://localhost/api//user///id/ will convert to http://localhost/api/user/id
+     * @param {string} path url path
      * @returns {Request}
      */
-    function httpRequest(url) {
+    function httpRequest(path) {
+        var url = path;
+        if (!/^https?:\/\/.+$/g.test(path)) {//path is not a full url
+            url = config.baseURL + path;
+        }
+        url = url.replace(/\/{2,}/g, '/').replace(/:\//g, '://');
         return new Request({url: url, method: method});
     }
 
@@ -234,35 +241,35 @@ exports.config = config;
 
 /**
  * make http get request
- * @param {string} url full url string
+ * @param {string} path url path
  * @returns {Request}
  */
 exports.get = buildHttpMethodFunction('GET');
 
 /**
  * make http post request
- * @param {string} url full url string
+ * @param {string} path url path
  * @returns {Request}
  */
 exports.post = buildHttpMethodFunction('POST');
 
 /**
  * make http patch request
- * @param {string} url full url string
+ * @param {string} path url path
  * @returns {Request}
  */
 exports.patch = buildHttpMethodFunction('PATCH');
 
 /**
  * make http put request
- * @param {string} url full url string
+ * @param {string} path url path
  * @returns {Request}
  */
 exports.put = buildHttpMethodFunction('PUT');
 
 /**
  * make http delete request
- * @param {string} url full url string
+ * @param {string} path url path
  * @returns {Request}
  */
 exports.delete = buildHttpMethodFunction('DELETE');

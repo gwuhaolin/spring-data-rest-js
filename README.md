@@ -41,6 +41,18 @@ assert.equal(request.options.body, 'name%3D%E4%B8%AD%E5%9B%BD&age%3D123');
 assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
 ```
 
+**auto revise url**
+if path param is a complete url then fetch ues path as url,
+else path is not a complete url string but just a path then fetch url=config.baseURL+path
+url string will been auto revised, etc: http://localhost/api//user///id/ will convert to http://localhost/api/user/id
+```javascript
+springRest.request.config.baseURL = 'http://localhost:8080/';
+let req = springRest.request.get('//hello/name//');
+assert.equal(req.options.url, `http://localhost:8080/hello/name/`);
+let req2 = springRest.request.get('https://google.com//hello/name');
+assert.equal(req2.options.url, `https://google.com/hello/name`);
+```
+
 #### Config Request
 ```javascript
 springRest.request.config = {

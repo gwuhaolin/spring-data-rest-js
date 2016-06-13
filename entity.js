@@ -6,7 +6,7 @@ var config = {
      * spring-data-rest-base-path config
      * @type {string}
      */
-    restBaseURL: ''
+    restBaseURL: '/'
 };
 
 /**
@@ -307,7 +307,7 @@ function extend(entityName) {
      * get spring data rest entity repo url
      * @returns {string}
      */
-    Entity.entityBaseURL = config.restBaseURL + Entity.entityName;
+    Entity.entityBaseURL = config.restBaseURL + '/' + Entity.entityName;
 
     /**
      * get entity json data by id
