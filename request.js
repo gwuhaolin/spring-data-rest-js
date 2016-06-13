@@ -230,7 +230,7 @@ function buildHttpMethodFunction(method) {
     function httpRequest(path) {
         var url = path;
         if (!/^https?:\/\/.+$/g.test(path)) {//path is not a full url
-            url = config.baseURL + path;
+            url = config.baseURL + '/' + path;
         }
         url = url.replace(/\/{2,}/g, '/').replace(/:\//g, '://');
         return new Request({url: url, method: method});
