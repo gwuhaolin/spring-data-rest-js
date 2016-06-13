@@ -16,7 +16,7 @@ let springRest = require('spring-data-rest-js');
 ## Request
 
 #### Build Request
-#####add query param in url
+#####add query param in ur
 ```javascript
 let param1 = {name: '中'};
 let param2 = {age: 23, academy: 'physics'};
@@ -36,9 +36,15 @@ assert.equal(request.options.headers['Content-Type'], 'application/json');
 #####send request body as form
 ```javascript
 let param = {name: '中国', age: 123};
-let request = springRest.request.post('/').formBody(param);
-assert.equal(request.options.body, 'name%3D%E4%B8%AD%E5%9B%BD&age%3D123');
+let request = springRest.request.post('/postForm').formBody(param);
 assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
+request.send().then(json=> {
+    assert.equal(json.name, '中国');
+    assert.equal(json.age, 123);
+    done();
+}).catch(err=> {
+    done(err);
+});
 ```
 
 #####auto revise url
@@ -103,15 +109,19 @@ springRest.request.config.globalFetchOptions = {
 #### Get Response
 request return response in `Promise`,if request success `Promise` will resolve json data,if will reject a `Request` object will `Request.error` store error reason
 
-##### get response data
+##### send request and get response data
 ```javascript
 let classroom = new Classroom({name: 'D1143'});
-    classroom.save().then(function () {
-    return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
-}).then(function (json) {
+let request;
+classroom.save().then(function () {
+    request = springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`);
+    return request.send();
+}).then(json=> {
+    assert.equal(json.constructor, Object);
     assert.equal(json.name, 'D1143');
+    assert.deepEqual(json, request.responseData);
     done();
-}).catch(function (err) {
+}).catch(err=> {
     done(err);
 });
 ```
@@ -119,9 +129,9 @@ let classroom = new Classroom({name: 'D1143'});
 ##### follow links
 ```javascript
 let student = new Student({name: '吴浩麟', age: 23});
-    let academy = new Academy({name: '计算机学院'});
-    student.set('academy', academy);
-    student.save().then(()=> {
+let academy = new Academy({name: '计算机学院'});
+student.set('academy', academy);
+student.save().then(()=> {
     return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
 }).then((json)=> {
     assert.equal(json.name, '计算机学院');
@@ -170,9 +180,9 @@ request.send().then(()=> {
 ##### extend
 get a class by entity path name
 ```javascript
-let Student = springRest.extend('students');
-let Academy = springRest.extend('academies');
-let Classroom = springRest.extend('classrooms');
+let Student = springRest.entity.extend('students');
+let Academy = springRest.entity.extend('academies');
+let Classroom = springRest.entity.extend('classrooms');
 ```
 
 ##### config entity
@@ -191,15 +201,15 @@ config = {
 class ref to spring data entity,use entity class to make a new entity instance and then create it on service.
 ```javascript
 let student = new Student();
-   student.set('name', 'Tom');
-   student.save().then(()=> {
-   assert(student.id != null);
-   return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).send();
+student.set('name', 'Tom');
+student.save().then(()=> {
+    assert(student.id != null);
+    return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).send();
 }).then((json)=> {
-   assert.equal(json.name, 'Tom');
-   done();
+    assert.equal(json.name, 'Tom');
+    done();
 }).catch(err=> {
-   done(err);
+    done(err);
 })
 ```
 
@@ -218,14 +228,14 @@ student.id = 26;
 if a entity instance has id attr,and use entity's `set(key,value)` method update attr,then can call entity's `save()` method to patch update change to service.
 ```javascript
 let academy = new Academy({name: 'Math'});
-   academy.save().then(()=> {
-   academy.set('name', 'Physics');
-   return academy.save();
+academy.save().then(()=> {
+    academy.set('name', 'Physics');
+    return academy.save();
 }).then(()=> {
-   assert.deepEqual(academy.get('name'), 'Physics');
-   done();
+    assert.deepEqual(academy.get('name'), 'Physics');
+    done();
 }).catch(err=> {
-   done(err);
+    done(err);
 })
 ```
 
@@ -238,13 +248,13 @@ if id is null,then will send HTTP POST request to create an entity
 use entity's `delete()` method to remove this entity in service.
 ```javascript
 let student = new Student();
-   student.save().then(()=> {
-   return student.delete();
+student.save().then(()=> {
+    return student.delete();
 }).then(()=> {
-   return Student.findOne(student.id);
+    return Student.findOne(student.id);
 }).catch(err=> {
-   assert.equal(err.response.status, 404);
-   done();
+    assert.equal(err.response.status, 404);
+    done();
 });
 ```
 Entity Class also has a static method to delete an entity by id
@@ -256,20 +266,36 @@ Student.delete(42).then(()=>{},err=>{})
 entity's data properties store in data
 ```javascript
 let name = 'Ace';
-   let age = 20;
-   let ace = new Student({name: name, age: age});
-   let student = new Student();
-   ace.save().then(()=> {
-   student.id = ace.id;
-   return student.fetch();
+let age = 20;
+let ace = new Student({name: name, age: age});
+let student = new Student();
+ace.save().then(()=> {
+    student.id = ace.id;
+    return student.fetch();
 }).then(json=> {
-   assert.equal(json.name, name);
-   assert.equal(json.age, age);
-   assert.equal(student.get('name'), name);
-   assert.equal(student.get('age'), age);
-   done();
+    assert.equal(json.name, name);
+    assert.equal(json.age, age);
+    assert.equal(student.get('name'), name);
+    assert.equal(student.get('age'), age);
+    done();
 }).catch(err=> {
-   done(err);
+    done(err);
+});
+```
+
+##### follow
+send request follow this entity's _links's href
+```javascript
+let student = new Student({name: '吴浩麟', age: 23});
+let academy = new Academy({name: '计算机学院'});
+student.set('academy', academy);
+student.save().then(()=> {
+    return student.follow(['academy']);
+}).then((json)=> {
+    assert.equal(json.name, '计算机学院');
+    done();
+}).catch(err=> {
+    done(err);
 });
 ```
 
@@ -348,7 +374,7 @@ Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}
 ## Error Handle
 all error will be reject by return promise,and the error object is instance of `Request` will `Request.error` properties store error reason
 ```javascript
-Student.findOne(42).then(()=>{}).catch(req=>{
+Student.findOne(404).then(()=>{}).catch(req=>{
     console.error(req.error);
     console.log(req.response.status);
     console.log(req.response.statusText);
