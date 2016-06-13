@@ -111,7 +111,7 @@ Request.prototype.formBody = function (obj) {
     var arr = [];
     for (var key in obj) {
         if (obj.hasOwnProperty(key)) {
-            arr.push(encodeURIComponent(key + '=' + obj[key]));
+            arr.push(key + '=' + obj[key]);
         }
     }
     this.options.body = arr.join('&');

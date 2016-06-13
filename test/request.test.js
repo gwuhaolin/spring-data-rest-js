@@ -110,11 +110,17 @@ describe('class:Request', ()=> {
 
     describe('method:formBody', ()=> {
 
-        it('ok', ()=> {
+        it('ok', (done)=> {
             let param = {name: '中国', age: 123};
-            let request = springRest.request.post('/').formBody(param);
-            assert.equal(request.options.body, 'name%3D%E4%B8%AD%E5%9B%BD&age%3D123');
+            let request = springRest.request.post('/postForm').formBody(param);
             assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
+            request.send().then(json=> {
+                assert.equal(json.name, '中国');
+                assert.equal(json.age, 123);
+                done();
+            }).catch(err=> {
+                done(err);
+            });
         });
 
     });
