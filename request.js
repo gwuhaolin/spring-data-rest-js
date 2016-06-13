@@ -143,30 +143,32 @@ Request.prototype.send = function () {
             var fetchEndHook = config.fetchEndHook;
             fetchStartHook && fetchStartHook(self);
             //noinspection JSUnresolvedFunction
-            fetch(self.options.url, self.options).then(function (response) {
+            fetch(self.options.url, self.options).then(function (response) {//parse response data by content-type
                 self.response = response;
-                if (response.ok) {
-                    var contentType = response.headers.get('content-type');
-                    if (contentType == null) {
-                        return Promise.resolve();
-                    } else {
-                        if (/.*json.*/.test(contentType)) {
-                            //noinspection JSUnresolvedFunction
-                            return response.json();
-                        } else {
-                            return response.text();
-                        }
-                    }
+                var contentType = response.headers.get('content-type');
+                if (contentType == null) {
+                    return Promise.resolve();
                 } else {
-                    return Promise.reject(response.statusText);
+                    if (/.*json.*/.test(contentType)) {
+                        //noinspection JSUnresolvedFunction
+                        return response.json();
+                    } else {
+                        return response.text();
+                    }
                 }
-            }).then(function (json) {
+            }).then(function (data) {//resolve or reject data by response.status is ok
+                self.responseData = data;
+                if (self.response.ok) {
+                    return Promise.resolve(data);
+                } else {
+                    return Promise.reject(data);
+                }
+            }).then(function (data) {
                 fetchEndHook && fetchEndHook(self);
-                self.responseData = json;
-                resolve(json);
+                resolve(data);
             }).catch(function (err) {
-                fetchEndHook && fetchEndHook(self);
                 self.error = err;
+                fetchEndHook && fetchEndHook(self);
                 reject(self);
             })
         }
