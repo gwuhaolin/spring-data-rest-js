@@ -18,8 +18,12 @@ let springRest = require('spring-data-rest-js');
 #### Build Request
 **add query param in url**
 ```javascript
-let request = springRest.request.get(springRest.request.config.restBasePath).query({page: 0, size: 2});
-assert.equal(request.options.url, springRest.request.config.restBasePath + '?page=0&size=2');
+let param1 = {name: '中'};
+let param2 = {age: 23, academy: 'physics'};
+let request = springRest.request.get(springRest.request.config.baseURL).query(param1);
+assert.equal(request.options.url, springRest.request.config.baseURL + '?name=中');
+request.query(param2);
+assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&academy=physics');
 ```
 **send json as request body**
 ```javascript
@@ -44,7 +48,7 @@ springRest.request.config = {
      * springRestRest data rest base url
      * @type {string}
      */
-    restBasePath: 'http://api.hostname/rest',
+    baseURL: 'http://api.hostname/rest',
     /**
      * call before send fetch request
      * default do nothing
@@ -114,7 +118,7 @@ let student = new Student({name: '吴浩麟', age: 23});
 before send fetch request
 ```javascript
 let flag = 'old';
-let request = springRest.request.get(springRest.request.config.restBasePath);
+let request = springRest.request.get(springRest.request.config.baseURL);
 springRest.request.config.fetchStartHook = function (req) {
     assert.equal(req, request);
     flag = 'new';
@@ -130,7 +134,7 @@ request.send().then(()=> {
 fetch request is finished
 ```javascript
 let flag = 'old';
-let request = springRest.request.get(springRest.request.config.restBasePath);
+let request = springRest.request.get(springRest.request.config.baseURL);
 springRest.request.config.fetchEndHook = function (req) {
     assert.equal(req, request);
     flag = 'new';

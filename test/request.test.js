@@ -2,10 +2,10 @@
 let assert = require('assert');
 let springRest = require('../index');
 
-springRest.request.config.restBasePath = 'http://localhost:8080/rest/';
-let Student = springRest.extend('students');
-let Academy = springRest.extend('academies');
-let Classroom = springRest.extend('classrooms');
+springRest.request.config.baseURL = 'http://localhost:8080/rest/';
+let Student = springRest.entity.extend('students');
+let Academy = springRest.entity.extend('academies');
+let Classroom = springRest.entity.extend('classrooms');
 
 describe('class:Request', ()=> {
 
@@ -33,7 +33,7 @@ describe('class:Request', ()=> {
 
             it('ok', (done)=> {
                 let flag = 'old';
-                let request = springRest.request.get(springRest.request.config.restBasePath);
+                let request = springRest.request.get(springRest.request.config.baseURL);
                 springRest.request.config.fetchStartHook = function (req) {
                     assert.equal(req, request);
                     flag = 'new';
@@ -56,7 +56,7 @@ describe('class:Request', ()=> {
 
             it('ok', (done)=> {
                 let flag = 'old';
-                let request = springRest.request.get(springRest.request.config.restBasePath);
+                let request = springRest.request.get(springRest.request.config.baseURL);
                 springRest.request.config.fetchEndHook = function (req) {
                     assert.equal(req, request);
                     flag = 'new';
@@ -82,10 +82,10 @@ describe('class:Request', ()=> {
         it('ok', ()=> {
             let param1 = {name: '中'};
             let param2 = {age: 23, academy: 'physics'};
-            let request = springRest.request.get(springRest.request.config.restBasePath).query(param1);
-            assert.equal(request.options.url, springRest.request.config.restBasePath + '?name=中');
+            let request = springRest.request.get(springRest.request.config.baseURL).query(param1);
+            assert.equal(request.options.url, springRest.request.config.baseURL + '?name=中');
             request.query(param2);
-            assert.equal(request.options.url, springRest.request.config.restBasePath + '?age=23&academy=physics');
+            assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&academy=physics');
         });
     });
 
@@ -141,7 +141,7 @@ describe('class:Request', ()=> {
         });
 
         it('response 404 error', (done)=> {
-            springRest.request.get(`${springRest.request.config.restBasePath}$%404`).send().then(()=> {
+            springRest.request.get(`${springRest.request.config.baseURL}$%404`).send().then(()=> {
                 done('should be 404 error');
             }).catch(err=> {
                 assert.equal(err.response.status, 404);

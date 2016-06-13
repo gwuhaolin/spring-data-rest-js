@@ -2,10 +2,10 @@
 let assert = require('assert');
 let springRest = require('../index');
 
-springRest.request.config.restBasePath = 'http://localhost:8080/rest/';
-let Student = springRest.extend('students');
-let Academy = springRest.extend('academies');
-let Classroom = springRest.extend('classrooms');
+springRest.request.config.baseURL = 'http://localhost:8080/rest/';
+let Student = springRest.entity.extend('students');
+let Academy = springRest.entity.extend('academies');
+let Classroom = springRest.entity.extend('classrooms');
 
 describe('class:Entity', ()=> {
 
@@ -145,7 +145,7 @@ describe('class:Entity', ()=> {
                 assert.equal(arr.length, size);
                 assert.equal(arr.page.number, pageIndex);
                 assert.equal(arr.page.size, size);
-                assert.equal(springRest.extend.isEntity(arr[0]), true);
+                assert.equal(springRest.entity.isEntity(arr[0]), true);
                 assert.equal(arr[0].constructor, Student);
                 for (let i = 1; i < size - 2; i++) {
                     assert.equal(arr[i].get('age') > arr[i + 1].get('age'), true);

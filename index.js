@@ -7,7 +7,7 @@
  * @author gwuhaolin
  */
 var request = require('./request');
-var extend = require('./entity');
+var entity = require('./entity');
 
 exports.request = request;
-exports.extend = extend;
+exports.entity = entity;

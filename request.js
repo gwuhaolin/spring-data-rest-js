@@ -1,6 +1,32 @@
 'use strict';
 var fetch = require('isomorphic-fetch');
 
+var config = {
+    /**
+     * options used to every fetch request
+     */
+    globalFetchOptions: {},
+
+    /**
+     * fetch request base url
+     * notice: must end with /
+     * @type {string}
+     */
+    baseURL: '/',
+    /**
+     * call before send fetch request
+     * default do nothing
+     * @param {Request} request Request ref
+     */
+    fetchStartHook: null,
+    /**
+     * call after fetch request end
+     * default do nothing
+     * @param {Request} request Request ref
+     */
+    fetchEndHook: null
+};
+
 /**
  * Request
  * @param {object} options
@@ -14,7 +40,7 @@ function Request(options) {
      * store request options
      * @type {object}
      */
-    this.options = Object.assign({headers: {}, body: null}, options, exports.config.globalFetchOptions);
+    this.options = Object.assign({headers: {}, body: null}, options, config.globalFetchOptions);
 
     /**
      * has this request been send
@@ -91,8 +117,8 @@ Request.prototype.send = function () {
             }
         } else {
             self.hasSend = true;
-            var fetchStartHook = exports.config.fetchStartHook;
-            var fetchEndHook = exports.config.fetchEndHook;
+            var fetchStartHook = config.fetchStartHook;
+            var fetchEndHook = config.fetchEndHook;
             fetchStartHook && fetchStartHook(self);
             //noinspection JSUnresolvedFunction
             fetch(self.options.url, self.options).then(function (response) {
@@ -177,31 +203,7 @@ function buildHttpMethodFunction(method) {
     return httpRequest;
 }
 
-exports.config = {
-    /**
-     * options used to every fetch request
-     */
-    globalFetchOptions: {},
-
-    /**
-     * springRest data rest base url
-     * notice: must end with /
-     * @type {string}
-     */
-    restBasePath: '/',
-    /**
-     * call before send fetch request
-     * default do nothing
-     * @param {Request} request Request ref
-     */
-    fetchStartHook: null,
-    /**
-     * call after fetch request end
-     * default do nothing
-     * @param {Request} request Request ref
-     */
-    fetchEndHook: null
-};
+exports.config = config;
 
 /**
  * make http get request

@@ -1,6 +1,14 @@
 'use strict';
 var Request = require('./request');
 
+var config = {
+    /**
+     * spring-data-rest-base-path config
+     * @type {string}
+     */
+    restBaseURL: ''
+};
+
 /**
  * if any is a Entity instance
  * @param {*} any
@@ -102,7 +110,7 @@ function extend(entityName) {
         /**
          * get this entity's spring data rest resource uri.
          * if this entity's has data and data has _link properties,use _data['_links']['self']['href']
-         * else use config.restBasePath + entityName + '/' + self.id
+         * else use config.restBaseURL + entityName + '/' + self.id
          * @returns {string} URI string link to this entity
          */
         this.href = function () {
@@ -299,7 +307,7 @@ function extend(entityName) {
      * get spring data rest entity repo url
      * @returns {string}
      */
-    Entity.entityBaseURL = Request.config.restBasePath + Entity.entityName;
+    Entity.entityBaseURL = config.restBaseURL + Entity.entityName;
 
     /**
      * get entity json data by id
@@ -357,5 +365,6 @@ function extend(entityName) {
     return Entity;
 }
 
-extend.isEntity = isEntity;
-module.exports = extend;
+exports.config = config;
+exports.extend = extend;
+exports.isEntity = isEntity;
