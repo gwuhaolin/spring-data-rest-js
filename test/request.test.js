@@ -2,7 +2,8 @@
 let assert = require('assert');
 let springRest = require('../index');
 
-springRest.request.config.baseURL = 'http://localhost:8080/rest/';
+springRest.request.config.baseURL = 'http://localhost:8080/';
+springRest.entity.config.restBaseURL = 'http://localhost:8080/rest/';
 let Student = springRest.entity.extend('students');
 let Academy = springRest.entity.extend('academies');
 let Classroom = springRest.entity.extend('classrooms');

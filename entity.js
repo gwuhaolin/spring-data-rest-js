@@ -1,5 +1,5 @@
 'use strict';
-var Request = require('./request');
+var request = require('./request');
 
 var config = {
     /**
@@ -186,7 +186,7 @@ function extend(entityName) {
         this._create = function () {
             return new Promise(function (resolve, reject) {
                 translateRelationEntity(self.data()).then(function (body) {
-                    return Request.post(self.constructor.entityBaseURL).body(body).send();
+                    return request.post(self.constructor.entityBaseURL).body(body).send();
                 }).then(function (json) {
                     self.patchData(json);
                     resolve(json);
@@ -214,16 +214,16 @@ function extend(entityName) {
                 var value = this.get(key);
                 if (links[key] && ((isEntity(value)) || (Array.isArray(value) && isEntity(value[0])))) {//is relation entity or entity array
                     value = translateRelationEntity(value);
-                    var request = Request.put(links[key]['href']).body(value);
-                    request.options.headers['Content-Type'] = 'text/uri-list';
-                    promiseList.push(request.data());
+                    var req = request.put(links[key]['href']).body(value);
+                    req.options.headers['Content-Type'] = 'text/uri-list';
+                    promiseList.push(req.data());
                 } else {
                     pureChange[key] = value;
                 }
             }
             return new Promise(function (resolve, reject) {
                 translateRelationEntity(pureChange).then(function (json) {
-                    promiseList.unshift(Request.patch(self.href()).body(json).send());
+                    promiseList.unshift(request.patch(self.href()).body(json).send());
                     return Promise.all(promiseList);
                 }).then(function (jsonArr) {
                     var data = jsonArr[0];
@@ -281,7 +281,7 @@ function extend(entityName) {
         this.follow = function (keys) {
             return new Promise(function (resole, reject) {
                 function doFollow() {
-                    Request.mockRequest(self._data).follow(keys).then(function (json) {
+                    request.mockRequest(self._data).follow(keys).then(function (json) {
                         resole(json);
                     }).catch(function (err) {
                         reject(err);
@@ -317,7 +317,7 @@ function extend(entityName) {
     Entity.findOne = function (id) {
         if (id) {
             return new Promise(function (resolve, reject) {
-                Request.get(Entity.entityBaseURL + '/' + id).send().then(function (json) {
+                request.get(Entity.entityBaseURL + '/' + id).send().then(function (json) {
                     resolve(new Entity(json));
                 }).catch(function (err) {
                     reject(err);
@@ -340,7 +340,7 @@ function extend(entityName) {
      */
     Entity.findAll = function (opts) {
         return new Promise(function (resolve, reject) {
-            Request.get(Entity.entityBaseURL).query(opts).send().then(function (json) {
+            request.get(Entity.entityBaseURL).query(opts).send().then(function (json) {
                 var re = [];
                 re.page = json.page;
                 var arr = json['_embedded'][Entity.entityName];
@@ -359,7 +359,7 @@ function extend(entityName) {
      * @returns {Promise} resolve(json), reject(Request)
      */
     Entity.delete = function (id) {
-        return Request.delete(Entity.entityBaseURL + '/' + id).send();
+        return request.delete(Entity.entityBaseURL + '/' + id).send();
     };
 
     return Entity;
