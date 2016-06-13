@@ -35,7 +35,7 @@ springRest.request.config = {
     /**
      * options used to every fetch request
      */
-    globalOptions: {},
+    globalFetchOptions: {},
     /**
      * API base url
      */
@@ -52,7 +52,7 @@ springRest.request.config = {
 fetch API request options
 see [detail](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 ```javascript
-springRest.request.config.globalOptions = {
+springRest.request.config.globalFetchOptions = {
    method: 'POST',
    headers: {
         'Accept': 'application/json',

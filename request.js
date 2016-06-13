@@ -14,7 +14,7 @@ function Request(options) {
      * store request options
      * @type {object}
      */
-    this.options = Object.assign({headers: {}, body: null}, options, exports.config.globalOptions);
+    this.options = Object.assign({headers: {}, body: null}, options, exports.config.globalFetchOptions);
 
     /**
      * has this request been send
@@ -44,25 +44,25 @@ function Request(options) {
 }
 
 /**
- * append query param to url
- * @param {object|null} obj
+ * append ? and query param to end of url
+ * @param {Object} obj
  * @returns {Request}
  */
 Request.prototype.query = function (obj) {
-    if (obj) {
-        var arr = [];
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                arr.push(key + '=' + obj[key])
-            }
+    var arr = [];
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            arr.push(key + '=' + obj[key])
         }
-        this.options.url += '?' + arr.join('&');
     }
+    this.options.url += '?' + arr.join('&');
     return this;
 };
 /**
- * set request body as json type
- * @param {object} obj
+ * set request body use json
+ * support json type only
+ * HTTP Header Content-Type will set as application/json
+ * @param {object} obj pure json object
  * @returns {Request}
  */
 Request.prototype.body = function (obj) {
@@ -72,7 +72,7 @@ Request.prototype.body = function (obj) {
 };
 
 /**
- * send request
+ * send fetch request
  * get response's data
  * @returns {Promise} resolve(json|null|string), reject(Request)
  * resolve:
@@ -91,6 +91,9 @@ Request.prototype.send = function () {
             }
         } else {
             self.hasSend = true;
+            var fetchStartHook = exports.config.fetchStartHook;
+            var fetchEndHook = exports.config.fetchEndHook;
+            fetchStartHook && fetchStartHook(self);
             //noinspection JSUnresolvedFunction
             fetch(self.options.url, self.options).then(function (response) {
                 self.response = response;
@@ -110,9 +113,11 @@ Request.prototype.send = function () {
                     return Promise.reject(response.statusText);
                 }
             }).then(function (json) {
+                fetchEndHook && fetchEndHook(self);
                 self.responseData = json;
                 resolve(json);
             }).catch(function (err) {
+                fetchEndHook && fetchEndHook(self);
                 self.error = err;
                 reject(self);
             })
@@ -176,14 +181,26 @@ exports.config = {
     /**
      * options used to every fetch request
      */
-    globalOptions: {},
+    globalFetchOptions: {},
 
     /**
      * springRest data rest base url
      * notice: must end with /
      * @type {string}
      */
-    restBasePath: '/'
+    restBasePath: '/',
+    /**
+     * call before send fetch request
+     * default do nothing
+     * @param {Request} request Request ref
+     */
+    fetchStartHook: null,
+    /**
+     * call after fetch request end
+     * default do nothing
+     * @param {Request} request Request ref
+     */
+    fetchEndHook: null
 };
 
 /**
