@@ -25,12 +25,20 @@ assert.equal(request.options.url, springRest.request.config.baseURL + '?name=中
 request.queryParam(param2);
 assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&academy=physics');
 ```
-**send json as request body**
+**send request body as json**
 ```javascript
 let param = {name: '吴浩麟', age: 23};
 let request = springRest.request.post('/').jsonBody(param);
-assert.deepEqual(request.options.body, JSON.stringify(param));
+assert.equal(request.options.body, JSON.stringify(param));
 assert.equal(request.options.headers['Content-Type'], 'application/json');
+```
+
+**send request body as form**
+```javascript
+let param = {name: '中国', age: 123};
+let request = springRest.request.post('/').formBody(param);
+assert.equal(request.options.body, 'name%3D%E4%B8%AD%E5%9B%BD&age%3D123');
+assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
 ```
 
 #### Config Request

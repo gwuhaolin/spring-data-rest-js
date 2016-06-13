@@ -101,6 +101,26 @@ Request.prototype.jsonBody = function (obj) {
 };
 
 /**
+ * set request body as form type
+ * parse obj to form string
+ * HTTP Header Content-Type will set as application/x-www-form-urlencoded
+ * can't use it to upload file
+ * @param obj pure json object
+ * @returns {Request}
+ */
+Request.prototype.formBody = function (obj) {
+    var arr = [];
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key)) {
+            arr.push(encodeURIComponent(key + '=' + obj[key]));
+        }
+    }
+    this.options.body = arr.join('&');
+    this.options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+    return this;
+};
+
+/**
  * send fetch request
  * get response's data
  * @returns {Promise} resolve(json|null|string), reject(Request)
