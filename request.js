@@ -13,12 +13,14 @@ var config = {
      * @type {string}
      */
     baseURL: '/',
+
     /**
      * call before send fetch request
      * default do nothing
      * @param {Request} request Request ref
      */
     fetchStartHook: null,
+
     /**
      * call after fetch request end
      * default do nothing
@@ -84,6 +86,7 @@ Request.prototype.queryParam = function (obj) {
     this.options.url = this.options.url.split('?')[0] + '?' + arr.join('&');
     return this;
 };
+
 /**
  * set request body use json
  * support json type only
@@ -154,7 +157,11 @@ Request.prototype.send = function () {
 /**
  * send request follow _links's href
  * @param {string[]} keys links href in order
- * @returns {Promise} resolve(json), reject(Request)
+ * @returns {Promise} resolve(json|null|string), reject(Request)
+ * resolve:
+ *      if response content-type is null,then resolve null
+ *      if response content-type has string json,then read response data as json and resolve pure json
+ *      else read response data as text and resolve plain text
  */
 Request.prototype.follow = function (keys) {
     var self = this;
