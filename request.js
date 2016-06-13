@@ -44,7 +44,7 @@ function Request(options) {
 }
 
 /**
- * append ? and query param to end of url
+ * reset query param in request url by append ? and query param to end of url
  * @param {Object} obj
  * @returns {Request}
  */
@@ -55,7 +55,7 @@ Request.prototype.query = function (obj) {
             arr.push(key + '=' + obj[key])
         }
     }
-    this.options.url += '?' + arr.join('&');
+    this.options.url = this.options.url.split('?')[0] + '?' + arr.join('&');
     return this;
 };
 /**
