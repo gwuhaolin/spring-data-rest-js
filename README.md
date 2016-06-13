@@ -40,15 +40,13 @@ springRest.request.config = {
      * options used to every fetch request
      */
     globalFetchOptions: {},
+
     /**
-     * API base url
-     */
-    basePath: 'http://api.hostname',
-    /**
-     * springRestRest data rest base url
+     * fetch request base url
+     * notice: must end with /
      * @type {string}
      */
-    baseURL: 'http://api.hostname/rest',
+    baseURL: '/',
     /**
      * call before send fetch request
      * default do nothing
@@ -155,6 +153,18 @@ get a class by entity path name
 let Student = springRest.extend('students');
 let Academy = springRest.extend('academies');
 let Classroom = springRest.extend('classrooms');
+```
+
+**config entity**
+```javascript
+config = {
+    /**
+     * spring-data-rest-base-path config
+     * @type {string}
+     */
+    restBaseURL: ''
+};
+
 ```
 
 **create entity**
