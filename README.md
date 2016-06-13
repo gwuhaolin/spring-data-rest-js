@@ -333,64 +333,15 @@ call query methods exposed by a repository. The path and name of the query metho
 - @param {number} opts.size the page size requested (defaults to 20).
 - @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
 ```javascript
-describe('method:search', ()=> {
-    //insert 50 student first
-    before((done)=> {
-        let promiseList = [];
-        for (let i = 1000; i < 1030; i++) {
-            let student = new Student({name: `student${i}`, age: i});
-            promiseList.push(student.save());
-        }
-        Promise.all(promiseList).then(()=> {
-            done();
-        }).catch(req=> {
-            done(req);
-        });
-    });
-
-    it('search one entity', (done)=> {
-        Student.search('nameEquals', {name: 'student1015'}).then(entity=> {
-            assert.equal(entity.get('age'), 1015);
-            done();
-        }).catch(err=> {
-            done(err);
-        })
-    });
-
-    it('search entity array', (done)=> {
-        Student.search('nameContaining', {keyword: '1023'}).then(entityList=> {
-            assert.equal(entityList.constructor, Array);
-            assert.equal(entityList.length, 1);
-            assert.equal(entityList[0].get('age'), 1023);
-            done();
-        }).catch(err=> {
-            done(err);
-        });
-    });
-
-    it('search with pageable', (done)=> {
-        Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}).then(entityList=> {
-            assert.equal(entityList.constructor, Array);
-            assert.equal(entityList.length, 5);
-            for (var i = 0; i < entityList.length - 2; i++) {
-                assert(entityList[i].get('age') > entityList[i + 1].get('age'));
-            }
-            done();
-        }).catch(err=> {
-            done(err);
-        });
-    });
-
-    it('404 error', (done)=> {
-        Student.search('nameEquals', {name: 'student101512'}).then(()=> {
-            done('should be 404 error');
-        }).catch(err=> {
-            assert.equal(err.response.status, 404);
-            done();
-        })
-    });
+Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}).then(entityList=> {
+    assert.equal(entityList.length, 5);
+    for (var i = 0; i < entityList.length - 2; i++) {
+        assert(entityList[i].get('age') > entityList[i + 1].get('age'));
+    }
+    done();
+}).catch(err=> {
+    done(err);
 });
-
 ```
 
 
@@ -404,9 +355,9 @@ Student.findOne(42).then(()=>{}).catch(req=>{
 })
 ```
 
-## Example
-- [javascript in mocha test](https://github.com/gwuhaolin/spring-data-rest.js/blob/master/test/node.test.js)
-- [java spring data rest code](https://github.com/gwuhaolin/spring-data-rest-js-backend)
+## Example Code
+- [javascript](https://github.com/gwuhaolin/spring-data-rest.js/blob/master/test/node.test.js)
+- [java](https://github.com/gwuhaolin/spring-data-rest-js-backend)
 
 ## Browser Support
 require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API,use [isomorphic-fetch](https://github.com/matthew-andrews/isomorphic-fetch) as polyfill.
