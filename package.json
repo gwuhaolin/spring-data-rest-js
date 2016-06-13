@@ -11,7 +11,7 @@
     "hypermedia-driven HTTP resources",
     "restful"
   ],
-  "version": "0.0.4",
+  "version": "0.0.5",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1"
   },
