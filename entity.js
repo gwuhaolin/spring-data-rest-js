@@ -366,7 +366,7 @@ function extend(entityName) {
     };
 
     /**
-     * a search resource if the backing repository exposes query methods.
+     * search resource if the backing repository exposes query methods.
      * call query methods exposed by a repository. The path and name of the query method resources can be modified using @RestResource on the method declaration.
      *
      * @param {string} searchPath spring data rest searchMethod path string

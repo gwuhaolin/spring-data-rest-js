@@ -299,12 +299,11 @@ Student.findOne('404404').then(()=> {
 ```
 
 ##### findAll
-find entity list with page and sort
-method param opts = {
-    page:'the page number to access (0 indexed, defaults to 0)',
-    size:'the page size requested (defaults to 20)',
-    sort:'a collection of sort directives in the format ($propertyName,)+[asc|desc]?  etc:name,age,desc'
-}
+collection resource with page and sort.
+Returns all entities the repository servers through its findAll(…) method. If the repository is a paging repository we include the pagination links if necessary and additional page metadata.*
+- @param {number} opts.page the page number to access (0 indexed, defaults to 0).
+- @param {number} opts.size the page size requested (defaults to 20).
+- @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
 ```javascript
 let size = 13;
 let pageIndex = 1;
@@ -324,6 +323,76 @@ Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (
     done(req);
 });
 ```
+
+##### search
+search resource if the backing repository exposes query methods.
+call query methods exposed by a repository. The path and name of the query method resources can be modified using @RestResource on the method declaration.
+- @param {string} searchPath spring data rest searchMethod path string
+- @param {Object} opts search params, If the query method has pagination capabilities (indicated in the URI template pointing to the resource) the resource takes the following parameters:
+- @param {number} opts.page the page number to access (0 indexed, defaults to 0).
+- @param {number} opts.size the page size requested (defaults to 20).
+- @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
+```javascript
+describe('method:search', ()=> {
+    //insert 50 student first
+    before((done)=> {
+        let promiseList = [];
+        for (let i = 1000; i < 1030; i++) {
+            let student = new Student({name: `student${i}`, age: i});
+            promiseList.push(student.save());
+        }
+        Promise.all(promiseList).then(()=> {
+            done();
+        }).catch(req=> {
+            done(req);
+        });
+    });
+
+    it('search one entity', (done)=> {
+        Student.search('nameEquals', {name: 'student1015'}).then(entity=> {
+            assert.equal(entity.get('age'), 1015);
+            done();
+        }).catch(err=> {
+            done(err);
+        })
+    });
+
+    it('search entity array', (done)=> {
+        Student.search('nameContaining', {keyword: '1023'}).then(entityList=> {
+            assert.equal(entityList.constructor, Array);
+            assert.equal(entityList.length, 1);
+            assert.equal(entityList[0].get('age'), 1023);
+            done();
+        }).catch(err=> {
+            done(err);
+        });
+    });
+
+    it('search with pageable', (done)=> {
+        Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}).then(entityList=> {
+            assert.equal(entityList.constructor, Array);
+            assert.equal(entityList.length, 5);
+            for (var i = 0; i < entityList.length - 2; i++) {
+                assert(entityList[i].get('age') > entityList[i + 1].get('age'));
+            }
+            done();
+        }).catch(err=> {
+            done(err);
+        });
+    });
+
+    it('404 error', (done)=> {
+        Student.search('nameEquals', {name: 'student101512'}).then(()=> {
+            done('should be 404 error');
+        }).catch(err=> {
+            assert.equal(err.response.status, 404);
+            done();
+        })
+    });
+});
+
+```
+
 
 ## Error Handle
 all error will be reject by return promise,and the error object is instance of `Request` will `Request.error` properties store error reason
