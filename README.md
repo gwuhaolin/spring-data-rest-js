@@ -16,7 +16,7 @@ let springRest = require('spring-data-rest-js');
 ## Request
 
 #### Build Request
-**add query param in url**
+#####add query param in url
 ```javascript
 let param1 = {name: '中'};
 let param2 = {age: 23, academy: 'physics'};
@@ -25,7 +25,7 @@ assert.equal(request.options.url, springRest.request.config.baseURL + '?name=中
 request.queryParam(param2);
 assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&academy=physics');
 ```
-**send request body as json**
+#####send request body as json
 ```javascript
 let param = {name: '吴浩麟', age: 23};
 let request = springRest.request.post('/').jsonBody(param);
@@ -33,7 +33,7 @@ assert.equal(request.options.body, JSON.stringify(param));
 assert.equal(request.options.headers['Content-Type'], 'application/json');
 ```
 
-**send request body as form**
+#####send request body as form
 ```javascript
 let param = {name: '中国', age: 123};
 let request = springRest.request.post('/').formBody(param);
@@ -41,7 +41,7 @@ assert.equal(request.options.body, 'name%3D%E4%B8%AD%E5%9B%BD&age%3D123');
 assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
 ```
 
-**auto revise url**
+#####auto revise url
 if path param is a complete url then fetch ues path as url,
 else path is not a complete url string but just a path then fetch url=config.baseURL+path
 url string will been auto revised, etc: http://localhost/api//user///id/ will convert to http://localhost/api/user/id
@@ -103,7 +103,7 @@ springRest.request.config.globalFetchOptions = {
 #### Get Response
 request return response in `Promise`,if request success `Promise` will resolve json data,if will reject a `Request` object will `Request.error` store error reason
 
-**get response data**
+##### get response data
 ```javascript
 let classroom = new Classroom({name: 'D1143'});
     classroom.save().then(function () {
@@ -116,7 +116,7 @@ let classroom = new Classroom({name: 'D1143'});
 });
 ```
 
-**follow links**
+##### follow links
 ```javascript
 let student = new Student({name: '吴浩麟', age: 23});
     let academy = new Academy({name: '计算机学院'});
@@ -131,7 +131,7 @@ let student = new Student({name: '吴浩麟', age: 23});
 });
 ```
 
-**fetch global hook**
+##### fetch global hook
 
 before send fetch request
 ```javascript
@@ -167,7 +167,7 @@ request.send().then(()=> {
 
 ## Entity
 
-**extend**
+##### extend
 get a class by entity path name
 ```javascript
 let Student = springRest.extend('students');
@@ -175,7 +175,7 @@ let Academy = springRest.extend('academies');
 let Classroom = springRest.extend('classrooms');
 ```
 
-**config entity**
+##### config entity
 ```javascript
 config = {
     /**
@@ -187,7 +187,7 @@ config = {
 
 ```
 
-**create entity**
+##### create entity
 class ref to spring data entity,use entity class to make a new entity instance and then create it on service.
 ```javascript
 let student = new Student();
@@ -203,7 +203,7 @@ let student = new Student();
 })
 ```
 
-**id**
+##### id
 the entity instance's id.
 for a existed entity set instance's id then you can use instance
 - `fetch` method to fetch entity's data
@@ -214,7 +214,7 @@ let student = new Student();
 student.id = 26;
 ```
 
-**update entity**
+##### update entity
 if a entity instance has id attr,and use entity's `set(key,value)` method update attr,then can call entity's `save()` method to patch update change to service.
 ```javascript
 let academy = new Academy({name: 'Math'});
@@ -229,12 +229,12 @@ let academy = new Academy({name: 'Math'});
 })
 ```
 
-**save or update**
+##### save or update
 create or update entity
 if id properties is set,then will send HTTP PATCH request to update an entity(will watch change in data properties to track change fields)
 if id is null,then will send HTTP POST request to create an entity
 
-**delete entity**
+##### delete entity
 use entity's `delete()` method to remove this entity in service.
 ```javascript
 let student = new Student();
@@ -252,7 +252,7 @@ Entity Class also has a static method to delete an entity by id
 Student.delete(42).then(()=>{},err=>{})
 ```
 
-**fetch data**
+##### fetch data
 entity's data properties store in data
 ```javascript
 let name = 'Ace';
@@ -274,7 +274,8 @@ let name = 'Ace';
 ```
 
 #### Entity static methods
-**findOne**
+
+##### findOne
 get an entity instance by id
 ```javascript
 let classRoom = new Classroom({name: '东16412'});
@@ -297,7 +298,7 @@ Student.findOne('404404').then(()=> {
 })
 ```
 
-**findAll**
+##### findAll
 find entity list with page and sort
 method param opts = {
     page:'the page number to access (0 indexed, defaults to 0)',
