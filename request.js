@@ -91,7 +91,7 @@ Request.prototype.queryParam = function (obj) {
  * @param {object} obj pure json object
  * @returns {Request}
  */
-Request.prototype.body = function (obj) {
+Request.prototype.jsonBody = function (obj) {
     this.options.body = JSON.stringify(obj);
     this.options.headers['Content-Type'] = 'application/json';
     return this;

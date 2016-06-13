@@ -90,11 +90,11 @@ describe('class:Request', ()=> {
         });
     });
 
-    describe('method:body', ()=> {
+    describe('method:jsonBody', ()=> {
 
         it('ok', ()=> {
             let param = {name: '吴浩麟', age: 23};
-            let request = springRest.request.post('/').body(param);
+            let request = springRest.request.post('/').jsonBody(param);
             assert.deepEqual(request.options.body, JSON.stringify(param));
             assert.equal(request.options.headers['Content-Type'], 'application/json');
         });

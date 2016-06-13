@@ -28,7 +28,7 @@ assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&a
 **send json as request body**
 ```javascript
 let param = {name: '吴浩麟', age: 23};
-let request = springRest.request.post('/').body(param);
+let request = springRest.request.post('/').jsonBody(param);
 assert.deepEqual(request.options.body, JSON.stringify(param));
 assert.equal(request.options.headers['Content-Type'], 'application/json');
 ```

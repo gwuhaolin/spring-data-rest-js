@@ -186,7 +186,7 @@ function extend(entityName) {
         this._create = function () {
             return new Promise(function (resolve, reject) {
                 translateRelationEntity(self.data()).then(function (body) {
-                    return request.post(self.constructor.entityBaseURL).body(body).send();
+                    return request.post(self.constructor.entityBaseURL).jsonBody(body).send();
                 }).then(function (json) {
                     self.patchData(json);
                     resolve(json);
@@ -214,7 +214,7 @@ function extend(entityName) {
                 var value = this.get(key);
                 if (links[key] && ((isEntity(value)) || (Array.isArray(value) && isEntity(value[0])))) {//is relation entity or entity array
                     value = translateRelationEntity(value);
-                    var req = request.put(links[key]['href']).body(value);
+                    var req = request.put(links[key]['href']).jsonBody(value);
                     req.options.headers['Content-Type'] = 'text/uri-list';
                     promiseList.push(req.data());
                 } else {
@@ -223,7 +223,7 @@ function extend(entityName) {
             }
             return new Promise(function (resolve, reject) {
                 translateRelationEntity(pureChange).then(function (json) {
-                    promiseList.unshift(request.patch(self.href()).body(json).send());
+                    promiseList.unshift(request.patch(self.href()).jsonBody(json).send());
                     return Promise.all(promiseList);
                 }).then(function (jsonArr) {
                     var data = jsonArr[0];
