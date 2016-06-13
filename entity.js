@@ -329,7 +329,22 @@ function extend(entityName) {
     };
 
     /**
-     * find entity list with page and sort
+     * read spring data rest's response json data then parse and return entity array
+     * @param json
+     * @returns {Array}
+     */
+    function jsonToEntityList(json) {
+        var re = [];
+        var arr = json['_embedded'][Entity.entityName];
+        for (var i = 0; i < arr.length; i++) {
+            re.push(new Entity(arr[i]));
+        }
+        return re;
+    }
+
+    /**
+     * collection resource with page and sort.
+     * Returns all entities the repository servers through its findAll(…) method. If the repository is a paging repository we include the pagination links if necessary and additional page metadata.*
      * @param {object} opts
      * @param {number} opts.page the page number to access (0 indexed, defaults to 0).
      * @param {number} opts.size the page size requested (defaults to 20).
@@ -341,17 +356,44 @@ function extend(entityName) {
     Entity.findAll = function (opts) {
         return new Promise(function (resolve, reject) {
             request.get(Entity.entityBaseURL).queryParam(opts).send().then(function (json) {
-                var re = [];
+                var re = jsonToEntityList(json);
                 re.page = json.page;
-                var arr = json['_embedded'][Entity.entityName];
-                for (var i = 0; i < arr.length; i++) {
-                    re.push(new Entity(arr[i]));
-                }
                 resolve(re);
             }).catch(function (err) {
                 reject(err);
             });
         });
+    };
+
+    /**
+     * a search resource if the backing repository exposes query methods.
+     * call query methods exposed by a repository. The path and name of the query method resources can be modified using @RestResource on the method declaration.
+     *
+     * @param {string} searchPath spring data rest searchMethod path string
+     *
+     * @param {Object} opts search params
+     * If the query method has pagination capabilities (indicated in the URI template pointing to the resource) the resource takes the following parameters:
+     * @param {number} opts.page the page number to access (0 indexed, defaults to 0).
+     * @param {number} opts.size the page size requested (defaults to 20).
+     * @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
+     *
+     * @returns {Promise} resolve(Entity|Entity[]) reject(Request)
+     * resolve:
+     *      if response json data has _embedded attr then resolve Entity array,
+     *      else resolve one Entity
+     */
+    Entity.search = function (searchPath, opts) {
+        return new Promise(function (resolve, reject) {
+            request.get(Entity.entityBaseURL + '/search/' + searchPath).queryParam(opts).send().then(function (json) {
+                try {//response entity list
+                    resolve(jsonToEntityList(json));
+                } catch (_) {//response one entity
+                    resolve(new Entity(json));
+                }
+            }).catch(function (err) {
+                reject(err);
+            })
+        })
     };
 
     /**
