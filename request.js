@@ -76,13 +76,15 @@ function Request(options) {
  * @returns {Request}
  */
 Request.prototype.queryParam = function (obj) {
-    var arr = [];
-    for (var key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            arr.push(key + '=' + obj[key])
+    if (obj != null) {
+        var arr = [];
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                arr.push(key + '=' + obj[key])
+            }
         }
+        this.options.url = this.options.url.split('?')[0] + '?' + arr.join('&');
     }
-    this.options.url = this.options.url.split('?')[0] + '?' + arr.join('&');
     return this;
 };
 

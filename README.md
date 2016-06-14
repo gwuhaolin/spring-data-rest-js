@@ -323,6 +323,19 @@ Student.findOne('404404').then(()=> {
     done();
 })
 ```
+support projection
+```javascript
+let student = new Student({name: 'HalWu', age: 23});
+student.save().then(()=> {
+    return Student.findOne(student.id, {projection: 'NoAge'});
+}).then(entity=> {
+    assert.equal(entity.get('name'), 'HalWu');
+    assert.equal(entity.get('age'), null);
+    done();
+}).catch(err=> {
+    done(err);
+})
+```
 
 ##### findAll
 collection resource with page and sort.

@@ -120,6 +120,19 @@ describe('class:Entity', ()=> {
                 done();
             })
         });
+
+        it('projection support', (done)=> {
+            let student = new Student({name: 'HalWu', age: 23});
+            student.save().then(()=> {
+                return Student.findOne(student.id, {projection: 'NoAge'});
+            }).then(entity=> {
+                assert.equal(entity.get('name'), 'HalWu');
+                assert.equal(entity.get('age'), null);
+                done();
+            }).catch(err=> {
+                done(err);
+            })
+        });
     });
 
     describe('method:findAll', ()=> {

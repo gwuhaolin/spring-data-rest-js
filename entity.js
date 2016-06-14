@@ -312,12 +312,14 @@ function extend(entityName) {
     /**
      * get entity json data by id
      * @param {string|number} id entity id
+     * @param {object?} queryParam
+     * @param {string} queryParam.projection the name of the projection you set with @Projection annotation name attributes
      * @returns {Promise} resolve(Entity), reject(Request)
      */
-    Entity.findOne = function (id) {
+    Entity.findOne = function (id, queryParam) {
         if (id) {
             return new Promise(function (resolve, reject) {
-                request.get(Entity.entityBaseURL + '/' + id).send().then(function (json) {
+                request.get(Entity.entityBaseURL + '/' + id).queryParam(queryParam).send().then(function (json) {
                     resolve(new Entity(json));
                 }).catch(function (err) {
                     reject(err);
@@ -345,17 +347,17 @@ function extend(entityName) {
     /**
      * collection resource with page and sort.
      * Returns all entities the repository servers through its findAll(…) method. If the repository is a paging repository we include the pagination links if necessary and additional page metadata.*
-     * @param {object} opts
-     * @param {number} opts.page the page number to access (0 indexed, defaults to 0).
-     * @param {number} opts.size the page size requested (defaults to 20).
-     * @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
+     * @param {object} queryParam
+     * @param {number} queryParam.page the page number to access (0 indexed, defaults to 0).
+     * @param {number} queryParam.size the page size requested (defaults to 20).
+     * @param {string} queryParam.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
      * etc:name,age,desc
      * @returns {Promise} resolve(Entity[]), reject(Request)
      * resolve array of Entity with prop page store page info
      */
-    Entity.findAll = function (opts) {
+    Entity.findAll = function (queryParam) {
         return new Promise(function (resolve, reject) {
-            request.get(Entity.entityBaseURL).queryParam(opts).send().then(function (json) {
+            request.get(Entity.entityBaseURL).queryParam(queryParam).send().then(function (json) {
                 var re = jsonToEntityList(json);
                 re.page = json.page;
                 resolve(re);
@@ -371,20 +373,20 @@ function extend(entityName) {
      *
      * @param {string} searchPath spring data rest searchMethod path string
      *
-     * @param {Object} opts search params
+     * @param {Object} queryParam search params
      * If the query method has pagination capabilities (indicated in the URI template pointing to the resource) the resource takes the following parameters:
-     * @param {number} opts.page the page number to access (0 indexed, defaults to 0).
-     * @param {number} opts.size the page size requested (defaults to 20).
-     * @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
+     * @param {number} queryParam.page the page number to access (0 indexed, defaults to 0).
+     * @param {number} queryParam.size the page size requested (defaults to 20).
+     * @param {string} queryParam.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
      *
      * @returns {Promise} resolve(Entity|Entity[]) reject(Request)
      * resolve:
      *      if response json data has _embedded attr then resolve Entity array,
      *      else resolve one Entity
      */
-    Entity.search = function (searchPath, opts) {
+    Entity.search = function (searchPath, queryParam) {
         return new Promise(function (resolve, reject) {
-            request.get(Entity.entityBaseURL + '/search/' + searchPath).queryParam(opts).send().then(function (json) {
+            request.get(Entity.entityBaseURL + '/search/' + searchPath).queryParam(queryParam).send().then(function (json) {
                 try {//response entity list
                     resolve(jsonToEntityList(json));
                 } catch (_) {//response one entity
