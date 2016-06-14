@@ -12,6 +12,7 @@
     "restful"
   ],
   "version": "0.0.6",
+  "license": "MIT",
   "dependencies": {
     "isomorphic-fetch": "^2.2.1"
   },
