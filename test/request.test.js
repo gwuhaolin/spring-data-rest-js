@@ -165,6 +165,15 @@ describe('class:Request', ()=> {
             });
         });
 
+        it('response status ok with string-with auto send', (done)=> {
+            springRest.request.get(`/returnString`).then((str)=> {
+                assert.equal(str.constructor, String);
+                done();
+            }).catch(err=> {
+                done(err);
+            });
+        });
+
         it('response 404 error', (done)=> {
             springRest.request.get(`/$%404`).send().then(()=> {
                 done('should be 404 error');
@@ -174,8 +183,28 @@ describe('class:Request', ()=> {
             });
         });
 
+        it('response 404 error-with auto send', (done)=> {
+            springRest.request.get(`/$%404`).then(()=> {
+                done('should be 404 error');
+            }).catch(err=> {
+                assert.equal(err.response.status, 404);
+                done();
+            });
+        });
+
         it('response error with json', (done)=> {
             springRest.request.get(`/errorWithJSON`).send().then(()=> {
+                done('should be 404 error');
+            }).catch(req=> {
+                assert.equal(req.response.status, 500);
+                assert.equal(req.error.constructor, Object);
+                assert.equal(req.error.message, "for errorWithJSON test");
+                done();
+            });
+        });
+
+        it('response error with json-with auto send', (done)=> {
+            springRest.request.get(`/errorWithJSON`).then(()=> {
                 done('should be 404 error');
             }).catch(req=> {
                 assert.equal(req.response.status, 500);

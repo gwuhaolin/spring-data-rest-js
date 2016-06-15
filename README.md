@@ -9,7 +9,7 @@ useful util to play with the service in js.
 $ npm install spring-data-rest-js --save
 ```
 then use it in commonjs env
-```javascript
+```js
 let springRest = require('spring-data-rest-js');
 ```
 
@@ -17,7 +17,7 @@ let springRest = require('spring-data-rest-js');
 
 #### Build Request
 #####add query param in ur
-```javascript
+```js
 let param1 = {name: '中'};
 let param2 = {age: 23, academy: 'physics'};
 let request = springRest.request.get(springRest.request.config.baseURL).queryParam(param1);
@@ -26,7 +26,7 @@ request.queryParam(param2);
 assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&academy=physics');
 ```
 #####send request body as json
-```javascript
+```js
 let param = {name: '吴浩麟', age: 23};
 let request = springRest.request.post('/').jsonBody(param);
 assert.equal(request.options.body, JSON.stringify(param));
@@ -34,7 +34,7 @@ assert.equal(request.options.headers['Content-Type'], 'application/json');
 ```
 
 #####send request body as form
-```javascript
+```js
 let param = {name: '中国', age: 123};
 let request = springRest.request.post('/postForm').formBody(param);
 assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
@@ -51,7 +51,7 @@ request.send().then(json=> {
 if path param is a complete url then fetch ues path as url,
 else path is not a complete url string but just a path then fetch url=config.baseURL+path
 url string will been auto revised, etc: http://localhost/api//user///id/ will convert to http://localhost/api/user/id
-```javascript
+```js
 springRest.request.config.baseURL = 'http://localhost:8080/';
 let req = springRest.request.get('//hello/name//');
 assert.equal(req.options.url, `http://localhost:8080/hello/name/`);
@@ -60,7 +60,7 @@ assert.equal(req2.options.url, `https://google.com/hello/name`);
 ```
 
 #### Config Request
-```javascript
+```js
 springRest.request.config = {
     /**
      * options used to every fetch request
@@ -91,7 +91,7 @@ springRest.request.config = {
 #### Fetch API Global Option
 fetch API request options
 see [detail](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
-```javascript
+```js
 springRest.request.config.globalFetchOptions = {
    method: 'POST',
    headers: {
@@ -110,7 +110,7 @@ springRest.request.config.globalFetchOptions = {
 request return response in `Promise`,if request success `Promise` will resolve json data,if will reject a `Request` object will `Request.error` store error reason
 
 ##### send request and get response data
-```javascript
+```js
 let classroom = new Classroom({name: 'D1143'});
 let request;
 classroom.save().then(function () {
@@ -126,8 +126,19 @@ classroom.save().then(function () {
 });
 ```
 
+##### auto send
+auto call Request.send() when without call send() to use then()
+```js
+springRest.request.get(`/returnString`).then((str)=> {
+    assert.equal(str.constructor, String);
+    done();
+}).catch(err=> {
+    done(err);
+});
+```
+
 ##### follow links
-```javascript
+```js
 let student = new Student({name: '吴浩麟', age: 23});
 let academy = new Academy({name: '计算机学院'});
 student.set('academy', academy);
@@ -144,7 +155,7 @@ student.save().then(()=> {
 ##### fetch global hook
 
 before send fetch request
-```javascript
+```js
 let flag = 'old';
 let request = springRest.request.get(springRest.request.config.baseURL);
 springRest.request.config.fetchStartHook = function (req) {
@@ -160,7 +171,7 @@ request.send().then(()=> {
 ```
 
 fetch request is finished
-```javascript
+```js
 let flag = 'old';
 let request = springRest.request.get(springRest.request.config.baseURL);
 springRest.request.config.fetchEndHook = function (req) {
@@ -179,14 +190,14 @@ request.send().then(()=> {
 
 ##### extend
 get a class by entity path name
-```javascript
+```js
 let Student = springRest.entity.extend('students');
 let Academy = springRest.entity.extend('academies');
 let Classroom = springRest.entity.extend('classrooms');
 ```
 
 ##### config entity
-```javascript
+```js
 config = {
     /**
      * spring-data-rest-base-path config
@@ -199,7 +210,7 @@ config = {
 
 ##### create entity
 class ref to spring data entity,use entity class to make a new entity instance and then create it on service.
-```javascript
+```js
 let student = new Student();
 student.set('name', 'Tom');
 student.save().then(()=> {
@@ -219,14 +230,14 @@ for a existed entity set instance's id then you can use instance
 - `fetch` method to fetch entity's data
 - `save` method to update entity's updated properties
 - `delete` method to delete this entity
-```javascript
+```js
 let student = new Student();
 student.id = 26;
 ```
 
 ##### update entity
 if a entity instance has id attr,and use entity's `set(key,value)` method update attr,then can call entity's `save()` method to patch update change to service.
-```javascript
+```js
 let academy = new Academy({name: 'Math'});
 academy.save().then(()=> {
     academy.set('name', 'Physics');
@@ -246,7 +257,7 @@ if id is null,then will send HTTP POST request to create an entity
 
 ##### delete entity
 use entity's `delete()` method to remove this entity in service.
-```javascript
+```js
 let student = new Student();
 student.save().then(()=> {
     return student.delete();
@@ -258,13 +269,13 @@ student.save().then(()=> {
 });
 ```
 Entity Class also has a static method to delete an entity by id
-```javascript
+```js
 Student.delete(42).then(()=>{},err=>{})
 ```
 
 ##### fetch data
 entity's data properties store in data
-```javascript
+```js
 let name = 'Ace';
 let age = 20;
 let ace = new Student({name: name, age: age});
@@ -285,7 +296,7 @@ ace.save().then(()=> {
 
 ##### follow
 send request follow this entity's _links's href
-```javascript
+```js
 let student = new Student({name: '吴浩麟', age: 23});
 let academy = new Academy({name: '计算机学院'});
 student.set('academy', academy);
@@ -303,7 +314,7 @@ student.save().then(()=> {
 
 ##### findOne
 get an entity instance by id
-```javascript
+```js
 let classRoom = new Classroom({name: '东16412'});
 classRoom.save().then(()=> {
     return Classroom.findOne(classRoom.id);
@@ -315,7 +326,7 @@ classRoom.save().then(()=> {
 });
 ```
 get an not exist instance will reject 404 err
-```javascript
+```js
 Student.findOne('404404').then(()=> {
     done('should be 404 error');
 }).catch(req=> {
@@ -324,7 +335,7 @@ Student.findOne('404404').then(()=> {
 })
 ```
 support projection
-```javascript
+```js
 let student = new Student({name: 'HalWu', age: 23});
 student.save().then(()=> {
     return Student.findOne(student.id, {projection: 'NoAge'});
@@ -343,7 +354,7 @@ Returns all entities the repository servers through its findAll(…) method. If 
 - @param {number} opts.page the page number to access (0 indexed, defaults to 0).
 - @param {number} opts.size the page size requested (defaults to 20).
 - @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
-```javascript
+```js
 let size = 13;
 let pageIndex = 1;
 Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (jsonArr) {
@@ -371,7 +382,7 @@ call query methods exposed by a repository. The path and name of the query metho
 - @param {number} opts.page the page number to access (0 indexed, defaults to 0).
 - @param {number} opts.size the page size requested (defaults to 20).
 - @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
-```javascript
+```js
 Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}).then(entityList=> {
     assert.equal(entityList.length, 5);
     for (var i = 0; i < entityList.length - 2; i++) {
@@ -386,7 +397,7 @@ Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}
 
 ## Error Handle
 all error will be reject by return promise,and the error object is instance of `Request` will `Request.error` properties store error reason
-```javascript
+```js
 Student.findOne(404).then(()=>{}).catch(req=>{
     console.error(req.error);
     console.log(req.response.status);

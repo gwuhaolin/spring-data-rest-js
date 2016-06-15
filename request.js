@@ -178,6 +178,16 @@ Request.prototype.send = function () {
 };
 
 /**
+ * fake Promise.then() method,auto call Request.send() when without call send() to use then()
+ * @param resolve
+ * @param reject
+ * @returns {Promise}
+ */
+Request.prototype.then = function (resolve, reject) {
+    return this.send().then(resolve).catch(reject);
+};
+
+/**
  * send request follow _links's href
  * @param {string[]} keys links href in order
  * @returns {Promise} resolve(json|null|string), reject(Request)
