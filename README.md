@@ -1,5 +1,8 @@
 # Spring Data Rest JavaScript Library
-[![Build Status](https://travis-ci.org/gwuhaolin/spring-data-rest-js.svg?branch=master)](https://travis-ci.org/gwuhaolin/spring-data-rest-js)
+[![Build Status](https://img.shields.io/travis/ant-design/ant-design.svg?style=flat-square)](https://travis-ci.org/gwuhaolin/spring-data-rest-js)
+[![Npm Package](https://img.shields.io/npm/v/spring-data-rest-js.svg?style=flat-square)](https://www.npmjs.org/package/spring-data-rest-js)
+[![Npm Downloads](http://img.shields.io/npm/dm/spring-data-rest-js.svg?style=flat-square)](https://npmjs.org/package/spring-data-rest-js)
+[![Dependency Status](https://david-dm.org/gwuhaolin/spring-data-rest-js.svg?style=flat-square)](https://npmjs.org/package/spring-data-rest-js)
 
 [Spring Data Rest](http://projects.springRest.io/springRest-data-rest/) is makes it easy to build hypermedia-driven REST web services. This lib provider
 useful util to play with the service in js.
