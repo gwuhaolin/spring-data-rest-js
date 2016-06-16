@@ -1,12 +1,12 @@
 'use strict';
 let assert = require('assert');
-let springRest = require('../index');
+let spring = require('../index');
 
-springRest.request.config.baseURL = 'http://localhost:8080///';
-springRest.entity.config.restBaseURL = 'http://localhost:8080//rest//';
-let Student = springRest.entity.extend('students');
-let Academy = springRest.entity.extend('academies');
-let Classroom = springRest.entity.extend('classrooms');
+spring.request.config.baseURL = 'http://localhost:8080///';
+spring.entity.config.restBaseURL = 'http://localhost:8080//rest//';
+let Student = spring.entity.extend('students');
+let Academy = spring.entity.extend('academies');
+let Classroom = spring.entity.extend('classrooms');
 
 describe('class:Entity', ()=> {
 
@@ -17,7 +17,7 @@ describe('class:Entity', ()=> {
             student.set('name', 'Tom');
             student.save().then(()=> {
                 assert(student.id != null);
-                return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).send();
+                return spring.request.get(`${Student.entityBaseURL}/${student.id}`).send();
             }).then((json)=> {
                 assert.equal(json.name, 'Tom');
                 done();
@@ -159,7 +159,7 @@ describe('class:Entity', ()=> {
                 assert.equal(arr.length, size);
                 assert.equal(arr.page.number, pageIndex);
                 assert.equal(arr.page.size, size);
-                assert.equal(springRest.entity.isEntity(arr[0]), true);
+                assert.equal(spring.entity.isEntity(arr[0]), true);
                 assert.equal(arr[0].constructor, Student);
                 for (let i = 1; i < size - 2; i++) {
                     assert.equal(arr[i].get('age') > arr[i + 1].get('age'), true);

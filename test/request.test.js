@@ -1,19 +1,19 @@
 'use strict';
 let assert = require('assert');
-let springRest = require('../index');
+let spring = require('../index');
 
-springRest.request.config.baseURL = 'http://localhost:8080/';
-springRest.entity.config.restBaseURL = 'http://localhost:8080/rest/';
-let Student = springRest.entity.extend('students');
-let Academy = springRest.entity.extend('academies');
-let Classroom = springRest.entity.extend('classrooms');
+spring.request.config.baseURL = 'http://localhost:8080/';
+spring.entity.config.restBaseURL = 'http://localhost:8080/rest/';
+let Student = spring.entity.extend('students');
+let Academy = spring.entity.extend('academies');
+let Classroom = spring.entity.extend('classrooms');
 
 describe('class:Request', ()=> {
 
     it('auto revise url', function () {
-        let req = springRest.request.get('//hello/name//');
+        let req = spring.request.get('//hello/name//');
         assert.equal(req.options.url, `http://localhost:8080/hello/name/`);
-        let req2 = springRest.request.get('https://google.com//hello/name');
+        let req2 = spring.request.get('https://google.com//hello/name');
         assert.equal(req2.options.url, `https://google.com/hello/name`);
     });
 
@@ -22,13 +22,13 @@ describe('class:Request', ()=> {
         describe('attr:config.globalFetchOptions', ()=> {
 
             it('ok', function () {
-                springRest.request.config.globalFetchOptions = {
+                spring.request.config.globalFetchOptions = {
                     credentials: 'same-origin',
                     headers: {
                         'X': 'x'
                     }
                 };
-                let req = springRest.request.get('/hello');
+                let req = spring.request.get('/hello');
                 assert.equal(req.options.url, `http://localhost:8080/hello`);
                 assert.equal(req.options.credentials, 'same-origin');
                 assert.deepEqual(req.options.headers, {
@@ -41,8 +41,8 @@ describe('class:Request', ()=> {
 
             it('ok', (done)=> {
                 let flag = 'old';
-                let request = springRest.request.get(springRest.request.config.baseURL);
-                springRest.request.config.fetchStartHook = function (req) {
+                let request = spring.request.get(spring.request.config.baseURL);
+                spring.request.config.fetchStartHook = function (req) {
                     assert.equal(req, request);
                     flag = 'new';
                 };
@@ -55,7 +55,7 @@ describe('class:Request', ()=> {
             });
 
             after(()=> {
-                springRest.request.config.fetchStartHook = null;
+                spring.request.config.fetchStartHook = null;
             });
 
         });
@@ -64,8 +64,8 @@ describe('class:Request', ()=> {
 
             it('ok', (done)=> {
                 let flag = 'old';
-                let request = springRest.request.get(springRest.request.config.baseURL);
-                springRest.request.config.fetchEndHook = function (req) {
+                let request = spring.request.get(spring.request.config.baseURL);
+                spring.request.config.fetchEndHook = function (req) {
                     assert.equal(req, request);
                     flag = 'new';
                 };
@@ -78,7 +78,7 @@ describe('class:Request', ()=> {
             });
 
             after(()=> {
-                springRest.request.config.fetchEndHook = null;
+                spring.request.config.fetchEndHook = null;
             });
 
         });
@@ -90,10 +90,10 @@ describe('class:Request', ()=> {
         it('ok', ()=> {
             let param1 = {name: '中'};
             let param2 = {age: 23, academy: 'physics'};
-            let request = springRest.request.get(springRest.request.config.baseURL).queryParam(param1);
-            assert.equal(request.options.url, springRest.request.config.baseURL + '?name=中');
+            let request = spring.request.get(spring.request.config.baseURL).queryParam(param1);
+            assert.equal(request.options.url, spring.request.config.baseURL + '?name=中');
             request.queryParam(param2);
-            assert.equal(request.options.url, springRest.request.config.baseURL + '?age=23&academy=physics');
+            assert.equal(request.options.url, spring.request.config.baseURL + '?age=23&academy=physics');
         });
     });
 
@@ -101,7 +101,7 @@ describe('class:Request', ()=> {
 
         it('ok', ()=> {
             let param = {name: '吴浩麟', age: 23};
-            let request = springRest.request.post('/').jsonBody(param);
+            let request = spring.request.post('/').jsonBody(param);
             assert.equal(request.options.body, JSON.stringify(param));
             assert.equal(request.options.headers['Content-Type'], 'application/json');
         });
@@ -112,7 +112,7 @@ describe('class:Request', ()=> {
 
         it('ok', (done)=> {
             let param = {name: '中国', age: 123};
-            let request = springRest.request.post('/postForm').formBody(param);
+            let request = spring.request.post('/postForm').formBody(param);
             assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
             request.send().then(json=> {
                 assert.equal(json.name, '中国');
@@ -131,7 +131,7 @@ describe('class:Request', ()=> {
             let classroom = new Classroom({name: 'D1143'});
             let request;
             classroom.save().then(function () {
-                request = springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`);
+                request = spring.request.get(`${Classroom.entityBaseURL}/${classroom.id}`);
                 return request.send();
             }).then(json=> {
                 assert.equal(json.constructor, Object);
@@ -146,7 +146,7 @@ describe('class:Request', ()=> {
         it('response status ok with null', (done)=> {
             let classroom = new Classroom({name: 'D1143'});
             classroom.save().then(()=> {
-                return springRest.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
+                return spring.request.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
             }).then(json=> {
                 assert.equal(json.constructor, Object);
                 assert.equal(json.name, 'D1143');
@@ -157,7 +157,7 @@ describe('class:Request', ()=> {
         });
 
         it('response status ok with string', (done)=> {
-            springRest.request.get(`/returnString`).send().then((str)=> {
+            spring.request.get(`/returnString`).send().then((str)=> {
                 assert.equal(str.constructor, String);
                 done();
             }).catch(err=> {
@@ -166,7 +166,7 @@ describe('class:Request', ()=> {
         });
 
         it('response status ok with string-with auto send', (done)=> {
-            springRest.request.get(`/returnString`).then((str)=> {
+            spring.request.get(`/returnString`).then((str)=> {
                 assert.equal(str.constructor, String);
                 done();
             }).catch(err=> {
@@ -175,7 +175,7 @@ describe('class:Request', ()=> {
         });
 
         it('response 404 error', (done)=> {
-            springRest.request.get(`/$%404`).send().then(()=> {
+            spring.request.get(`/$%404`).send().then(()=> {
                 done('should be 404 error');
             }).catch(err=> {
                 assert.equal(err.response.status, 404);
@@ -184,7 +184,7 @@ describe('class:Request', ()=> {
         });
 
         it('response 404 error-with auto send', (done)=> {
-            springRest.request.get(`/$%404`).then(()=> {
+            spring.request.get(`/$%404`).then(()=> {
                 done('should be 404 error');
             }).catch(err=> {
                 assert.equal(err.response.status, 404);
@@ -193,7 +193,7 @@ describe('class:Request', ()=> {
         });
 
         it('response error with json', (done)=> {
-            springRest.request.get(`/errorWithJSON`).send().then(()=> {
+            spring.request.get(`/errorWithJSON`).send().then(()=> {
                 done('should be 404 error');
             }).catch(req=> {
                 assert.equal(req.response.status, 500);
@@ -204,7 +204,7 @@ describe('class:Request', ()=> {
         });
 
         it('response error with json-with auto send', (done)=> {
-            springRest.request.get(`/errorWithJSON`).then(()=> {
+            spring.request.get(`/errorWithJSON`).then(()=> {
                 done('should be 404 error');
             }).catch(req=> {
                 assert.equal(req.response.status, 500);
@@ -223,7 +223,7 @@ describe('class:Request', ()=> {
             let academy = new Academy({name: '计算机学院'});
             student.set('academy', academy);
             student.save().then(()=> {
-                return springRest.request.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
+                return spring.request.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
             }).then((json)=> {
                 assert.equal(json.name, '计算机学院');
                 done();
@@ -241,7 +241,7 @@ describe('class:Request', ()=> {
             let academy = new Academy({name: 'Physics Academy'});
             student.set('academy', academy);
             student.save().then((json)=> {
-                return springRest.request.mockRequest(json).follow(['self', 'academy', 'self', 'self']);
+                return spring.request.mockRequest(json).follow(['self', 'academy', 'self', 'self']);
             }).then((json)=> {
                 assert.equal(json.name, 'Physics Academy');
                 done();
@@ -255,7 +255,7 @@ describe('class:Request', ()=> {
             let academy = new Academy({name: 'Physics Academy'});
             student.set('academy', academy);
             student.save().then((json)=> {
-                return springRest.request.mockRequest(json).follow(['self404', 'academy', 'self', 'self']);
+                return spring.request.mockRequest(json).follow(['self404', 'academy', 'self', 'self']);
             }).then(()=> {
                 done('should be 404');
             }).catch(()=> {
