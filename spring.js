@@ -7,6 +7,12 @@
  * @author gwuhaolin
  */
 'use strict';
+/**
+ * build spring object
+ * @param fetch fetch API function ref
+ * @returns {{request:request,entity:entity}}
+ * @private
+ */
 function _spring(fetch) {
     var re = {};
     ////////////////////////////////////////// Request ///////////////////////////////////////
@@ -737,6 +743,9 @@ function _spring(fetch) {
 if (typeof exports === 'object' && typeof window === 'undefined') {//node.js
     module.exports = _spring;
 } else {//commonjs or browser
+    /**
+     * @type {{request: request, entity: entity}}
+     */
     var spring = _spring(window.fetch);
     if (typeof module === 'object') {
         module.exports = spring;
