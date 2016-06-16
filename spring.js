@@ -400,6 +400,11 @@ function spring(exports, fetch) {
      */
     entity.extend = function (entityName) {
 
+        /**
+         * spring data Entity Class
+         * @param initData json data from spring data rest service's response
+         * @constructor
+         */
         function Entity(initData) {
             var self = this;
             /**
