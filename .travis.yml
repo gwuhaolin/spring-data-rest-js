@@ -11,3 +11,7 @@ install:
   - sleep 100
   - cd ../
 script: mocha
+
+deploy:
+  provider: npm
+  api_key: "271c2ca1-5c5f-410e-b960-73d614eb9dd5"

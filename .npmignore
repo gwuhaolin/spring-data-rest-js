@@ -2,6 +2,7 @@
 /node_modules/
 .idea/
 test/
+dist/
 .travis.yml
 README.md
 .gitignore
