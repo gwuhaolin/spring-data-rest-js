@@ -14,4 +14,5 @@ script: mocha
 
 deploy:
   provider: npm
+  emial: gwuhaolin@gmail.com
   api_key: "271c2ca1-5c5f-410e-b960-73d614eb9dd5"
