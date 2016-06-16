@@ -7,7 +7,7 @@
  * @author gwuhaolin
  */
 'use strict';
-function spring(exports, fetch) {
+function _spring(exports, fetch) {
 
     ////////////////////////////////////////// Request ///////////////////////////////////////
 
@@ -733,7 +733,7 @@ function spring(exports, fetch) {
 
 }
 if (typeof exports === 'undefined') {//browser
-    spring(window.spring = {}, window.fetch);
+    _spring(window.spring = {}, window.fetch);
 } else {//node.js
-    module.exports = spring;
+    module.exports = _spring;
 }
