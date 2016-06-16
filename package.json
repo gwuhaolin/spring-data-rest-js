@@ -14,9 +14,10 @@
   "version": "0.0.8",
   "license": "MIT",
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1"
+    "node-fetch": "^1.5.3"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "browser": "cp index.js dist/spring-data-rest.js & uglifyjs dist/spring-data-rest.js -o dist/spring-data-rest.min.js --source-map dist/spring-data-rest.min.js.map -p 5 -c -m"
   }
 }

@@ -5,7 +5,7 @@
 [![Dependency Status](https://david-dm.org/gwuhaolin/spring-data-rest-js.svg?style=flat-square)](https://npmjs.org/package/spring-data-rest-js)
 
 [Spring Data Rest](http://projects.springRest.io/springRest-data-rest/) is makes it easy to build hypermedia-driven REST web services. This lib provider
-useful util to play with the service in js.
+useful util to play with the service in js. It's a easy to use and lightweight (*2kb after min and gzip*) javascript lib can run in both node.js and browser,can be work with lib like AngularJS React Vue.
 
 ## Installation
 ```sh
@@ -15,11 +15,23 @@ then use it in commonjs env
 ```js
 let spring = require('spring-data-rest-js');
 ```
-for browser,you should use tools like [Webpack](http://webpack.github.io/) or [Browserify](http://browserify.org/) to bundle up your module for browser.
+for browser,you can use tools like [Webpack](http://webpack.github.io/) or [Browserify](http://browserify.org/) to bundle up your module for browser.
+you also can include lib file in html file and then use it:
+```html
+<!DOCTYPE html>
+<html>
+<body>
+<script src="./dist/spring-data-rest.js"></script>
+<script>
+    window.spring.request.post('/');
+</script>
+</body>
+</html>
+```
 ## Request
 
 #### Build Request
-#####add query param in ur
+#####add query param in url
 ```js
 let param1 = {name: '中'};
 let param2 = {age: 23, academy: 'physics'};
@@ -413,8 +425,13 @@ Student.findOne(404).then(()=>{}).catch(req=>{
 - [java](https://github.com/gwuhaolin/spring-data-rest-js-backend)
 
 ## Browser Support
-require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API,use [node-fetch](https://github.com/bitinn/node-fetch) as node.js polyfill.
-[Browser Support](https://github.com/github/fetch#browser-support).
+this lib use es6 some feature:
+- Object.assign [doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) [polyfill](https://github.com/sindresorhus/object-assign)
+- Promise [doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) [polyfill](https://github.com/stefanpenner/es6-promise)
+- fetch [doc](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) [polyfill](https://github.com/github/fetch)
+for browser use, be sure browser must support this,in old browser you should include polyfill.
+require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API.
+In Node.js env,will use [node-fetch](https://github.com/bitinn/node-fetch) as fetch polyfill.
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
