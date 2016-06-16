@@ -1,0 +1,27 @@
+{
+  "name": "spring-data-rest-js",
+  "description": "js lib for java spring data rest service,work for node.js and browser,use fetch API",
+  "main": "index.js",
+  "authors": [
+    "WuHaolin <gwuhaolin@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "spring",
+    "spring",
+    "data",
+    "rest",
+    "hypermedia-driven",
+    "HTTP",
+    "resources",
+    "restful"
+  ],
+  "homepage": "https://github.com/gwuhaolin/spring-data-rest-js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

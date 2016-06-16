@@ -1,5 +1,6 @@
 # Spring Data Rest JavaScript Library
 [![Build Status](https://img.shields.io/travis/ant-design/ant-design.svg?style=flat-square)](https://travis-ci.org/gwuhaolin/spring-data-rest-js)
+[![Bower](https://img.shields.io/bower/v/spring-data-rest-js.svg?maxAge=2592000)](https://www.npmjs.org/package/spring-data-rest-js)
 [![Npm Package](https://img.shields.io/npm/v/spring-data-rest-js.svg?style=flat-square)](https://www.npmjs.org/package/spring-data-rest-js)
 [![Npm Downloads](http://img.shields.io/npm/dm/spring-data-rest-js.svg?style=flat-square)](https://npmjs.org/package/spring-data-rest-js)
 [![Dependency Status](https://david-dm.org/gwuhaolin/spring-data-rest-js.svg?style=flat-square)](https://npmjs.org/package/spring-data-rest-js)
@@ -9,13 +10,17 @@ useful util to play with the service in js. It's a easy to use and lightweight (
 
 ## Installation
 ```sh
-$ npm install spring-data-rest-js --save
+npm install spring-data-rest-js --save
 ```
 then use it in commonjs env
 ```js
 let spring = require('spring-data-rest-js');
 ```
 for browser,you can use tools like [Webpack](http://webpack.github.io/) or [Browserify](http://browserify.org/) to bundle up your module for browser.
+install with bower
+```sh
+bower install spring-data-rest-js
+```
 you also can include lib file in html file and then use it:
 ```html
 <!DOCTYPE html>
