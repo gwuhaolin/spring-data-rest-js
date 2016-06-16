@@ -10,17 +10,16 @@ useful util to play with the service in js. It's a easy to use and lightweight (
 
 ## Installation
 ```sh
+# for npm
 npm install spring-data-rest-js --save
+# for bower
+bower install spring-data-rest-js
 ```
 then use it in commonjs env
 ```js
 let spring = require('spring-data-rest-js');
 ```
 for browser,you can use tools like [Webpack](http://webpack.github.io/) or [Browserify](http://browserify.org/) to bundle up your module for browser.
-install with bower
-```sh
-bower install spring-data-rest-js
-```
 you also can include lib file in html file and then use it:
 ```html
 <!DOCTYPE html>
