@@ -16,8 +16,10 @@
   "dependencies": {
     "node-fetch": "^1.5.3"
   },
+  "main": "index.js",
+  "browser": "spring.js",
   "scripts": {
     "test": "mocha",
-    "browser": "cp index.js dist/spring-data-rest.js & uglifyjs dist/spring-data-rest.js -o dist/spring-data-rest.min.js --source-map dist/spring-data-rest.min.js.map -p 5 -c -m"
+    "browser": "cp spring.js dist/spring-data-rest.js & uglifyjs dist/spring-data-rest.js -o dist/spring-data-rest.min.js --source-map dist/spring-data-rest.min.js.map -p 5 -c -m"
   }
 }
