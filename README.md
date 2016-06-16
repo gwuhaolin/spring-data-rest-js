@@ -430,9 +430,10 @@ Student.findOne(404).then(()=>{}).catch(req=>{
 
 ## Browser Support
 this lib use es6 some feature:
-- Object.assign [doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) [polyfill](https://github.com/sindresorhus/object-assign)
-- Promise [doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) [polyfill](https://github.com/stefanpenner/es6-promise)
-- fetch [doc](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) [polyfill](https://github.com/github/fetch)
+- Object.assign [doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign)  [polyfill](https://github.com/sindresorhus/object-assign)
+- Promise [doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise)  [polyfill](https://github.com/stefanpenner/es6-promise)
+- fetch [doc](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)  [polyfill](https://github.com/github/fetch)
+
 for browser use, be sure browser must support this,in old browser you should include polyfill.
 require es6 `Object.assign` and `Promise`,this lib build on the top of es6 fetch API.
 In Node.js env,will use [node-fetch](https://github.com/bitinn/node-fetch) as fetch polyfill.
