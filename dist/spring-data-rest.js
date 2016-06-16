@@ -7,8 +7,8 @@
  * @author gwuhaolin
  */
 'use strict';
-function spring(exports, fetch) {
-
+function _spring(fetch) {
+    var re = {};
     ////////////////////////////////////////// Request ///////////////////////////////////////
 
     var request = {};
@@ -311,7 +311,7 @@ function spring(exports, fetch) {
         return req;
     };
 
-    exports.request = request;
+    re.request = request;
 
     ////////////////////////////////////////// Entity ///////////////////////////////////////
     var entity = {};
@@ -400,6 +400,11 @@ function spring(exports, fetch) {
      */
     entity.extend = function (entityName) {
 
+        /**
+         * spring data Entity Class
+         * @param initData json data from spring data rest service's response
+         * @constructor
+         */
         function Entity(initData) {
             var self = this;
             /**
@@ -538,7 +543,7 @@ function spring(exports, fetch) {
                 }
                 return new Promise(function (resolve, reject) {
                     translateRelationEntity(pureChange).then(function (json) {
-                        promiseList.unshift(exports.request.patch(self.href()).jsonBody(json).send());
+                        promiseList.unshift(re.request.patch(self.href()).jsonBody(json).send());
                         return Promise.all(promiseList);
                     }).then(function (jsonArr) {
                         var data = jsonArr[0];
@@ -724,11 +729,16 @@ function spring(exports, fetch) {
         return Entity;
     };
 
-    exports.entity = entity;
+    re.entity = entity;
+
+    return re;
 
 }
-if (typeof exports === 'undefined') {//browser
-    spring(window.spring = {}, window.fetch);
-} else {//node.js
-    module.exports = spring;
+if (typeof exports === 'object' && typeof window === 'undefined') {//node.js
+    module.exports = _spring;
+} else {//commonjs or browser
+    var spring = _spring(window.fetch);
+    if (typeof module === 'object') {
+        module.exports = spring;
+    }
 }

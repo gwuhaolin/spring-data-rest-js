@@ -1,2 +1,2 @@
 var fetch = require('node-fetch');
-require('./spring')(exports, fetch);
+module.exports = require('./spring')(fetch);

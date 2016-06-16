@@ -7,8 +7,8 @@
  * @author gwuhaolin
  */
 'use strict';
-function _spring(exports, fetch) {
-
+function _spring(fetch) {
+    var re = {};
     ////////////////////////////////////////// Request ///////////////////////////////////////
 
     var request = {};
@@ -311,7 +311,7 @@ function _spring(exports, fetch) {
         return req;
     };
 
-    exports.request = request;
+    re.request = request;
 
     ////////////////////////////////////////// Entity ///////////////////////////////////////
     var entity = {};
@@ -543,7 +543,7 @@ function _spring(exports, fetch) {
                 }
                 return new Promise(function (resolve, reject) {
                     translateRelationEntity(pureChange).then(function (json) {
-                        promiseList.unshift(exports.request.patch(self.href()).jsonBody(json).send());
+                        promiseList.unshift(re.request.patch(self.href()).jsonBody(json).send());
                         return Promise.all(promiseList);
                     }).then(function (jsonArr) {
                         var data = jsonArr[0];
@@ -729,11 +729,16 @@ function _spring(exports, fetch) {
         return Entity;
     };
 
-    exports.entity = entity;
+    re.entity = entity;
+
+    return re;
 
 }
-if (typeof exports === 'undefined') {//browser
-    _spring(window.spring = {}, window.fetch);
-} else {//node.js
+if (typeof exports === 'object' && typeof window === 'undefined') {//node.js
     module.exports = _spring;
+} else {//commonjs or browser
+    var spring = _spring(window.fetch);
+    if (typeof module === 'object') {
+        module.exports = spring;
+    }
 }
