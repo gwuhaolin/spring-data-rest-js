@@ -8,3 +8,4 @@ typings/
 *.d.ts
 !webpack.config.js
 !webpack.production.config.js
+!test/spring.test.js
