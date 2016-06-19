@@ -4,6 +4,10 @@
 test/
 dist/
 .travis.yml
-README.md
 .gitignore
 *.ts
+typings.json
+webpack.config.js
+webpack.production.config.js
+bower.json
+tsconfig.json
