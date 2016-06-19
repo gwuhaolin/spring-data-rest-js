@@ -286,7 +286,7 @@ student.save().then(()=> {
     assert.equal(err.response.status, 404);
 });
 ```
-Entity Class also has a static method to delete an entity by id
+Entity Entity also has a static method to delete an entity by id
 ```js
 Student.remove(42).then(()=>{},err=>{})
 ```

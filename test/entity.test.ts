@@ -7,7 +7,7 @@ let Student = spring.extend('students');
 let Academy = spring.extend('academies');
 let Classroom = spring.extend('classrooms');
 
-describe('class:Class', ()=> {
+describe('class:Entity', ()=> {
 
     describe('method:save', ()=> {
 
@@ -156,7 +156,6 @@ describe('class:Class', ()=> {
             Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (arr) {
                 assert(Array.isArray(arr));
                 assert.equal(arr.length, size);
-                assert.equal(arr[0].constructor, Student);
                 for (let i = 1; i < size - 2; i++) {
                     assert.equal(arr[i].get('age') > arr[i + 1].get('age'), true);
                 }
