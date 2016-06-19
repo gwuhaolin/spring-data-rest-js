@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<script src="../dist/spring.js"></script>
+<script>
+
+    window.spring.requestConfig.baseURL = 'http://localhost:8080/';
+    window.spring.entityConfig.restBaseURL = 'http://localhost:8080/rest/';
+    var Student = window.spring.extend('students');
+    var Classroom = window.spring.extend('classrooms');
+
+    var tom = new Student({name: 'tom', age: 13});
+    var sql = new Classroom({name: 'learn SQL'});
+    var js = new Classroom({name: 'learn Javascript'});
+    var java = new Classroom({name: 'learn Java'});
+
+    tom.save().then(function () {
+        tom.set('classrooms', [sql, js, java]);
+        return tom.save();
+    }).then(function () {
+        return tom.follow(['classrooms']);
+    }).then(function (json) {
+        var classrooms = Classroom.jsonToEntityList(json);
+        assert.equal(classrooms.length, 3);
+        classrooms.forEach(function (one) {
+            one.set('name', 'new name');
+        });
+        tom.set('age', 100);
+        tom.set('classrooms', classrooms);
+        return tom.save();
+    }).then(function () {
+        assert.equal(tom.get('age'), 100);
+        return tom.follow(['classrooms']);
+    }).then(function (json) {
+        Classroom.jsonToEntityList(json).forEach(function (one) {
+            assert.equal(one.get('name'), 'new name');
+            assert(one.id === sql.id || one.id === js.id || one.id === java.id);
+        });
+        console.info(json);
+    }).catch(err=> {
+        console.error(err);
+    })
+</script>
+</body>
+</html>

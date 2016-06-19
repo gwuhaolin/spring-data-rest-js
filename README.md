@@ -6,6 +6,7 @@
 
 [Spring Data Rest](http://projects.springRest.io/springRest-data-rest/) is makes it easy to build hypermedia-driven REST web services. This lib provider
 useful util to play with the service in js. It's a easy to use and lightweight (*2kb after min and gzip*) javascript lib can run in both node.js and browser,can be work with lib like AngularJS React Vue.
+support Typescript.
 
 ## Installation
 ```sh
@@ -24,9 +25,9 @@ you also can include lib file in html file and then use it:
 <!DOCTYPE html>
 <html>
 <body>
-<script src="./dist/spring-data-rest.js"></script>
+<script src="./dist/spring.js"></script>
 <script>
-    window.spring.request.post('/');
+    window.spring.post('/');
 </script>
 </body>
 </html>
@@ -38,15 +39,15 @@ you also can include lib file in html file and then use it:
 ```js
 let param1 = {name: '中'};
 let param2 = {age: 23, academy: 'physics'};
-let request = spring.request.get(spring.request.config.baseURL).queryParam(param1);
-assert.equal(request.options.url, spring.request.config.baseURL + '?name=中');
+let request = spring.get(spring.requestConfig.baseURL).queryParam(param1);
+assert.equal(request.options.url, spring.requestConfig.baseURL + '?name=中');
 request.queryParam(param2);
-assert.equal(request.options.url, spring.request.config.baseURL + '?age=23&academy=physics');
+assert.equal(request.options.url, spring.requestConfig.baseURL + '?age=23&academy=physics');
 ```
 #####send request body as json
 ```js
 let param = {name: '吴浩麟', age: 23};
-let request = spring.request.post('/').jsonBody(param);
+let request = spring.post('/').jsonBody(param);
 assert.equal(request.options.body, JSON.stringify(param));
 assert.equal(request.options.headers['Content-Type'], 'application/json');
 ```
@@ -54,7 +55,7 @@ assert.equal(request.options.headers['Content-Type'], 'application/json');
 #####send request body as form
 ```js
 let param = {name: '中国', age: 123};
-let request = spring.request.post('/postForm').formBody(param);
+let request = spring.post('/postForm').formBody(param);
 assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-urlencoded');
 request.send().then(json=> {
     assert.equal(json.name, '中国');
@@ -70,10 +71,10 @@ if path param is a complete url then fetch ues path as url,
 else path is not a complete url string but just a path then fetch url=config.baseURL+path
 url string will been auto revised, etc: http://localhost/api//user///id/ will convert to http://localhost/api/user/id
 ```js
-spring.request.config.baseURL = 'http://localhost:8080/';
-let req = spring.request.get('//hello/name//');
+spring.requestConfig.baseURL = 'http://localhost:8080/';
+let req = spring.get('//hello/name//');
 assert.equal(req.options.url, `http://localhost:8080/hello/name/`);
-let req2 = spring.request.get('https://google.com//hello/name');
+let req2 = spring.get('https://google.com//hello/name');
 assert.equal(req2.options.url, `https://google.com/hello/name`);
 ```
 
@@ -110,7 +111,7 @@ spring.request.config = {
 fetch API request options
 see [detail](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)
 ```js
-spring.request.config.globalFetchOptions = {
+spring.requestConfig.globalFetchOptions = {
    method: 'POST',
    headers: {
         'Accept': 'application/json',
@@ -132,7 +133,7 @@ request return response in `Promise`,if request success `Promise` will resolve j
 let classroom = new Classroom({name: 'D1143'});
 let request;
 classroom.save().then(function () {
-    request = spring.request.get(`${Classroom.entityBaseURL}/${classroom.id}`);
+    request = spring.get(`${Classroom.entityBaseURL}/${classroom.id}`);
     return request.send();
 }).then(json=> {
     assert.equal(json.constructor, Object);
@@ -147,7 +148,7 @@ classroom.save().then(function () {
 ##### auto send
 auto call Request.send() when without call send() to use then()
 ```js
-spring.request.get(`/returnString`).then((str)=> {
+spring.get(`/returnString`).then((str)=> {
     assert.equal(str.constructor, String);
     done();
 }).catch(err=> {
@@ -161,7 +162,7 @@ let student = new Student({name: '吴浩麟', age: 23});
 let academy = new Academy({name: '计算机学院'});
 student.set('academy', academy);
 student.save().then(()=> {
-    return spring.request.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
+    return spring.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
 }).then((json)=> {
     assert.equal(json.name, '计算机学院');
     done();
@@ -175,8 +176,8 @@ student.save().then(()=> {
 before send fetch request
 ```js
 let flag = 'old';
-let request = spring.request.get(spring.request.config.baseURL);
-spring.request.config.fetchStartHook = function (req) {
+let request = spring.get(spring.requestConfig.baseURL);
+spring.requestConfig.fetchStartHook = function (req) {
     assert.equal(req, request);
     flag = 'new';
 };
@@ -191,8 +192,8 @@ request.send().then(()=> {
 fetch request is finished
 ```js
 let flag = 'old';
-let request = spring.request.get(spring.request.config.baseURL);
-spring.request.config.fetchEndHook = function (req) {
+let request = spring.get(spring.requestConfig.baseURL);
+spring.requestConfig.fetchEndHook = function (req) {
     assert.equal(req, request);
     flag = 'new';
 };
@@ -209,9 +210,9 @@ request.send().then(()=> {
 ##### extend
 get a class by entity path name
 ```js
-let Student = spring.entity.extend('students');
-let Academy = spring.entity.extend('academies');
-let Classroom = spring.entity.extend('classrooms');
+let Student = spring.extend('students');
+let Academy = spring.extend('academies');
+let Classroom = spring.extend('classrooms');
 ```
 
 ##### config entity
@@ -233,7 +234,7 @@ let student = new Student();
 student.set('name', 'Tom');
 student.save().then(()=> {
     assert(student.id != null);
-    return spring.request.get(`${Student.entityBaseURL}/${student.id}`).send();
+    return spring.get(`${Student.entityBaseURL}/${student.id}`).send();
 }).then((json)=> {
     assert.equal(json.name, 'Tom');
     done();
@@ -278,17 +279,16 @@ use entity's `delete()` method to remove this entity in service.
 ```js
 let student = new Student();
 student.save().then(()=> {
-    return student.delete();
+    return student.remove();
 }).then(()=> {
     return Student.findOne(student.id);
 }).catch(err=> {
     assert.equal(err.response.status, 404);
-    done();
 });
 ```
 Entity Class also has a static method to delete an entity by id
 ```js
-Student.delete(42).then(()=>{},err=>{})
+Student.remove(42).then(()=>{},err=>{})
 ```
 
 ##### fetch data
@@ -306,7 +306,6 @@ ace.save().then(()=> {
     assert.equal(json.age, age);
     assert.equal(student.get('name'), name);
     assert.equal(student.get('age'), age);
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -322,7 +321,6 @@ student.save().then(()=> {
     return student.follow(['academy']);
 }).then((json)=> {
     assert.equal(json.name, '计算机学院');
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -338,7 +336,6 @@ classRoom.save().then(()=> {
     return Classroom.findOne(classRoom.id);
 }).then(entity=> {
     assert.equal(entity.get('name'), '东16412');
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -349,7 +346,6 @@ Student.findOne('404404').then(()=> {
     done('should be 404 error');
 }).catch(req=> {
     assert.equal(req.response.status, 404);
-    done();
 })
 ```
 support projection
@@ -360,7 +356,6 @@ student.save().then(()=> {
 }).then(entity=> {
     assert.equal(entity.get('name'), 'HalWu');
     assert.equal(entity.get('age'), null);
-    done();
 }).catch(err=> {
     done(err);
 })
@@ -378,15 +373,12 @@ let pageIndex = 1;
 Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (jsonArr) {
     assert(Array.isArray(jsonArr));
     assert.equal(jsonArr.length, size);
-    assert.equal(jsonArr.page.number, pageIndex);
-    assert.equal(jsonArr.page.size, size);
     assert.equal(spring.extend.isEntity(jsonArr[0]), true);
     assert.equal(jsonArr[0].constructor, Student);
     for (let i = 1; i < size - 2; i++) {
         assert.equal(jsonArr[i].get('age') > jsonArr[i + 1].get('age'), true);
         assert.equal(jsonArr[i - 1].get('age') > jsonArr[i].get('age'), true);
     }
-    done();
 }).catch(req=> {
     done(req);
 });
@@ -406,7 +398,6 @@ Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}
     for (var i = 0; i < entityList.length - 2; i++) {
         assert(entityList[i].get('age') > entityList[i + 1].get('age'));
     }
-    done();
 }).catch(err=> {
     done(err);
 });

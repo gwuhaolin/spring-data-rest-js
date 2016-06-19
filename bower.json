@@ -22,6 +22,9 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    ".travis.yml",
+    "README.md",
+    ".gitignore",
+    "*.ts"
   ]
 }

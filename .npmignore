@@ -6,3 +6,4 @@ dist/
 .travis.yml
 README.md
 .gitignore
+*.ts

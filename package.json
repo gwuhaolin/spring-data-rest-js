@@ -16,10 +16,11 @@
   "dependencies": {
     "node-fetch": "^1.5.3"
   },
-  "main": "index.js",
-  "browser": "spring.js",
+  "main": "node.js",
+  "browser": "browser.js",
+  "typings": "index.d.ts",
   "scripts": {
     "test": "mocha",
-    "browser": "cp spring.js dist/spring-data-rest.js & uglifyjs dist/spring-data-rest.js -o dist/spring-data-rest.min.js --source-map dist/spring-data-rest.min.js.map -p 5 -c -m"
+    "browser": "webpack & webpack -p -d --config webpack.production.config.js"
   }
 }
