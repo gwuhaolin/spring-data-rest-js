@@ -145,17 +145,6 @@ classroom.save().then(function () {
 });
 ```
 
-##### auto send
-auto call Request.send() when without call send() to use then()
-```js
-spring.get(`/returnString`).then((str)=> {
-    assert.equal(str.constructor, String);
-    done();
-}).catch(err=> {
-    done(err);
-});
-```
-
 ##### follow links
 ```js
 let student = new Student({name: '吴浩麟', age: 23});

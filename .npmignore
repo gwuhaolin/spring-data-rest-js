@@ -6,6 +6,8 @@ dist/
 .travis.yml
 .gitignore
 *.ts
+*.js.map
+!*.d.ts
 typings.json
 webpack.config.js
 webpack.production.config.js
