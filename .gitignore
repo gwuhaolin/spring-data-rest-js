@@ -9,3 +9,4 @@ typings/
 !webpack.config.js
 !webpack.production.config.js
 !test/spring.test.js
+!index.d.ts
