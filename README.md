@@ -237,7 +237,7 @@ the entity instance's id.
 for a existed entity set instance's id then you can use instance
 - `fetch` method to fetch entity's data
 - `save` method to update entity's updated properties
-- `delete` method to delete this entity
+- `remove` method to delete this entity
 ```js
 let student = new Student();
 student.id = 26;
@@ -263,8 +263,8 @@ create or update entity
 if id properties is set,then will send HTTP PATCH request to update an entity(will watch change in data properties to track change fields)
 if id is null,then will send HTTP POST request to create an entity
 
-##### delete entity
-use entity's `delete()` method to remove this entity in service.
+##### remove entity
+use entity's `remove()` method to remove this entity in service.
 ```js
 let student = new Student();
 student.save().then(()=> {
@@ -275,7 +275,7 @@ student.save().then(()=> {
     assert.equal(err.response.status, 404);
 });
 ```
-Entity Entity also has a static method to delete an entity by id
+Entity Entity also has a static method to remove an entity by id
 ```js
 Student.remove(42).then(()=>{},err=>{})
 ```
