@@ -3,8 +3,9 @@ node_js:
   - "6"
 
 install:
-  - npm install -g mocha typescript
+  - npm install -g mocha typescript typings
   - npm install
+  - typings install
   - tsc
   - git clone https://github.com/gwuhaolin/spring-data-rest-js-backend.git
   - cd spring-data-rest-js-backend
