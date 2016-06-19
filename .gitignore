@@ -1,7 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 /node_modules/
 .idea/
-dist/
 typings/
 *.js
 *.js.map
@@ -10,3 +9,4 @@ typings/
 !webpack.production.config.js
 !test/spring.test.js
 !index.d.ts
+!dist/*
