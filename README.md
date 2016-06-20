@@ -133,7 +133,7 @@ request return response in `Promise`,if request success `Promise` will resolve j
 let classroom = new Classroom({name: 'D1143'});
 let request;
 classroom.save().then(function () {
-    request = spring.get(`${Classroom.entityBaseURL}/${classroom.id}`);
+    request = spring.get(`${Classroom.entityBaseURL()}/${classroom.id}`);
     return request.send();
 }).then(json=> {
     assert.equal(json.constructor, Object);
@@ -151,7 +151,7 @@ let student = new Student({name: '吴浩麟', age: 23});
 let academy = new Academy({name: '计算机学院'});
 student.set('academy', academy);
 student.save().then(()=> {
-    return spring.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
+    return spring.get(`${Student.entityBaseURL()}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
 }).then((json)=> {
     assert.equal(json.name, '计算机学院');
     done();
@@ -197,11 +197,40 @@ request.send().then(()=> {
 ## Entity
 
 ##### extend
-get a class by entity path name
+get a class by entity path name.
 ```js
+//by extend function
 let Student = spring.extend('students');
 let Academy = spring.extend('academies');
 let Classroom = spring.extend('classrooms');
+```
+```typescript
+//by typescript extend
+import * as spring from './index'
+import * as assert from 'assert';
+class Student extends spring.Entity {
+
+    get name():string {
+        return this.get('name');
+    }
+
+    set name(name:string) {
+        this.set('name', name);
+    }
+
+    hi():string {
+        return `${this.name}:${this.get('age')}`;
+    }
+}
+Student.entityName = 'students';
+
+//use it
+let student = new Student({
+    name: 'Hal',
+    age: 23
+});
+assert.equal(student.name, 'Hal');
+assert.equal(student.hi(), 'Hal:23');
 ```
 
 ##### config entity
@@ -223,7 +252,7 @@ let student = new Student();
 student.set('name', 'Tom');
 student.save().then(()=> {
     assert(student.id != null);
-    return spring.get(`${Student.entityBaseURL}/${student.id}`).send();
+    return spring.get(`${Student.entityBaseURL()}/${student.id}`).send();
 }).then((json)=> {
     assert.equal(json.name, 'Tom');
     done();

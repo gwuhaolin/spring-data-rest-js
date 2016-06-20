@@ -21,7 +21,6 @@
   "typings": "index.d.ts",
   "scripts": {
     "test": "mocha",
-    "browser": "webpack & webpack -p -d --config webpack.production.config.js",
-    "release": "tsc & npm run browser"
+    "release": "tsc & webpack & webpack -p -d --config webpack.production.config.js"
   }
 }

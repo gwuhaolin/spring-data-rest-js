@@ -3,11 +3,38 @@ import * as spring from '../node'
 
 spring.requestConfig.baseURL = 'http://localhost:8080///';
 spring.entityConfig.restBaseURL = 'http://localhost:8080//rest//';
-let Student = spring.extend('students');
+
+class Student extends spring.Entity {
+
+    get name():string {
+        return this.get('name');
+    }
+    set name(name:string) {
+        this.set('name', name);
+    }
+
+    hi():string {
+        return `${this.name}:${this.get('age')}`;
+    }
+}
+Student.entityName = 'students';
+
 let Academy = spring.extend('academies');
 let Classroom = spring.extend('classrooms');
 
 describe('class:Entity', ()=> {
+
+    describe('extend', ()=> {
+
+        it('ok', ()=> {
+            let student = new Student({
+                name: 'Hal',
+                age: 23
+            });
+            assert.equal(student.name, 'Hal');
+            assert.equal(student.hi(), 'Hal:23');
+        })
+    });
 
     describe('method:save', ()=> {
 
@@ -16,7 +43,7 @@ describe('class:Entity', ()=> {
             student.set('name', 'Tom');
             student.save().then(()=> {
                 assert(student.id != null);
-                return spring.get(`${Student.entityBaseURL}/${student.id}`).send();
+                return spring.get(`${Student.entityBaseURL()}/${student.id}`).send();
             }).then((json)=> {
                 assert.equal(json.name, 'Tom');
                 done();

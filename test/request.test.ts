@@ -130,7 +130,7 @@ describe('class:Request', ()=> {
             let classroom = new Classroom({name: 'D1143'});
             let request;
             classroom.save().then(function () {
-                request = spring.get(`${Classroom.entityBaseURL}/${classroom.id}`);
+                request = spring.get(`${Classroom.entityBaseURL()}/${classroom.id}`);
                 return request.send();
             }).then(json=> {
                 assert.equal(json.constructor, Object);
@@ -145,7 +145,7 @@ describe('class:Request', ()=> {
         it('response status ok with null', (done)=> {
             let classroom = new Classroom({name: 'D1143'});
             classroom.save().then(()=> {
-                return spring.get(`${Classroom.entityBaseURL}/${classroom.id}`).send();
+                return spring.get(`${Classroom.entityBaseURL()}/${classroom.id}`).send();
             }).then(json=> {
                 assert.equal(json.constructor, Object);
                 assert.equal(json.name, 'D1143');
@@ -222,7 +222,7 @@ describe('class:Request', ()=> {
             let academy = new Academy({name: '计算机学院'});
             student.set('academy', academy);
             student.save().then(()=> {
-                return spring.get(`${Student.entityBaseURL}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
+                return spring.get(`${Student.entityBaseURL()}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
             }).then((json)=> {
                 assert.equal(json.name, '计算机学院');
                 done();

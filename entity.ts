@@ -56,7 +56,7 @@ export class Entity {
             return links['self']['href'];
         } else {
             if (this.id) {
-                return `${(this.constructor as typeof Entity).entityBaseURL}/${this.id}`;
+                return `${(this.constructor as typeof Entity).entityBaseURL()}/${this.id}`;
             } else {
                 throw new Error(`entity without id can't map to backend service:\n${JSON.stringify(this)}`);
             }
@@ -116,7 +116,7 @@ export class Entity {
     private create():Promise <any> {
         return new Promise((resolve, reject) => {
             (this.constructor as typeof Entity).translateRelationEntity(this.data()).then(body=> {
-                return request.post((this.constructor as typeof Entity).entityBaseURL).jsonBody(body).send();
+                return request.post((this.constructor as typeof Entity).entityBaseURL()).jsonBody(body).send();
             }).then(json => {
                 this.patchData(json);
                 this.modifyFields = [];
@@ -228,7 +228,9 @@ export class Entity {
     /**
      * spring data rest entity base url
      */
-    static entityBaseURL:string;
+    static entityBaseURL():string {
+        return `${entityConfig.restBaseURL}/${this.entityName}`;
+    }
 
     /**
      * read spring data rest's response json data then parse and return entity array
@@ -300,7 +302,7 @@ export class Entity {
     static findOne(id:string|number, queryParam?:{projection:string}):Promise<Entity> {
         if (id != null) {
             return new Promise((resolve, reject) => {
-                request.get(`${this.entityBaseURL}/${id}`).queryParam(queryParam).send().then(json=> {
+                request.get(`${this.entityBaseURL()}/${id}`).queryParam(queryParam).send().then(json=> {
                     resolve(new Entity(json));
                 }).catch((err) => {
                     reject(err);
@@ -322,7 +324,7 @@ export class Entity {
      */
     static findAll(queryParam:{page:number,size:number,sort:string}):Promise<Entity[]> {
         return new Promise((resolve, reject) => {
-            request.get(this.entityBaseURL).queryParam(queryParam).send().then(json => {
+            request.get(this.entityBaseURL()).queryParam(queryParam).send().then(json => {
                 let re = this.jsonToEntityList(json);
                 resolve(re);
             }).catch((err) => {
@@ -355,7 +357,7 @@ export class Entity {
         [key:string]:any
     }):Promise<Entity|Entity[]> {
         return new Promise((resolve, reject) => {
-            request.get(`${this.entityBaseURL}/search/${searchPath}`).queryParam(queryParam).send().then((json) => {
+            request.get(`${this.entityBaseURL()}/search/${searchPath}`).queryParam(queryParam).send().then((json) => {
                 try {//response entity list
                     resolve(this.jsonToEntityList(json));
                 } catch (_) {//response one entity
@@ -371,7 +373,7 @@ export class Entity {
      * remove entity by id
      */
     static remove(id:string|number):Promise<void> {
-        return request.deleteMethod(`${this.entityBaseURL}/${id}`).send();
+        return request.deleteMethod(`${this.entityBaseURL()}/${id}`).send();
     }
 }
 
@@ -387,7 +389,6 @@ export function extend(entity_name:string):typeof Entity {
      * spring data rest entity path
      */
     Class.entityName = entity_name;
-    Class.entityBaseURL = `${entityConfig.restBaseURL}/${entity_name}`;
 
     return Class;
 
