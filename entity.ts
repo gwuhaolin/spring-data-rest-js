@@ -29,7 +29,7 @@ export class Entity {
      * if id is set means this is a exists entity and can use methods:[save,exists,remove]
      * if id is null,means this is a new entity which will course save() method create a new object
      */
-    id:string|number = null;
+    id:string|number;
 
     /**
      * store one entity's data
@@ -51,10 +51,7 @@ export class Entity {
      * else use config.restBaseURL + entityName + '/' + self.id
      */
     href():string {
-        let links;
-        if (this._data != null) {
-            links = this._data['_links'];
-        }
+        let links = this._data['_links'];
         if (links != null) {
             return links['self']['href'];
         } else {
