@@ -60,7 +60,6 @@ assert.equal(request.options.headers['Content-Type'], 'application/x-www-form-ur
 request.send().then(json=> {
     assert.equal(json.name, '中国');
     assert.equal(json.age, 123);
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -139,7 +138,6 @@ classroom.save().then(function () {
     assert.equal(json.constructor, Object);
     assert.equal(json.name, 'D1143');
     assert.deepEqual(json, request.responseData);
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -154,7 +152,6 @@ student.save().then(()=> {
     return spring.get(`${Student.entityBaseURL()}/${student.id}`).follow(['self', 'academy', 'self', 'self']);
 }).then((json)=> {
     assert.equal(json.name, '计算机学院');
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -172,7 +169,6 @@ spring.requestConfig.fetchStartHook = function (req) {
 };
 request.send().then(()=> {
     assert.equal(flag, 'new');
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -188,7 +184,6 @@ spring.requestConfig.fetchEndHook = function (req) {
 };
 request.send().then(()=> {
     assert.equal(flag, 'new');
-    done();
 }).catch(err=> {
     done(err);
 });
@@ -255,7 +250,6 @@ student.save().then(()=> {
     return spring.get(`${Student.entityBaseURL()}/${student.id}`).send();
 }).then((json)=> {
     assert.equal(json.name, 'Tom');
-    done();
 }).catch(err=> {
     done(err);
 })
@@ -281,7 +275,6 @@ academy.save().then(()=> {
     return academy.save();
 }).then(()=> {
     assert.deepEqual(academy.get('name'), 'Physics');
-    done();
 }).catch(err=> {
     done(err);
 })

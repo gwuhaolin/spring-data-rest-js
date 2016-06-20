@@ -21,6 +21,6 @@
   "typings": "index.d.ts",
   "scripts": {
     "test": "mocha",
-    "release": "tsc & webpack & webpack -p -d --config webpack.production.config.js"
+    "release": "tsc & webpack & webpack -p -d --config webpack.production.config.js & npm version patch & git add . & git commit -m & git push origin & npm publish"
   }
 }
