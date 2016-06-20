@@ -359,7 +359,7 @@
 	        }
 	        else {
 	            if (this.id) {
-	                return this.constructor.entityBaseURL + "/" + this.id;
+	                return this.constructor.entityBaseURL() + "/" + this.id;
 	            }
 	            else {
 	                throw new Error("entity without id can't map to backend service:\n" + JSON.stringify(this));
@@ -417,7 +417,7 @@
 	        var _this = this;
 	        return new Promise(function (resolve, reject) {
 	            _this.constructor.translateRelationEntity(_this.data()).then(function (body) {
-	                return request.post(_this.constructor.entityBaseURL).jsonBody(body).send();
+	                return request.post(_this.constructor.entityBaseURL()).jsonBody(body).send();
 	            }).then(function (json) {
 	                _this.patchData(json);
 	                _this.modifyFields = [];
@@ -521,6 +521,12 @@
 	        });
 	    };
 	    /**
+	     * spring data rest entity base url
+	     */
+	    Entity.entityBaseURL = function () {
+	        return exports.entityConfig.restBaseURL + "/" + this.entityName;
+	    };
+	    /**
 	     * read spring data rest's response json data then parse and return entity array
 	     * @param json
 	     */
@@ -592,7 +598,7 @@
 	        var _this = this;
 	        if (id != null) {
 	            return new Promise(function (resolve, reject) {
-	                request.get(_this.entityBaseURL + "/" + id).queryParam(queryParam).send().then(function (json) {
+	                request.get(_this.entityBaseURL() + "/" + id).queryParam(queryParam).send().then(function (json) {
 	                    resolve(new Entity(json));
 	                }).catch(function (err) {
 	                    reject(err);
@@ -615,7 +621,7 @@
 	    Entity.findAll = function (queryParam) {
 	        var _this = this;
 	        return new Promise(function (resolve, reject) {
-	            request.get(_this.entityBaseURL).queryParam(queryParam).send().then(function (json) {
+	            request.get(_this.entityBaseURL()).queryParam(queryParam).send().then(function (json) {
 	                var re = _this.jsonToEntityList(json);
 	                resolve(re);
 	            }).catch(function (err) {
@@ -643,7 +649,7 @@
 	    Entity.search = function (searchPath, queryParam) {
 	        var _this = this;
 	        return new Promise(function (resolve, reject) {
-	            request.get(_this.entityBaseURL + "/search/" + searchPath).queryParam(queryParam).send().then(function (json) {
+	            request.get(_this.entityBaseURL() + "/search/" + searchPath).queryParam(queryParam).send().then(function (json) {
 	                try {
 	                    resolve(_this.jsonToEntityList(json));
 	                }
@@ -659,7 +665,7 @@
 	     * remove entity by id
 	     */
 	    Entity.remove = function (id) {
-	        return request.deleteMethod(this.entityBaseURL + "/" + id).send();
+	        return request.deleteMethod(this.entityBaseURL() + "/" + id).send();
 	    };
 	    return Entity;
 	}());
@@ -680,7 +686,6 @@
 	     * spring data rest entity path
 	     */
 	    Class.entityName = entity_name;
-	    Class.entityBaseURL = exports.entityConfig.restBaseURL + "/" + entity_name;
 	    return Class;
 	}
 	exports.extend = extend;
