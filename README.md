@@ -441,6 +441,7 @@ In Node.js env,will use [node-fetch](https://github.com/bitinn/node-fetch) as fe
 
 ## Contributing
 ##### dev
+run `typings install` to install require typescript d.ts file
 this lib write with typescript,edit *.ts file then test it
 
 ##### test
@@ -451,9 +452,10 @@ after test success,run `npm run release` to commit it to github and npm.
 
 ##### require
 - spring java backend service [java code](https://github.com/gwuhaolin/spring-data-rest-js-backend) for test use
-- tsc typescript tsc install in global
-- webpack install in global
-- mocha install in global
+- **tsc** to compile typescript file
+- **webpack** for pack commonjs to browser
+- **mocha** for test
+- **typings** for install require typescript d.ts file
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
