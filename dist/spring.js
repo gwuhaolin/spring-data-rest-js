@@ -338,12 +338,6 @@
 	var Entity = (function () {
 	    function Entity(initData) {
 	        /**
-	         * springRest data entity id.
-	         * if id is set means this is a exists entity and can use methods:[save,exists,remove]
-	         * if id is null,means this is a new entity which will course save() method create a new object
-	         */
-	        this.id = null;
-	        /**
 	         * store one entity's data
 	         */
 	        this._data = {};
@@ -359,10 +353,7 @@
 	     * else use config.restBaseURL + entityName + '/' + self.id
 	     */
 	    Entity.prototype.href = function () {
-	        var links;
-	        if (this._data != null) {
-	            links = this._data['_links'];
-	        }
+	        var links = this._data['_links'];
 	        if (links != null) {
 	            return links['self']['href'];
 	        }
