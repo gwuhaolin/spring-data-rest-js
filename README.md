@@ -441,8 +441,7 @@ In Node.js env,will use [node-fetch](https://github.com/bitinn/node-fetch) as fe
 
 ## Contributing
 ##### dev
-run `typings install` to install require typescript d.ts file
-this lib write with typescript,edit *.ts file then test it
+this lib write with typescript, run `typings install` to install require typescript d.ts file, edit *.ts file then test it,
 
 ##### test
 test with `mocha`,run `npm run test` to test it
