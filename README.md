@@ -442,15 +442,19 @@ In Node.js env,will use [node-fetch](https://github.com/bitinn/node-fetch) as fe
 ## Contributing
 ##### dev
 this lib write with typescript,edit *.ts file then test it
+
 ##### test
 test with `mocha`,run `npm run test` to test it
+
 ##### commit and release
 after test success,run `npm run release` to commit it to github and npm.
+
 ##### require
-- spring java backend service [java](https://github.com/gwuhaolin/spring-data-rest-js-backend) for test use
+- spring java backend service [java code](https://github.com/gwuhaolin/spring-data-rest-js-backend) for test use
 - tsc typescript tsc install in global
 - webpack install in global
 - mocha install in global
+
 ## License
 [MIT](http://opensource.org/licenses/MIT)
 
