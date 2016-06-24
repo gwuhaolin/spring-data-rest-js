@@ -8,5 +8,11 @@
   },
   "exclude": [
     "node_modules"
+  ],
+  "files": [
+    "typings/index",
+    "browser",
+    "node-fetch",
+    "node"
   ]
 }
