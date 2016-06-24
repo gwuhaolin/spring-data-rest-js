@@ -290,10 +290,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	function __export(m) {
+	    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+	}
 	var spring = __webpack_require__(3);
 	window['spring'] = spring;
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.default = spring;
+	__export(__webpack_require__(3));
 	//# sourceMappingURL=browser.js.map
 
 /***/ },
