@@ -375,6 +375,7 @@ student.save().then(()=> {
 ##### findAll
 collection resource with page and sort.
 Returns all entities the repository servers through its findAll(…) method. If the repository is a paging repository we include the pagination links if necessary and additional page metadata.*
+return entity array has `page` attr patch form response json data's page info
 - @param {number} opts.page the page number to access (0 indexed, defaults to 0).
 - @param {number} opts.size the page size requested (defaults to 20).
 - @param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
@@ -386,6 +387,7 @@ Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (
     assert.equal(jsonArr.length, size);
     assert.equal(spring.extend.isEntity(jsonArr[0]), true);
     assert.equal(jsonArr[0].constructor, Student);
+    assert.equal(arr['page'], {size: size, totalElements: 1, totalPages: 1, number: 0});
     for (let i = 1; i < size - 2; i++) {
         assert.equal(jsonArr[i].get('age') > jsonArr[i + 1].get('age'), true);
         assert.equal(jsonArr[i - 1].get('age') > jsonArr[i].get('age'), true);
@@ -398,6 +400,7 @@ Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (
 ##### search
 search resource if the backing repository exposes query methods.
 call query methods exposed by a repository. The path and name of the query method resources can be modified using @RestResource on the method declaration.
+return entity array has `page` attr patch form response json data's page info
 - @param {string} searchPath spring data rest searchMethod path string
 - @param {Object} opts search params, If the query method has pagination capabilities (indicated in the URI template pointing to the resource) the resource takes the following parameters:
 - @param {number} opts.page the page number to access (0 indexed, defaults to 0).
@@ -406,6 +409,7 @@ call query methods exposed by a repository. The path and name of the query metho
 ```js
 Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}).then(entityList=> {
     assert.equal(entityList.length, 5);
+    assert.equal(entityList['page'], {size: 5, totalElements: 1, totalPages: 1, number: 0});
     for (var i = 0; i < entityList.length - 2; i++) {
         assert(entityList[i].get('age') > entityList[i + 1].get('age'));
     }

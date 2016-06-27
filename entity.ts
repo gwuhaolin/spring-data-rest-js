@@ -240,6 +240,7 @@ export class Entity {
         let re = [];
         let arr:any[] = json['_embedded'][this.entityName];
         arr.forEach(one=> re.push(new Entity(one)));
+        re['page'] = json['page'];//add page info
         return re;
     }
 
