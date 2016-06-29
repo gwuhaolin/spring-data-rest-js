@@ -331,8 +331,8 @@
 	 */
 	function isEntity(any) {
 	    if (any instanceof Object) {
-	        var prototype = any.constructor.prototype;
-	        return prototype.href && prototype.href.constructor === Function;
+	        var prototype = any.constructor.prototype.__proto__;
+	        return prototype && prototype.constructor === Entity;
 	    }
 	    return false;
 	}
@@ -535,16 +535,24 @@
 	     * @param json
 	     */
 	    Entity.jsonToEntityList = function (json) {
+	        var _this = this;
 	        var re = [];
 	        var arr = json['_embedded'][this.entityName];
-	        arr.forEach(function (one) {
-	            //json data from server is fresh,so entity modifyFields should be empty
-	            var entity = new Entity(one);
-	            entity.modifyFields = [];
-	            re.push(entity);
+	        arr.forEach(function (json) {
+	            re.push(_this.jsonToEntity(json));
 	        });
 	        re['page'] = json['page']; //add page info
 	        return re;
+	    };
+	    /**
+	     * read spring data rest's response json data then parse and return entity
+	     * @param json
+	     */
+	    Entity.jsonToEntity = function (json) {
+	        var entity = new this(json);
+	        //json data from server is fresh,so entity modifyFields should be empty
+	        entity.modifyFields = [];
+	        return entity;
 	    };
 	    /**
 	     * translate entity's data properties which contain Relation Entity instance value to text-uri list
@@ -609,9 +617,7 @@
 	        if (id != null) {
 	            return new Promise(function (resolve, reject) {
 	                request.get(_this.entityBaseURL() + "/" + id).queryParam(queryParam).send().then(function (json) {
-	                    var entity = new Entity(json);
-	                    entity.modifyFields = []; //fresh entity
-	                    resolve(entity);
+	                    resolve(_this.jsonToEntity(json));
 	                }).catch(function (err) {
 	                    reject(err);
 	                });
@@ -666,7 +672,7 @@
 	                    resolve(_this.jsonToEntityList(json));
 	                }
 	                catch (_) {
-	                    resolve(new Entity(json));
+	                    resolve(_this.jsonToEntity(json));
 	                }
 	            }).catch(function (err) {
 	                reject(err);

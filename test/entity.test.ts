@@ -34,6 +34,13 @@ describe('class:Entity', ()=> {
             });
             assert.equal(student.name, 'Hal');
             assert.equal(student.hi(), 'Hal:23');
+            let physics = new Academy({
+                name: 'Physics'
+            });
+            assert.equal(student instanceof Student, true);
+            assert.equal(physics instanceof Student, false);
+            assert.equal(student instanceof Academy, false);
+            assert.equal(physics instanceof Academy, true);
         })
     });
 
