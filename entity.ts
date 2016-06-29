@@ -16,8 +16,8 @@ export let entityConfig:{
  */
 export function isEntity(any:any):boolean {
     if (any instanceof Object) {
-        let prototype = any.constructor.prototype;
-        return prototype.href && prototype.href.constructor === Function;
+        let prototype = any.constructor.prototype.__proto__;
+        return prototype && prototype.constructor === Entity;
     }
     return false;
 }
@@ -241,14 +241,22 @@ export class Entity {
     static jsonToEntityList(json:{[key:string]:any}):Entity[] {
         let re = [];
         let arr:any[] = json['_embedded'][this.entityName];
-        arr.forEach(one=> {
-            //json data from server is fresh,so entity modifyFields should be empty
-            let entity = new Entity(one);
-            entity.modifyFields = [];
-            re.push(entity);
+        arr.forEach(json=> {
+            re.push(this.jsonToEntity(json));
         });
         re['page'] = json['page'];//add page info
         return re;
+    }
+
+    /**
+     * read spring data rest's response json data then parse and return entity
+     * @param json
+     */
+    static jsonToEntity(json:{[key:string]:any}):Entity {
+        let entity = new this(json);
+        //json data from server is fresh,so entity modifyFields should be empty
+        entity.modifyFields = [];
+        return entity;
     }
 
     /**
@@ -311,9 +319,7 @@ export class Entity {
         if (id != null) {
             return new Promise((resolve, reject) => {
                 request.get(`${this.entityBaseURL()}/${id}`).queryParam(queryParam).send().then(json=> {
-                    let entity = new Entity(json);
-                    entity.modifyFields = [];//fresh entity
-                    resolve(entity);
+                    resolve(this.jsonToEntity(json));
                 }).catch((err) => {
                     reject(err);
                 })
@@ -371,7 +377,7 @@ export class Entity {
                 try {//response entity list
                     resolve(this.jsonToEntityList(json));
                 } catch (_) {//response one entity
-                    resolve(new Entity(json));
+                    resolve(this.jsonToEntity(json));
                 }
             }).catch((err) => {
                 reject(err);

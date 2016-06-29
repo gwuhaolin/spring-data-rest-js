@@ -491,6 +491,7 @@
 	            _this.constructor.findOne(_this.id).then(function (entity) {
 	                var json = entity.data();
 	                _this.patchData(json);
+	                _this.modifyFields = [];
 	                resole(json);
 	            }).catch(function (err) {
 	                reject(err);
@@ -512,7 +513,8 @@
 	                    reject(err);
 	                });
 	            }
-	            if (_this.modifyFields.length > 0) {
+	            //fetch data before doFollow
+	            if (_this._data['_links'] == null) {
 	                doFollow(_this.data());
 	            }
 	            else {
@@ -535,7 +537,12 @@
 	    Entity.jsonToEntityList = function (json) {
 	        var re = [];
 	        var arr = json['_embedded'][this.entityName];
-	        arr.forEach(function (one) { return re.push(new Entity(one)); });
+	        arr.forEach(function (one) {
+	            //json data from server is fresh,so entity modifyFields should be empty
+	            var entity = new Entity(one);
+	            entity.modifyFields = [];
+	            re.push(entity);
+	        });
 	        re['page'] = json['page']; //add page info
 	        return re;
 	    };
@@ -602,7 +609,9 @@
 	        if (id != null) {
 	            return new Promise(function (resolve, reject) {
 	                request.get(_this.entityBaseURL() + "/" + id).queryParam(queryParam).send().then(function (json) {
-	                    resolve(new Entity(json));
+	                    var entity = new Entity(json);
+	                    entity.modifyFields = []; //fresh entity
+	                    resolve(entity);
 	                }).catch(function (err) {
 	                    reject(err);
 	                });
