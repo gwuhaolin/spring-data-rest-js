@@ -248,7 +248,7 @@ describe('class:Entity', ()=> {
             }).then((entityList:spring.Entity[])=> {
                 assert.equal(entityList.constructor, Array);
                 assert.equal(entityList.length, 5);
-                for (var i = 0; i < entityList.length - 2; i++) {
+                for (let i = 0; i < entityList.length - 2; i++) {
                     assert(entityList[i].get('age') > entityList[i + 1].get('age'));
                 }
                 done();
