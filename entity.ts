@@ -188,6 +188,7 @@ export class Entity {
             (this.constructor as typeof Entity).findOne(this.id).then(entity => {
                 let json = entity.data();
                 this.patchData(json);
+                this.modifyFields = [];
                 resole(json);
             }).catch((err) => {
                 reject(err);
@@ -210,7 +211,8 @@ export class Entity {
                 })
             }
 
-            if (this.modifyFields.length > 0) {
+            //fetch data before doFollow
+            if (this._data['_links'] == null) {
                 doFollow(this.data());
             } else {
                 this.fetch().then(() => {
@@ -239,7 +241,12 @@ export class Entity {
     static jsonToEntityList(json:{[key:string]:any}):Entity[] {
         let re = [];
         let arr:any[] = json['_embedded'][this.entityName];
-        arr.forEach(one=> re.push(new Entity(one)));
+        arr.forEach(one=> {
+            //json data from server is fresh,so entity modifyFields should be empty
+            let entity = new Entity(one);
+            entity.modifyFields = [];
+            re.push(entity);
+        });
         re['page'] = json['page'];//add page info
         return re;
     }
@@ -304,7 +311,9 @@ export class Entity {
         if (id != null) {
             return new Promise((resolve, reject) => {
                 request.get(`${this.entityBaseURL()}/${id}`).queryParam(queryParam).send().then(json=> {
-                    resolve(new Entity(json));
+                    let entity = new Entity(json);
+                    entity.modifyFields = [];//fresh entity
+                    resolve(entity);
                 }).catch((err) => {
                     reject(err);
                 })
