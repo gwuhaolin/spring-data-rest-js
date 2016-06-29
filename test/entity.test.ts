@@ -191,7 +191,7 @@ describe('class:Entity', ()=> {
             Student.findAll({page: pageIndex, size: size, sort: 'age,desc'}).then(function (arr) {
                 assert(Array.isArray(arr));
                 assert.equal(arr.length, size);
-                assert.deepEqual(arr['page'].constructor, Object);
+                assert.equal(arr['page'] != null, true);
                 for (let i = 1; i < size - 2; i++) {
                     assert.equal(arr[i].get('age') > arr[i + 1].get('age'), true);
                 }
@@ -232,7 +232,6 @@ describe('class:Entity', ()=> {
             Student.search('nameContaining', {keyword: '1023'}).then((entityList:spring.Entity[])=> {
                 assert.equal(entityList.constructor, Array);
                 assert.equal(entityList.length, 1);
-                assert.equal(entityList['page'].constructor, Object);
                 assert.equal(entityList[0].get('age'), 1023);
                 done();
             }).catch(err=> {

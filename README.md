@@ -409,7 +409,6 @@ return entity array has `page` attr patch form response json data's page info
 ```js
 Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}).then(entityList=> {
     assert.equal(entityList.length, 5);
-    assert.equal(entityList['page'], {size: 5, totalElements: 1, totalPages: 1, number: 0});
     for (var i = 0; i < entityList.length - 2; i++) {
         assert(entityList[i].get('age') > entityList[i + 1].get('age'));
     }
