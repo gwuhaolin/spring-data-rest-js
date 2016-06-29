@@ -41,6 +41,10 @@ export class Entity {
      */
     private modifyFields:string[] = [];
 
+    /**
+     * mock an entity instance with init data
+     * @param initData
+     */
     constructor(initData?:any) {
         this.patchData(initData);
     }
@@ -249,7 +253,7 @@ export class Entity {
     }
 
     /**
-     * read spring data rest's response json data then parse and return entity
+     * read spring data rest's response json data then parse and return an entity
      * @param json
      */
     static jsonToEntity(json:{[key:string]:any}):Entity {
@@ -260,6 +264,7 @@ export class Entity {
     }
 
     /**
+     * this method use before send request to service to create or update entity
      * translate entity's data properties which contain Relation Entity instance value to text-uri list
      * if data has Entity attr,this Entity attr will be replace by is href() value,and if this entity has't be store in service will store this entity first.
      * @param data entity's data properties can has Entity attr
