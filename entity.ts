@@ -323,7 +323,7 @@ export class Entity {
      * @param {string} queryParam.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?
      * etc:name,age,desc
      */
-    static findAll(queryParam:{page:number,size:number,sort:string}):Promise<Entity[]> {
+    static findAll(queryParam?:{page?:number,size?:number,sort?:string}):Promise<Entity[]> {
         return new Promise((resolve, reject) => {
             request.get(this.entityBaseURL()).queryParam(queryParam).send().then(json => {
                 let re = this.jsonToEntityList(json);
@@ -351,7 +351,7 @@ export class Entity {
      *      if response json data has _embedded attr then resolve Entity array,
      *      else resolve one Entity
      */
-    static search(searchPath:string, queryParam:{
+    static search(searchPath:string, queryParam?:{
         page?:number,
         size?:number,
         sort?:string,

@@ -536,6 +536,7 @@
 	        var re = [];
 	        var arr = json['_embedded'][this.entityName];
 	        arr.forEach(function (one) { return re.push(new Entity(one)); });
+	        re['page'] = json['page']; //add page info
 	        return re;
 	    };
 	    /**
