@@ -114,7 +114,7 @@ export class Request {
      *      if response content-type has string json,then read response data as json and resolve pure json
      *      else read response data as text and resolve plain text
      */
-    send():Promise<{[key:string]:any}|string|void> {
+    send():Promise<any> {
         return new Promise((resolve, reject)=> {
             if (this.hasSend) {
                 if (this.error == null) {
@@ -165,7 +165,7 @@ export class Request {
      *      if response content-type has string json,then read response data as json and resolve pure json
      *      else read response data as text and resolve plain text
      */
-    follow(keys:string[]):Promise<{[key:string]:any}|string|void> {
+    follow(keys:string[]):Promise<any> {
         let self = this;
         return new Promise((resolve, reject) => {
             function doFollow(data) {
