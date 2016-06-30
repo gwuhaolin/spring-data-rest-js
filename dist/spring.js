@@ -338,6 +338,10 @@
 	}
 	exports.isEntity = isEntity;
 	var Entity = (function () {
+	    /**
+	     * mock an entity instance with init data
+	     * @param initData
+	     */
 	    function Entity(initData) {
 	        /**
 	         * store one entity's data
@@ -514,7 +518,7 @@
 	                });
 	            }
 	            //fetch data before doFollow
-	            if (_this._data['_links'] == null) {
+	            if (_this._data['_links'] != null) {
 	                doFollow(_this.data());
 	            }
 	            else {
@@ -545,7 +549,7 @@
 	        return re;
 	    };
 	    /**
-	     * read spring data rest's response json data then parse and return entity
+	     * read spring data rest's response json data then parse and return an entity
 	     * @param json
 	     */
 	    Entity.jsonToEntity = function (json) {
@@ -555,6 +559,7 @@
 	        return entity;
 	    };
 	    /**
+	     * this method use before send request to service to create or update entity
 	     * translate entity's data properties which contain Relation Entity instance value to text-uri list
 	     * if data has Entity attr,this Entity attr will be replace by is href() value,and if this entity has't be store in service will store this entity first.
 	     * @param data entity's data properties can has Entity attr
