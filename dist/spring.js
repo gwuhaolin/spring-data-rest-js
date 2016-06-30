@@ -337,6 +337,49 @@
 	    return false;
 	}
 	exports.isEntity = isEntity;
+	/**
+	 * object deep equal,optimize for Entity
+	 * @param a
+	 * @param b
+	 * @returns {boolean} is equal ?
+	 */
+	function equal(a, b) {
+	    if (typeof a === typeof b) {
+	        if (isEntity(a) && isEntity(b)) {
+	            if (a.id == b.id) {
+	                return true;
+	            }
+	            else {
+	                return equal(a.data(), b.data());
+	            }
+	        }
+	        else if (Array.isArray(a) && Array.isArray(b)) {
+	            if (a.length === b.length) {
+	                var re_1 = true;
+	                a.forEach(function (aV, i) {
+	                    re_1 = re_1 && equal(aV, b[i]);
+	                });
+	                return re_1;
+	            }
+	        }
+	        else if ((a instanceof Object) && (b instanceof Object)) {
+	            for (var key in a) {
+	                var re = true;
+	                if (a.hasOwnProperty(key) && b.hasOwnProperty(key)) {
+	                    re = re && equal(a[key], b[key]);
+	                }
+	                else {
+	                    return false;
+	                }
+	            }
+	        }
+	        else {
+	            return a == b;
+	        }
+	    }
+	    return false;
+	}
+	exports.equal = equal;
 	var Entity = (function () {
 	    /**
 	     * mock an entity instance with init data
@@ -381,11 +424,15 @@
 	    };
 	    /**
 	     * set entity properties value by key
+	     * will compare olaValue and newValue,if value is equal then not append filed name to modifyFields
 	     * @param key properties name
 	     * @param value
 	     */
 	    Entity.prototype.set = function (key, value) {
-	        this.modifyFields.push(key);
+	        var oldValue = this.get(key);
+	        if (!equal(oldValue, value)) {
+	            this.modifyFields.push(key);
+	        }
 	        this._data[key] = value;
 	    };
 	    /**
@@ -470,6 +517,8 @@
 	     * create or update entity
 	     * if id properties is set update change to service,
 	     * else create an new entity to service.
+	     *
+	     * if entity.properties is an instance of Entity or Entity[],then entity.properties.save() will also call,which mean entity's all Entity attr will auto save()
 	     */
 	    Entity.prototype.save = function () {
 	        if (this.id != null) {
