@@ -22,6 +22,44 @@ export function isEntity(any:any):boolean {
     return false;
 }
 
+/**
+ * object deep equal,optimize for Entity
+ * @param a
+ * @param b
+ * @returns {boolean} is equal ?
+ */
+export function equal(a:any, b:any):boolean {
+    if (typeof a === typeof b) {
+        if (isEntity(a) && isEntity(b)) {//Entity
+            if ((a as Entity).id == (b as Entity).id) {
+                return true;
+            } else {
+                return equal((a as Entity).data(), (b as Entity).data());
+            }
+        } else if (Array.isArray(a) && Array.isArray(b)) {//array
+            if ((a as []).length === (b as []).length) {
+                let re = true;
+                (a as []).forEach((aV, i)=> {
+                    re = re && equal(aV, (b as [])[i]);
+                });
+                return re;
+            }
+        } else if ((a instanceof Object) && (b instanceof Object)) {//object
+            for (let key in a) {
+                let re = true;
+                if (a.hasOwnProperty(key) && b.hasOwnProperty(key)) {
+                    re = re && equal(a[key], b[key]);
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return a == b;
+        }
+    }
+    return false;
+}
+
 export class Entity {
 
     /**
@@ -39,7 +77,7 @@ export class Entity {
     /**
      * track modify field
      */
-    private modifyFields:string[] = [];
+    modifyFields:string[] = [];
 
     /**
      * mock an entity instance with init data
@@ -77,11 +115,15 @@ export class Entity {
 
     /**
      * set entity properties value by key
+     * will compare olaValue and newValue,if value is equal then not append filed name to modifyFields
      * @param key properties name
      * @param value
      */
     set(key:string, value:any) {
-        this.modifyFields.push(key);
+        let oldValue = this.get(key);
+        if (!equal(oldValue, value)) {
+            this.modifyFields.push(key);
+        }
         this._data[key] = value;
     }
 

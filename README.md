@@ -283,7 +283,13 @@ academy.save().then(()=> {
 ##### save or update
 create or update entity
 if id properties is set,then will send HTTP PATCH request to update an entity(will watch change in data properties to track change fields)
-if id is null,then will send HTTP POST request to create an entity
+if id is null,then will send HTTP POST request to create an entity.
+if entity.properties is an instance of Entity or Entity[],then entity.properties.save() will also call,which mean entity's all Entity attr will auto save()
+
+##### track modify fields
+every Entity instance has attr `modifyFields` fields name array,which store field has been changed.
+when update modify to service, `modifyFields` is used to optimize a mini `PATCH` request but send whole attr.
+when call Entity's `set` method,will compare olaValue and newValue,if value is equal then not append filed name to modifyFields.
 
 ##### remove entity
 use entity's `remove()` method to remove this entity in service.

@@ -128,6 +128,59 @@ describe('class:Entity', ()=> {
 
     });
 
+    describe('method:patchData', ()=> {
+
+        it('ok', ()=> {
+            let student = new Student();
+            let academy1 = new Academy({name: 'a'});
+            academy1.id = 1;
+            let academy2 = new Academy({name: 'a'});
+            academy2.id = 2;
+            let academy22 = new Academy();
+            academy22.id = academy2.id;
+            assert.equal(student.modifyFields.length, 0);
+            student.patchData({
+                name: 'hal',
+                age: 11
+            });
+            assert.equal(student.modifyFields.length, 2);
+            assert.deepEqual(student.modifyFields, ['name', 'age']);
+            student.modifyFields = [];
+            student.set('academy', academy1);
+            assert.equal(student.modifyFields.length, 1);
+            assert.deepEqual(student.modifyFields, ['academy']);
+            student.modifyFields = [];
+            student.set('academy', academy2);
+            assert.equal(student.modifyFields.length, 1);
+            assert.deepEqual(student.modifyFields, ['academy']);
+            student.modifyFields = [];
+            student.set('academy', academy22);
+            assert.equal(student.modifyFields.length, 0);
+
+            let classroom1 = new Classroom();
+            classroom1.id = 1;
+            let classroom2 = new Classroom();
+            classroom2.id = 2;
+            let classroom22 = new Classroom();
+            classroom22.id = classroom2.id;
+            student.modifyFields = [];
+            student.set('classrooms', [classroom1, classroom2]);
+            assert.equal(student.modifyFields.length, 1);
+            assert.deepEqual(student.modifyFields, ['classrooms']);
+            student.modifyFields = [];
+            student.set('classrooms', [classroom1, classroom22]);
+            assert.equal(student.modifyFields.length, 0);
+
+            academy1 = new Academy({name: 'hal', age: 23});
+            academy2 = new Academy({name: 'hal', age: 23});
+            student.set('academy', academy1);
+            student.modifyFields = [];
+            student.set('academy', academy2);
+            assert.equal(student.modifyFields.length, 0);
+        });
+
+    });
+
     describe('method:fetch', ()=> {
 
         it('fetch', (done)=> {
