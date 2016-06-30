@@ -167,6 +167,8 @@ export class Entity {
      * create or update entity
      * if id properties is set update change to service,
      * else create an new entity to service.
+     *
+     * if entity.properties is an instance of Entity or Entity[],then entity.properties.save() will also call,which mean entity's all Entity attr will auto save()
      */
     save():Promise<{[key:string]:any}|void> {
         if (this.id != null) {//update
@@ -275,7 +277,7 @@ export class Entity {
     private static translateRelationEntity(data:any):Promise<any> {
         return new Promise((resolve, reject)=> {
             if (isEntity(data)) {//is a Entity instance
-                <Entity>data.save().then(()=> {
+                <Entity>data.save().then(()=> {//create or update attr relation entity
                     resolve(data.href());
                 }).catch((err)=> {
                     reject(err);

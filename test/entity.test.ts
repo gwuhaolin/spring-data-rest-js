@@ -93,6 +93,23 @@ describe('class:Entity', ()=> {
             })
         });
 
+        it('auto create Entity type attr', (done)=> {
+            let academy = new Academy({name: 'CS'});
+            let student = new Student({name: 'HalWu', age: 23, academy: academy});
+            let javaClassroom = new Classroom({name: 'java'});
+            let sqlClassroom = new Classroom({name: 'sql'});
+            student.set('classrooms', [javaClassroom, sqlClassroom]);
+            student.save().then(()=> {
+                assert(student.id != null);
+                assert(academy.id != null);
+                assert(javaClassroom.id != null);
+                assert(sqlClassroom.id != null);
+                done();
+            }).catch(err=> {
+                done(err);
+            })
+        });
+
     });
 
     describe('method:delete', ()=> {
