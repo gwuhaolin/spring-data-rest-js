@@ -216,7 +216,7 @@ export class Entity {
             }
 
             //fetch data before doFollow
-            if (this._data['_links'] == null) {
+            if (this._data['_links'] != null) {
                 doFollow(this.data());
             } else {
                 this.fetch().then(() => {
