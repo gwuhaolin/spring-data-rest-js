@@ -21,6 +21,20 @@ class Student extends spring.Entity {
 Student.entityName = 'students';
 
 let Academy = spring.extend('academies');
+Academy.prototype['getName'] = function () {
+    return (this as spring.Entity).get('name');
+};
+Object.defineProperty(Academy.prototype, 'dName', {
+    get: function () {
+        return this.get('name');
+    },
+    set: function (value) {
+        this.set('name', value);
+    },
+    enumerable: true,
+    configurable: true
+});
+
 let Classroom = spring.extend('classrooms');
 
 describe('class:Entity', ()=> {
@@ -41,6 +55,12 @@ describe('class:Entity', ()=> {
             assert.equal(physics instanceof Student, false);
             assert.equal(student instanceof Academy, false);
             assert.equal(physics instanceof Academy, true);
+
+            assert.equal(physics['getName'](), 'Physics');
+            physics['dName'] = 'new';
+            assert.equal(physics.get('name'), 'new');
+            physics.set('name', 'new new');
+            assert.equal(physics.get('name'), 'new new');
         })
     });
 
@@ -53,7 +73,7 @@ describe('class:Entity', ()=> {
                 assert(student.id != null);
                 return spring.get(`${Student.entityBaseURL()}/${student.id}`).send();
             }).then((json)=> {
-                assert.equal(json.name, 'Tom');
+                assert.equal(json['name'], 'Tom');
                 done();
             }).catch(err=> {
                 done(err);
@@ -102,8 +122,8 @@ describe('class:Entity', ()=> {
                 student.id = ace.id;
                 return student.fetch();
             }).then(json=> {
-                assert.equal(json.name, name);
-                assert.equal(json.age, age);
+                assert.equal(json['name'], name);
+                assert.equal(json['age'], age);
                 assert.equal(student.get('name'), name);
                 assert.equal(student.get('age'), age);
                 done();
@@ -123,7 +143,7 @@ describe('class:Entity', ()=> {
             student.save().then(()=> {
                 return student.follow(['academy']);
             }).then((json)=> {
-                assert.equal(json.name, '计算机学院');
+                assert.equal(json['name'], '计算机学院');
                 done();
             }).catch(err=> {
                 done(err);

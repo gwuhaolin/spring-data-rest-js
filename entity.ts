@@ -117,7 +117,7 @@ export class Entity {
      * create an new entity
      * send HTTP POST request to create an entity
      */
-    private create():Promise <any> {
+    private create():Promise <{[key:string]:any}|void> {
         return new Promise((resolve, reject) => {
             (this.constructor as typeof Entity).translateRelationEntity(this.data()).then(body=> {
                 return request.post((this.constructor as typeof Entity).entityBaseURL()).jsonBody(body).send();
@@ -137,7 +137,7 @@ export class Entity {
      * @returns {Promise} resolve(json), reject(Request)
      * @private
      */
-    private update():Promise<any> {
+    private update():Promise<{[key:string]:any}|void> {
         return new Promise((resolve, reject)=> {
             let pureChange = {};
             if (this.modifyFields.length == 0) {//no modify
@@ -168,7 +168,7 @@ export class Entity {
      * if id properties is set update change to service,
      * else create an new entity to service.
      */
-    save():Promise<any> {
+    save():Promise<{[key:string]:any}|void> {
         if (this.id != null) {//update
             return this.update();
         } else {//create
@@ -187,7 +187,7 @@ export class Entity {
      * fetch entity data to keep updated to newest
      * @returns {Promise} resolve(json), reject(Request)
      */
-    fetch():Promise<any> {
+    fetch():Promise<{[key:string]:any}> {
         return new Promise((resole, reject) => {
             (this.constructor as typeof Entity).findOne(this.id).then(entity => {
                 let json = entity.data();
@@ -205,7 +205,7 @@ export class Entity {
      * @param {string[]} keys links href in order
      * @returns {Promise} resolve(json), reject(Request)
      */
-    follow(keys):Promise<any> {
+    follow(keys):Promise<{[key:string]:any}> {
         return new Promise((resole, reject) => {
             function doFollow(data) {
                 request.mockRequest(data).follow(keys).then((json) => {
