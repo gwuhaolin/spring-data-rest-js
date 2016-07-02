@@ -423,6 +423,33 @@ Student.search('ageGreaterThan', {age: 1013, page: 1, size: 5, sort: 'age,desc'}
 });
 ```
 
+##### exposeProperty
+expose entity instance properties in _data to entity itself use Object.defineProperty getter and setter
+after expose,you can access property in entity by entity.property rather than access by entity.data().property.
+example:
+```js
+let StudentX = spring.extend('students');
+StudentX.exposeProperty('name');
+StudentX.exposeProperty('age');
+let student = new StudentX({
+    name: 'hal'
+});
+assert.equal(student['name'], 'hal');
+student['age'] = 23;
+assert.equal(student.get('age'), 23);
+```
+implements source code:
+```js
+Object.defineProperty(this.prototype, propertyName, {
+    get: function () {
+        return this.get(propertyName);
+    },
+    set: function (value) {
+        this.set(propertyName, value);
+    },
+    enumerable: true
+})
+```
 
 ## Error Handle
 all error will be reject by return promise,and the error object is instance of `Request` will `Request.error` properties store error reason

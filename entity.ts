@@ -440,6 +440,23 @@ export class Entity {
     static remove(id:string|number):Promise<void> {
         return request.deleteMethod(`${this.entityBaseURL()}/${id}`).send();
     }
+
+    /**
+     * expose entity instance properties in _data to entity itself use Object.defineProperty getter and setter
+     * after expose,you can access property in entity by entity.property rather than access by entity.data().property
+     * @param propertyName property name in entity.data() object.
+     */
+    static exposeProperty(propertyName) {
+        Object.defineProperty(this.prototype, propertyName, {
+            get: function () {
+                return this.get(propertyName);
+            },
+            set: function (value) {
+                this.set(propertyName, value);
+            },
+            enumerable: true
+        })
+    }
 }
 
 /**

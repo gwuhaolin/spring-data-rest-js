@@ -357,4 +357,19 @@ describe('class:Entity', ()=> {
         });
     });
 
+    describe('method:exposeProperty', ()=> {
+
+        it('ok', ()=> {
+            let StudentX = spring.extend('students');
+            StudentX.exposeProperty('name');
+            StudentX.exposeProperty('age');
+            let student = new StudentX({
+                name: 'hal'
+            });
+            assert.equal(student['name'], 'hal');
+            student['age'] = 23;
+            assert.equal(student.get('age'), 23);
+        })
+    });
+
 });
