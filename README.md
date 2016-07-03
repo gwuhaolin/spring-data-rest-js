@@ -498,8 +498,8 @@ Student.findOne(404).then(()=>{}).catch(req=>{
 ```
 
 ## Example Code
-- [javascript](https://github.com/gwuhaolin/spring-data-rest-js/tree/master/test)
-- [java](https://github.com/gwuhaolin/spring-data-rest-js-backend)
+- unit test source code [javascript,typescript](https://github.com/gwuhaolin/spring-data-rest-js/tree/master/test) [java](https://github.com/gwuhaolin/spring-data-rest-js-backend)
+- real app [typescript](https://github.com/gwuhaolin/ourapp-web) [java](https://github.com/gwuhaolin/ourapp-backend)
 
 ## Browser Support
 this lib use es6 some feature:
