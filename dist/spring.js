@@ -332,7 +332,14 @@
 	function isEntity(any) {
 	    if (any instanceof Object) {
 	        var prototype = any.constructor.prototype.__proto__;
-	        return prototype && prototype.constructor === Entity;
+	        while (prototype instanceof Object) {
+	            if (prototype.constructor === Entity) {
+	                return true;
+	            }
+	            else {
+	                prototype = prototype.__proto__;
+	            }
+	        }
 	    }
 	    return false;
 	}
@@ -469,7 +476,7 @@
 	    Entity.prototype.create = function () {
 	        var _this = this;
 	        return new Promise(function (resolve, reject) {
-	            _this.constructor.translateRelationEntity(_this.data()).then(function (body) {
+	            _this.constructor.translateRelationEntity(_this.data(), []).then(function (body) {
 	                return request.post(_this.constructor.entityBaseURL()).jsonBody(body).send();
 	            }).then(function (json) {
 	                _this.patchData(json);
@@ -502,7 +509,7 @@
 	                    pureChange[key] = _this.get(key);
 	                }
 	            });
-	            _this.constructor.translateRelationEntity(pureChange).then(function (json) {
+	            _this.constructor.translateRelationEntity(pureChange, []).then(function (json) {
 	                return request.patch(_this.href()).jsonBody(json).send();
 	            }).then(function (json) {
 	                _this.patchData(json);
@@ -612,14 +619,23 @@
 	     * translate entity's data properties which contain Relation Entity instance value to text-uri list
 	     * if data has Entity attr,this Entity attr will be replace by is href() value,and if this entity has't be store in service will store this entity first.
 	     * @param data entity's data properties can has Entity attr
+	     * @param hasVisitedEntities track has visited entity for circle ref issue,init value should be []
 	     *
 	     * resolve: pure json data can send to spring data rest service as request body
 	     * reject: Request with error prop
 	     */
-	    Entity.translateRelationEntity = function (data) {
+	    Entity.translateRelationEntity = function (data, hasVisitedEntities) {
 	        var _this = this;
 	        return new Promise(function (resolve, reject) {
 	            if (isEntity(data)) {
+	                for (var i = 0; i < hasVisitedEntities.length; i++) {
+	                    var one = hasVisitedEntities[i];
+	                    if (data === one) {
+	                        resolve(data.href());
+	                        return;
+	                    }
+	                }
+	                hasVisitedEntities.push(data);
 	                data.save().then(function () {
 	                    resolve(data.href());
 	                }).catch(function (err) {
@@ -628,7 +644,7 @@
 	            }
 	            else if (Array.isArray(data)) {
 	                var promiseList_1 = [];
-	                data.forEach(function (one) { return promiseList_1.push(_this.translateRelationEntity(one)); });
+	                data.forEach(function (one) { return promiseList_1.push(_this.translateRelationEntity(one, hasVisitedEntities)); });
 	                Promise.all(promiseList_1).then(function (arr) {
 	                    resolve(arr);
 	                }).catch(function (err) {
@@ -642,7 +658,7 @@
 	                for (var key in data) {
 	                    if (data.hasOwnProperty(key)) {
 	                        indexKeyMap_1[nowIndex++] = key;
-	                        promiseList.push(_this.translateRelationEntity(data[key]));
+	                        promiseList.push(_this.translateRelationEntity(data[key], hasVisitedEntities));
 	                    }
 	                }
 	                Promise.all(promiseList).then(function (arr) {
@@ -738,6 +754,22 @@
 	     */
 	    Entity.remove = function (id) {
 	        return request.deleteMethod(this.entityBaseURL() + "/" + id).send();
+	    };
+	    /**
+	     * expose entity instance properties in _data to entity itself use Object.defineProperty getter and setter
+	     * after expose,you can access property in entity by entity.property rather than access by entity.data().property
+	     * @param propertyName property name in entity.data() object.
+	     */
+	    Entity.exposeProperty = function (propertyName) {
+	        Object.defineProperty(this.prototype, propertyName, {
+	            get: function () {
+	                return this.get(propertyName);
+	            },
+	            set: function (value) {
+	                this.set(propertyName, value);
+	            },
+	            enumerable: true
+	        });
 	    };
 	    return Entity;
 	}());
