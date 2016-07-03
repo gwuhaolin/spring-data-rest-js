@@ -161,7 +161,7 @@ export class Entity {
      */
     private create():Promise <{[key:string]:any}|void> {
         return new Promise((resolve, reject) => {
-            (this.constructor as typeof Entity).translateRelationEntity(this.data()).then(body=> {
+            (this.constructor as typeof Entity).translateRelationEntity(this.data(), []).then(body=> {
                 return request.post((this.constructor as typeof Entity).entityBaseURL()).jsonBody(body).send();
             }).then(json => {
                 this.patchData(json);
@@ -193,7 +193,7 @@ export class Entity {
                     pureChange[key] = this.get(key);
                 }
             });
-            (this.constructor as typeof Entity).translateRelationEntity(pureChange).then((json)=> {
+            (this.constructor as typeof Entity).translateRelationEntity(pureChange, []).then((json)=> {
                 return request.patch(this.href()).jsonBody(json).send();
             }).then((json) => {
                 this.patchData(json);
@@ -312,13 +312,22 @@ export class Entity {
      * translate entity's data properties which contain Relation Entity instance value to text-uri list
      * if data has Entity attr,this Entity attr will be replace by is href() value,and if this entity has't be store in service will store this entity first.
      * @param data entity's data properties can has Entity attr
+     * @param hasVisitedEntities track has visited entity for circle ref issue,init value should be []
      *
      * resolve: pure json data can send to spring data rest service as request body
      * reject: Request with error prop
      */
-    private static translateRelationEntity(data:any):Promise<any> {
+    private static translateRelationEntity(data:any, hasVisitedEntities:Entity[]):Promise<any> {
         return new Promise((resolve, reject)=> {
             if (isEntity(data)) {//is a Entity instance
+                for (let i = 0; i < hasVisitedEntities.length; i++) {
+                    let one = hasVisitedEntities[i];
+                    if (data === one) {
+                        resolve((data as Entity).href());
+                        return;
+                    }
+                }
+                hasVisitedEntities.push(data as Entity);
                 <Entity>data.save().then(()=> {//create or update attr relation entity
                     resolve(data.href());
                 }).catch((err)=> {
@@ -326,7 +335,7 @@ export class Entity {
                 })
             } else if (Array.isArray(data)) {
                 let promiseList:Promise<any>[] = [];
-                data.forEach(one=>promiseList.push(this.translateRelationEntity(one)));
+                data.forEach(one=>promiseList.push(this.translateRelationEntity(one, hasVisitedEntities)));
                 Promise.all(promiseList).then(arr=> {
                     resolve(arr);
                 }).catch(err=> {
@@ -339,7 +348,7 @@ export class Entity {
                 for (let key in data) {
                     if (data.hasOwnProperty(key)) {
                         indexKeyMap[nowIndex++] = key;
-                        promiseList.push(this.translateRelationEntity(data[key]));
+                        promiseList.push(this.translateRelationEntity(data[key], hasVisitedEntities));
                     }
                 }
                 Promise.all(promiseList).then((arr:any[])=> {
