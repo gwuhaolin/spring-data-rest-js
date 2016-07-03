@@ -1,5 +1,6 @@
 import * as assert from 'assert';
 import * as spring from '../node'
+import {Entity, isEntity} from "../entity";
 
 spring.requestConfig.baseURL = 'http://localhost:8080///';
 spring.entityConfig.restBaseURL = 'http://localhost:8080//rest//';
@@ -36,6 +37,27 @@ Object.defineProperty(Academy.prototype, 'dName', {
 });
 
 let Classroom = spring.extend('classrooms');
+
+describe('isEntity', ()=> {
+
+    class Comment extends Entity {
+    }
+
+    class CommentComment extends Comment {
+    }
+
+    class NoteComment extends Comment {
+    }
+
+    it('ok', ()=> {
+        assert(isEntity(new Comment()));
+        assert(isEntity(new NoteComment()));
+        assert(isEntity(new CommentComment()));
+        assert(isEntity(new Student()));
+        assert(isEntity(new Classroom()));
+        assert(isEntity(new Academy()));
+    });
+});
 
 describe('class:Entity', ()=> {
 

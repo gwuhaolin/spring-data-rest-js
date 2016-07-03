@@ -17,7 +17,13 @@ export let entityConfig:{
 export function isEntity(any:any):boolean {
     if (any instanceof Object) {
         let prototype = any.constructor.prototype.__proto__;
-        return prototype && prototype.constructor === Entity;
+        while (prototype instanceof Object) {
+            if (prototype.constructor === Entity) {
+                return true;
+            } else {
+                prototype = prototype.__proto__;
+            }
+        }
     }
     return false;
 }
