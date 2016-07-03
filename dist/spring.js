@@ -585,6 +585,44 @@
 	        });
 	    };
 	    /**
+	     * fetch relation property and store response value in entity's data attr,relation property is an instance of Entity.
+	     * after fetch you can get relation property by get(propertyName)
+	     * @param propertyName Entity relation property name in _links
+	     * @param T relation property's type(extend Entity class)
+	     * @returns {Promise<T>} resolve Entity relation property instance
+	     */
+	    Entity.prototype.fetchProperty = function (propertyName, T) {
+	        var _this = this;
+	        return new Promise(function (resolve, reject) {
+	            _this.follow([propertyName]).then(function (json) {
+	                var entity = T.jsonToEntity(json);
+	                _this.data()[propertyName] = entity;
+	                resolve(entity);
+	            }).catch(function (err) {
+	                reject(err);
+	            });
+	        });
+	    };
+	    /**
+	     * fetch relation property and store response value in entity's data attr,relation property is an Entity array
+	     * after fetch you can get relation property by get(propertyName)
+	     * @param propertyName Entity relation property name in _links
+	     * @param T relation property's type(extend Entity class)
+	     * @returns {Promise<T>}
+	     */
+	    Entity.prototype.fetchArrayProperty = function (propertyName, T) {
+	        var _this = this;
+	        return new Promise(function (resolve, reject) {
+	            _this.follow([propertyName]).then(function (json) {
+	                var entities = T.jsonToEntityList(json);
+	                _this.data()[propertyName] = entities;
+	                resolve(entities);
+	            }).catch(function (err) {
+	                reject(err);
+	            });
+	        });
+	    };
+	    /**
 	     * spring data rest entity base url
 	     */
 	    Entity.entityBaseURL = function () {
