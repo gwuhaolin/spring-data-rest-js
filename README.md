@@ -343,6 +343,42 @@ student.save().then(()=> {
 });
 ```
 
+##### fetch relation property
+fetch relation property and store response value in entity's data attr,relation property is an instance of Entity.
+after fetch you can get relation property by `entity.get(propertyName)`
+```js
+let academy = new Academy({name: 'CS'});
+let student = new Student({name: 'a', academy: academy});
+student.save().then(()=> {
+    return Student.findOne(student.id);
+}).then(stu=> {
+    student = stu as Student;
+    return stu.fetchProperty('academy', Academy);
+}).then((academy)=> {
+    assert.equal(student.get('academy'), academy);
+    assert(academy instanceof Academy);
+    assert.equal(academy.get('name'), 'CS');
+})
+```
+
+##### fetch array type relation property
+fetch relation property and store response value in entity's data attr,relation property is an Entity array
+after fetch you can get relation property by `entity.get(propertyName)`
+```js
+let classroom = new Classroom({name: 'java'});
+let student = new Student({name: 'a', classrooms: [classroom]});
+student.save().then(()=> {
+    return Student.findOne(student.id);
+}).then(stu=> {
+    student = stu as Student;
+    return stu.fetchArrayProperty('classrooms', Classroom);
+}).then(classrooms=> {
+    assert.deepEqual(student.get('classrooms'), classrooms);
+    assert.equal(classrooms.length, 1);
+    assert.equal(classrooms[0].get('name'), 'java');
+})
+```
+
 #### Entity static methods
 
 ##### findOne

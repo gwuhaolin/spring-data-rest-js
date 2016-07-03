@@ -394,4 +394,49 @@ describe('class:Entity', ()=> {
         })
     });
 
+    describe('method:fetchProperty', ()=> {
+
+        it('ok', (done)=> {
+            let academy = new Academy({name: 'CS'});
+            let student = new Student({name: 'a', academy: academy});
+            student.save().then(()=> {
+                return Student.findOne(student.id);
+            }).then(stu=> {
+                student = stu as Student;
+                return stu.fetchProperty('academy', Academy);
+            }).then((academy:Entity)=> {
+                assert.equal(student.get('academy'), academy);
+                assert(academy instanceof Academy);
+                assert.equal(academy.get('name'), 'CS');
+                done();
+            }).catch(err=> {
+                done(err);
+            })
+        });
+
+    });
+
+    describe('method:fetchArrayProperty', ()=> {
+
+        it('ok', (done)=> {
+            let classroom = new Classroom({name: 'java'});
+            let student = new Student({name: 'a', classrooms: [classroom]});
+            student.save().then(()=> {
+                return Student.findOne(student.id);
+            }).then(stu=> {
+                student = stu as Student;
+                return stu.fetchArrayProperty('classrooms', Classroom);
+            }).then((classrooms:Entity[])=> {
+                assert.deepEqual(student.get('classrooms'), classrooms);
+                assert.equal(classrooms.length, 1);
+                assert.equal(classrooms[0].get('name'), 'java');
+                done();
+            }).catch(err=> {
+                done(err);
+            })
+        });
+
+    });
+
+
 });

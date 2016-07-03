@@ -277,6 +277,44 @@ export class Entity {
     }
 
     /**
+     * fetch relation property and store response value in entity's data attr,relation property is an instance of Entity.
+     * after fetch you can get relation property by get(propertyName)
+     * @param propertyName Entity relation property name in _links
+     * @param T relation property's type(extend Entity class)
+     * @returns {Promise<T>} resolve Entity relation property instance
+     */
+    fetchProperty<T extends Entity>(propertyName:string, T):Promise<T> {
+        return new Promise((resolve, reject)=> {
+            this.follow([propertyName]).then(json=> {
+                let entity = T.jsonToEntity(json) as T;
+                this.data()[propertyName] = entity;
+                resolve(entity);
+            }).catch(err=> {
+                reject(err);
+            })
+        });
+    }
+
+    /**
+     * fetch relation property and store response value in entity's data attr,relation property is an Entity array
+     * after fetch you can get relation property by get(propertyName)
+     * @param propertyName Entity relation property name in _links
+     * @param T relation property's type(extend Entity class)
+     * @returns {Promise<T>}
+     */
+    fetchArrayProperty<T extends Entity>(propertyName:string, T):Promise<T[]> {
+        return new Promise((resolve, reject)=> {
+            this.follow([propertyName]).then(json=> {
+                let entities = T.jsonToEntityList(json) as T[];
+                this.data()[propertyName] = entities;
+                resolve(entities);
+            }).catch(err=> {
+                reject(err);
+            })
+        });
+    }
+
+    /**
      * spring data rest entity path
      */
     static entityName:string;
