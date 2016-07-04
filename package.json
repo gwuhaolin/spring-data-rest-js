@@ -22,7 +22,6 @@
   "browser": "browser.js",
   "typings": "index.d.ts",
   "scripts": {
-    "test": "tsc & mocha",
-    "release": "tsc & webpack & webpack -p -d --config webpack.production.config.js & git add . & git commit -m npm-release & npm version patch & git push origin master & npm publish"
+    "test": "tsc & mocha"
   }
 }

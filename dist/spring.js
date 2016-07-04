@@ -79,6 +79,38 @@ function buildHttpMethodFunction(method) {
     }
     return httpRequest;
 }
+/**
+ * Object.assign like function to assign fetch options
+ * @param args
+ * @returns {SpringRequestInit}
+ */
+function assignFetchOption() {
+    var args = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        args[_i - 0] = arguments[_i];
+    }
+    var orgOption = args[0];
+    if (args.length > 1) {
+        for (var i = 1; i < args.length; i++) {
+            var options = args[i];
+            for (var key in options) {
+                if (options.hasOwnProperty(key)) {
+                    if (key == 'headers') {
+                        for (var key_1 in options.headers) {
+                            if (options.headers.hasOwnProperty(key_1)) {
+                                orgOption.headers[key_1] = options.headers[key_1];
+                            }
+                        }
+                    }
+                    else {
+                        orgOption[key] = options[key];
+                    }
+                }
+            }
+        }
+    }
+    return orgOption;
+}
 var Request = (function () {
     /**
      * @param fetchOptions
@@ -103,7 +135,7 @@ var Request = (function () {
          * if error happen during request error will store in there,else this will be null
          */
         this.error = null;
-        Object.assign(this.options, exports.requestConfig.globalFetchOptions, fetchOptions);
+        assignFetchOption(this.options, exports.requestConfig.globalFetchOptions, fetchOptions);
     }
     /**
      * reset query param in request url by append ? and query param to end of url

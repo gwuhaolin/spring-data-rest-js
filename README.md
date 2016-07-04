@@ -32,6 +32,9 @@ you also can include lib file in html file and then use it:
 </body>
 </html>
 ```
+
+## [API Doc](http://gwuhaolin.github.io/spring-data-rest-js/)
+
 ## Request
 
 #### Build Request
@@ -518,7 +521,7 @@ this lib write with typescript, run `typings install` to install require typescr
 test with `mocha`,run `npm run test` to test it
 
 ##### commit and release
-after test success,run `npm run release` to commit it to github and npm.
+after test success,run `sh ./release.sh` to commit it to github and npm.
 
 ##### require
 - spring java backend service [java code](https://github.com/gwuhaolin/spring-data-rest-js-backend) for test use
