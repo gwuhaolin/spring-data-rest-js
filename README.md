@@ -1,5 +1,5 @@
 # Spring Data Rest JavaScript Library
-[![Build Status](https://img.shields.io/travis/ant-design/ant-design.svg?style=flat-square)](https://travis-ci.org/gwuhaolin/spring-data-rest-js)
+[![Build Status](https://img.shields.io/travis/gwuhaolin/spring-data-rest-js.svg?style=flat-square)](https://travis-ci.org/gwuhaolin/spring-data-rest-js)
 [![Npm Package](https://img.shields.io/npm/v/spring-data-rest-js.svg?style=flat-square)](https://www.npmjs.org/package/spring-data-rest-js)
 [![Npm Downloads](http://img.shields.io/npm/dm/spring-data-rest-js.svg?style=flat-square)](https://npmjs.org/package/spring-data-rest-js)
 [![Dependency Status](https://david-dm.org/gwuhaolin/spring-data-rest-js.svg?style=flat-square)](https://npmjs.org/package/spring-data-rest-js)
@@ -32,8 +32,6 @@ you also can include lib file in html file and then use it:
 </body>
 </html>
 ```
-
-## [API Doc](http://gwuhaolin.github.io/spring-data-rest-js/)
 
 ## Request
 
@@ -503,6 +501,8 @@ Student.findOne(404).then(()=>{}).catch(req=>{
 ## Example Code
 - unit test source code [javascript,typescript](https://github.com/gwuhaolin/spring-data-rest-js/tree/master/test) [java](https://github.com/gwuhaolin/spring-data-rest-js-backend)
 - real app [typescript](https://github.com/gwuhaolin/ourapp-web) [java](https://github.com/gwuhaolin/ourapp-backend)
+
+## [API Doc](http://gwuhaolin.github.io/spring-data-rest-js/)
 
 ## Browser Support
 this lib use es6 some feature:
