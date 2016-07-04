@@ -1,0 +1,642 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>spring-data-rest-js</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="assets/css/main.css">
+	<script src="assets/js/modernizr.js"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.js" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">spring-data-rest-js</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+							<input type="checkbox" id="tsd-filter-only-exported" />
+							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1> spring-data-rest-js</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<h1 id="spring-data-rest-javascript-library">Spring Data Rest JavaScript Library</h1>
+				<p><a href="https://travis-ci.org/gwuhaolin/spring-data-rest-js"><img src="https://img.shields.io/travis/ant-design/ant-design.svg?style=flat-square" alt="Build Status"></a>
+					<a href="https://www.npmjs.org/package/spring-data-rest-js"><img src="https://img.shields.io/npm/v/spring-data-rest-js.svg?style=flat-square" alt="Npm Package"></a>
+					<a href="https://npmjs.org/package/spring-data-rest-js"><img src="http://img.shields.io/npm/dm/spring-data-rest-js.svg?style=flat-square" alt="Npm Downloads"></a>
+				<a href="https://npmjs.org/package/spring-data-rest-js"><img src="https://david-dm.org/gwuhaolin/spring-data-rest-js.svg?style=flat-square" alt="Dependency Status"></a></p>
+				<p><a href="http://projects.springRest.io/springRest-data-rest/">Spring Data Rest</a> is makes it easy to build hypermedia-driven REST web services. This lib provider
+					useful util to play with the service in js. It&#39;s a easy to use and lightweight (<em>2kb after min and gzip</em>) javascript lib can run in both node.js and browser,can be work with lib like AngularJS React Vue.
+				support Typescript.</p>
+				<h2 id="installation">Installation</h2>
+				<pre><code class="lang-sh"><span class="hljs-comment"># for npm</span>
+npm install spring-data-rest-js --save
+<span class="hljs-comment"># for bower</span>
+bower install spring-data-rest-js
+</code></pre>
+				<p>then use it in commonjs env</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> spring = <span class="hljs-built_in">require</span>(<span class="hljs-string">'spring-data-rest-js'</span>);
+</code></pre>
+				<p>for browser,you can use tools like <a href="http://webpack.github.io/">Webpack</a> or <a href="http://browserify.org/">Browserify</a> to bundle up your module for browser.
+				you also can include lib file in html file and then use it:</p>
+				<pre><code class="lang-html"><span class="hljs-meta">&lt;!DOCTYPE html&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">"./dist/spring.js"</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span>&gt;</span><span class="javascript">
+    <span class="hljs-built_in">window</span>.spring.post(<span class="hljs-string">'/'</span>);
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
+</code></pre>
+				<h2 id="request">Request</h2>
+				<h4 id="build-request">Build Request</h4>
+				<p>#####add query param in url</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> param1 = {name: <span class="hljs-string">'中'</span>};
+<span class="hljs-keyword">let</span> param2 = {age: <span class="hljs-number">23</span>, academy: <span class="hljs-string">'physics'</span>};
+<span class="hljs-keyword">let</span> request = spring.get(spring.requestConfig.baseURL).queryParam(param1);
+assert.equal(request.options.url, spring.requestConfig.baseURL + <span class="hljs-string">'?name=中'</span>);
+request.queryParam(param2);
+assert.equal(request.options.url, spring.requestConfig.baseURL + <span class="hljs-string">'?age=23&amp;academy=physics'</span>);
+</code></pre>
+				<p>#####send request body as json</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> param = {name: <span class="hljs-string">'吴浩麟'</span>, age: <span class="hljs-number">23</span>};
+<span class="hljs-keyword">let</span> request = spring.post(<span class="hljs-string">'/'</span>).jsonBody(param);
+assert.equal(request.options.body, <span class="hljs-built_in">JSON</span>.stringify(param));
+assert.equal(request.options.headers[<span class="hljs-string">'Content-Type'</span>], <span class="hljs-string">'application/json'</span>);
+</code></pre>
+				<p>#####send request body as form</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> param = {name: <span class="hljs-string">'中国'</span>, age: <span class="hljs-number">123</span>};
+<span class="hljs-keyword">let</span> request = spring.post(<span class="hljs-string">'/postForm'</span>).formBody(param);
+assert.equal(request.options.headers[<span class="hljs-string">'Content-Type'</span>], <span class="hljs-string">'application/x-www-form-urlencoded'</span>);
+request.send().then(json=&gt; {
+    assert.equal(json.name, <span class="hljs-string">'中国'</span>);
+    assert.equal(json.age, <span class="hljs-number">123</span>);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<p>#####auto revise url
+					if path param is a complete url then fetch ues path as url,
+					else path is not a complete url string but just a path then fetch url=config.baseURL+path
+				url string will been auto revised, etc: <a href="http://localhost/api//user///id/">http://localhost/api//user///id/</a> will convert to <a href="http://localhost/api/user/id">http://localhost/api/user/id</a></p>
+				<pre><code class="lang-js">spring.requestConfig.baseURL = <span class="hljs-string">'http://localhost:8080/'</span>;
+<span class="hljs-keyword">let</span> req = spring.get(<span class="hljs-string">'//hello/name//'</span>);
+assert.equal(req.options.url, <span class="hljs-string">`http://localhost:8080/hello/name/`</span>);
+<span class="hljs-keyword">let</span> req2 = spring.get(<span class="hljs-string">'https://google.com//hello/name'</span>);
+assert.equal(req2.options.url, <span class="hljs-string">`https://google.com/hello/name`</span>);
+</code></pre>
+				<h4 id="config-request">Config Request</h4>
+				<pre><code class="lang-js">spring.request.config = {
+    <span class="hljs-comment">/**
+     * options used to every fetch request
+     */</span>
+    globalFetchOptions: {},
+
+    <span class="hljs-comment">/**
+     * fetch request base url
+     * notice: must end with /
+     * @type {string}
+     */</span>
+    baseURL: <span class="hljs-string">'/'</span>,
+    <span class="hljs-comment">/**
+     * call before send fetch request
+     * default do nothing
+     * @param {Request} request Request ref
+     */</span>
+    fetchStartHook: <span class="hljs-literal">null</span>,
+    <span class="hljs-comment">/**
+     * call after fetch request end
+     * default do nothing
+     * @param {Request} request Request ref
+     */</span>
+    fetchEndHook: <span class="hljs-literal">null</span>
+};
+</code></pre>
+				<h4 id="fetch-api-global-option">Fetch API Global Option</h4>
+				<p>fetch API request options
+				see <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">detail</a></p>
+				<pre><code class="lang-js">spring.requestConfig.globalFetchOptions = {
+   method: <span class="hljs-string">'POST'</span>,
+   headers: {
+        <span class="hljs-string">'Accept'</span>: <span class="hljs-string">'application/json'</span>,
+        <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>
+   },
+   body: <span class="hljs-built_in">JSON</span>.stringify({
+        name: <span class="hljs-string">'Hubot'</span>,
+        login: <span class="hljs-string">'hubot'</span>,
+   }),
+   credentials: <span class="hljs-string">'same-origin'</span>
+}
+</code></pre>
+				<h4 id="get-response">Get Response</h4>
+				<p>request return response in <code>Promise</code>,if request success <code>Promise</code> will resolve json data,if will reject a <code>Request</code> object will <code>Request.error</code> store error reason</p>
+				<h5 id="send-request-and-get-response-data">send request and get response data</h5>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> classroom = <span class="hljs-keyword">new</span> Classroom({name: <span class="hljs-string">'D1143'</span>});
+<span class="hljs-keyword">let</span> request;
+classroom.save().then(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+    request = spring.get(<span class="hljs-string">`<span class="hljs-subst">${Classroom.entityBaseURL()}</span>/<span class="hljs-subst">${classroom.id}</span>`</span>);
+    <span class="hljs-keyword">return</span> request.send();
+}).then(json=&gt; {
+    assert.equal(json.constructor, <span class="hljs-built_in">Object</span>);
+    assert.equal(json.name, <span class="hljs-string">'D1143'</span>);
+    assert.deepEqual(json, request.responseData);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<h5 id="follow-links">follow links</h5>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student({name: <span class="hljs-string">'吴浩麟'</span>, age: <span class="hljs-number">23</span>});
+<span class="hljs-keyword">let</span> academy = <span class="hljs-keyword">new</span> Academy({name: <span class="hljs-string">'计算机学院'</span>});
+student.set(<span class="hljs-string">'academy'</span>, academy);
+student.save().then(()=&gt; {
+    <span class="hljs-keyword">return</span> spring.get(<span class="hljs-string">`<span class="hljs-subst">${Student.entityBaseURL()}</span>/<span class="hljs-subst">${student.id}</span>`</span>).follow([<span class="hljs-string">'self'</span>, <span class="hljs-string">'academy'</span>, <span class="hljs-string">'self'</span>, <span class="hljs-string">'self'</span>]);
+}).then((json)=&gt; {
+    assert.equal(json.name, <span class="hljs-string">'计算机学院'</span>);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<h5 id="fetch-global-hook">fetch global hook</h5>
+				<p>before send fetch request</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> flag = <span class="hljs-string">'old'</span>;
+<span class="hljs-keyword">let</span> request = spring.get(spring.requestConfig.baseURL);
+spring.requestConfig.fetchStartHook = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req</span>) </span>{
+    assert.equal(req, request);
+    flag = <span class="hljs-string">'new'</span>;
+};
+request.send().then(()=&gt; {
+    assert.equal(flag, <span class="hljs-string">'new'</span>);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<p>fetch request is finished</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> flag = <span class="hljs-string">'old'</span>;
+<span class="hljs-keyword">let</span> request = spring.get(spring.requestConfig.baseURL);
+spring.requestConfig.fetchEndHook = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">req</span>) </span>{
+    assert.equal(req, request);
+    flag = <span class="hljs-string">'new'</span>;
+};
+request.send().then(()=&gt; {
+    assert.equal(flag, <span class="hljs-string">'new'</span>);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<h2 id="entity">Entity</h2>
+				<h5 id="extend">extend</h5>
+				<p>get a class by entity path name.</p>
+				<pre><code class="lang-js"><span class="hljs-comment">//by extend function</span>
+<span class="hljs-keyword">let</span> Student = spring.extend(<span class="hljs-string">'students'</span>);
+<span class="hljs-keyword">let</span> Academy = spring.extend(<span class="hljs-string">'academies'</span>);
+<span class="hljs-keyword">let</span> Classroom = spring.extend(<span class="hljs-string">'classrooms'</span>);
+</code></pre>
+				<pre><code class="lang-typescript"><span class="hljs-comment">//by typescript extend</span>
+<span class="hljs-keyword">import</span> * as spring from <span class="hljs-string">'./index'</span>
+<span class="hljs-keyword">import</span> * as assert from <span class="hljs-string">'assert'</span>;
+<span class="hljs-keyword">class</span> Student extends spring.Entity {
+
+    <span class="hljs-keyword">get</span> name():<span class="hljs-built_in">string</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.get(<span class="hljs-string">'name'</span>);
+    }
+
+    <span class="hljs-keyword">set</span> name(name:<span class="hljs-built_in">string</span>) {
+        <span class="hljs-keyword">this</span>.set(<span class="hljs-string">'name'</span>, name);
+    }
+
+    hi():<span class="hljs-built_in">string</span> {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${this.name}</span>:<span class="hljs-subst">${this.get('age')}</span>`</span>;
+    }
+}
+Student.entityName = <span class="hljs-string">'students'</span>;
+
+<span class="hljs-comment">//use it</span>
+<span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student({
+    name: <span class="hljs-string">'Hal'</span>,
+    age: <span class="hljs-number">23</span>
+});
+assert.equal(student.name, <span class="hljs-string">'Hal'</span>);
+assert.equal(student.hi(), <span class="hljs-string">'Hal:23'</span>);
+</code></pre>
+				<h5 id="config-entity">config entity</h5>
+				<pre><code class="lang-js">config = {
+    <span class="hljs-comment">/**
+     * spring-data-rest-base-path config
+     * @type {string}
+     */</span>
+    restBaseURL: <span class="hljs-string">''</span>
+};
+</code></pre>
+				<h5 id="create-entity">create entity</h5>
+				<p>class ref to spring data entity,use entity class to make a new entity instance and then create it on service.</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student();
+student.set(<span class="hljs-string">'name'</span>, <span class="hljs-string">'Tom'</span>);
+student.save().then(()=&gt; {
+    assert(student.id != <span class="hljs-literal">null</span>);
+    <span class="hljs-keyword">return</span> spring.get(<span class="hljs-string">`<span class="hljs-subst">${Student.entityBaseURL()}</span>/<span class="hljs-subst">${student.id}</span>`</span>).send();
+}).then((json)=&gt; {
+    assert.equal(json.name, <span class="hljs-string">'Tom'</span>);
+}).catch(err=&gt; {
+    done(err);
+})
+</code></pre>
+				<h5 id="id">id</h5>
+				<p>the entity instance&#39;s id.
+				for a existed entity set instance&#39;s id then you can use instance</p>
+				<ul>
+					<li><code>fetch</code> method to fetch entity&#39;s data</li>
+					<li><code>save</code> method to update entity&#39;s updated properties</li>
+					<li><code>remove</code> method to delete this entity<pre><code class="lang-js"><span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student();
+student.id = <span class="hljs-number">26</span>;
+</code></pre>
+					</li>
+				</ul>
+				<h5 id="update-entity">update entity</h5>
+				<p>if a entity instance has id attr,and use entity&#39;s <code>set(key,value)</code> method update attr,then can call entity&#39;s <code>save()</code> method to patch update change to service.</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> academy = <span class="hljs-keyword">new</span> Academy({name: <span class="hljs-string">'Math'</span>});
+academy.save().then(()=&gt; {
+    academy.set(<span class="hljs-string">'name'</span>, <span class="hljs-string">'Physics'</span>);
+    <span class="hljs-keyword">return</span> academy.save();
+}).then(()=&gt; {
+    assert.deepEqual(academy.get(<span class="hljs-string">'name'</span>), <span class="hljs-string">'Physics'</span>);
+}).catch(err=&gt; {
+    done(err);
+})
+</code></pre>
+				<h5 id="save-or-update">save or update</h5>
+				<p>create or update entity
+					if id properties is set,then will send HTTP PATCH request to update an entity(will watch change in data properties to track change fields)
+					if id is null,then will send HTTP POST request to create an entity.
+				if entity.properties is an instance of Entity or Entity[],then entity.properties.save() will also call,which mean entity&#39;s all Entity attr will auto save()</p>
+				<h5 id="track-modify-fields">track modify fields</h5>
+				<p>every Entity instance has attr <code>modifyFields</code> fields name array,which store field has been changed.
+					when update modify to service, <code>modifyFields</code> is used to optimize a mini <code>PATCH</code> request but send whole attr.
+				when call Entity&#39;s <code>set</code> method,will compare olaValue and newValue,if value is equal then not append filed name to modifyFields.</p>
+				<h5 id="remove-entity">remove entity</h5>
+				<p>use entity&#39;s <code>remove()</code> method to remove this entity in service.</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student();
+student.save().then(()=&gt; {
+    <span class="hljs-keyword">return</span> student.remove();
+}).then(()=&gt; {
+    <span class="hljs-keyword">return</span> Student.findOne(student.id);
+}).catch(err=&gt; {
+    assert.equal(err.response.status, <span class="hljs-number">404</span>);
+});
+</code></pre>
+				<p>Entity Entity also has a static method to remove an entity by id</p>
+				<pre><code class="lang-js">Student.remove(<span class="hljs-number">42</span>).then(()=&gt;{},err=&gt;{})
+</code></pre>
+				<h5 id="fetch-data">fetch data</h5>
+				<p>entity&#39;s data properties store in data</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> name = <span class="hljs-string">'Ace'</span>;
+<span class="hljs-keyword">let</span> age = <span class="hljs-number">20</span>;
+<span class="hljs-keyword">let</span> ace = <span class="hljs-keyword">new</span> Student({name: name, age: age});
+<span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student();
+ace.save().then(()=&gt; {
+    student.id = ace.id;
+    <span class="hljs-keyword">return</span> student.fetch();
+}).then(json=&gt; {
+    assert.equal(json.name, name);
+    assert.equal(json.age, age);
+    assert.equal(student.get(<span class="hljs-string">'name'</span>), name);
+    assert.equal(student.get(<span class="hljs-string">'age'</span>), age);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<h5 id="follow">follow</h5>
+				<p>send request follow this entity&#39;s _links&#39;s href</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student({name: <span class="hljs-string">'吴浩麟'</span>, age: <span class="hljs-number">23</span>});
+<span class="hljs-keyword">let</span> academy = <span class="hljs-keyword">new</span> Academy({name: <span class="hljs-string">'计算机学院'</span>});
+student.set(<span class="hljs-string">'academy'</span>, academy);
+student.save().then(()=&gt; {
+    <span class="hljs-keyword">return</span> student.follow([<span class="hljs-string">'academy'</span>]);
+}).then((json)=&gt; {
+    assert.equal(json.name, <span class="hljs-string">'计算机学院'</span>);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<h5 id="fetch-relation-property">fetch relation property</h5>
+				<p>fetch relation property and store response value in entity&#39;s data attr,relation property is an instance of Entity.
+				after fetch you can get relation property by <code>entity.get(propertyName)</code></p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> academy = <span class="hljs-keyword">new</span> Academy({name: <span class="hljs-string">'CS'</span>});
+<span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student({name: <span class="hljs-string">'a'</span>, academy: academy});
+student.save().then(()=&gt; {
+    <span class="hljs-keyword">return</span> Student.findOne(student.id);
+}).then(stu=&gt; {
+    student = stu <span class="hljs-keyword">as</span> Student;
+    <span class="hljs-keyword">return</span> stu.fetchProperty(<span class="hljs-string">'academy'</span>, Academy);
+}).then((academy)=&gt; {
+    assert.equal(student.get(<span class="hljs-string">'academy'</span>), academy);
+    assert(academy <span class="hljs-keyword">instanceof</span> Academy);
+    assert.equal(academy.get(<span class="hljs-string">'name'</span>), <span class="hljs-string">'CS'</span>);
+})
+</code></pre>
+				<h5 id="fetch-array-type-relation-property">fetch array type relation property</h5>
+				<p>fetch relation property and store response value in entity&#39;s data attr,relation property is an Entity array
+				after fetch you can get relation property by <code>entity.get(propertyName)</code></p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> classroom = <span class="hljs-keyword">new</span> Classroom({name: <span class="hljs-string">'java'</span>});
+<span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student({name: <span class="hljs-string">'a'</span>, classrooms: [classroom]});
+student.save().then(()=&gt; {
+    <span class="hljs-keyword">return</span> Student.findOne(student.id);
+}).then(stu=&gt; {
+    student = stu <span class="hljs-keyword">as</span> Student;
+    <span class="hljs-keyword">return</span> stu.fetchArrayProperty(<span class="hljs-string">'classrooms'</span>, Classroom);
+}).then(classrooms=&gt; {
+    assert.deepEqual(student.get(<span class="hljs-string">'classrooms'</span>), classrooms);
+    assert.equal(classrooms.length, <span class="hljs-number">1</span>);
+    assert.equal(classrooms[<span class="hljs-number">0</span>].get(<span class="hljs-string">'name'</span>), <span class="hljs-string">'java'</span>);
+})
+</code></pre>
+				<h4 id="entity-static-methods">Entity static methods</h4>
+				<h5 id="findone">findOne</h5>
+				<p>get an entity instance by id</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> classRoom = <span class="hljs-keyword">new</span> Classroom({name: <span class="hljs-string">'东16412'</span>});
+classRoom.save().then(()=&gt; {
+    <span class="hljs-keyword">return</span> Classroom.findOne(classRoom.id);
+}).then(entity=&gt; {
+    assert.equal(entity.get(<span class="hljs-string">'name'</span>), <span class="hljs-string">'东16412'</span>);
+}).catch(err=&gt; {
+    done(err);
+});
+</code></pre>
+				<p>get an not exist instance will reject 404 err</p>
+				<pre><code class="lang-js">Student.findOne(<span class="hljs-string">'404404'</span>).then(()=&gt; {
+    done(<span class="hljs-string">'should be 404 error'</span>);
+}).catch(req=&gt; {
+    assert.equal(req.response.status, <span class="hljs-number">404</span>);
+})
+</code></pre>
+				<p>support projection</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> Student({name: <span class="hljs-string">'HalWu'</span>, age: <span class="hljs-number">23</span>});
+student.save().then(()=&gt; {
+    <span class="hljs-keyword">return</span> Student.findOne(student.id, {projection: <span class="hljs-string">'NoAge'</span>});
+}).then(entity=&gt; {
+    assert.equal(entity.get(<span class="hljs-string">'name'</span>), <span class="hljs-string">'HalWu'</span>);
+    assert.equal(entity.get(<span class="hljs-string">'age'</span>), <span class="hljs-literal">null</span>);
+}).catch(err=&gt; {
+    done(err);
+})
+</code></pre>
+				<h5 id="findall">findAll</h5>
+				<p>collection resource with page and sort.
+					Returns all entities the repository servers through its findAll(…) method. If the repository is a paging repository we include the pagination links if necessary and additional page metadata.*
+				return entity array has <code>page</code> attr patch form response json data&#39;s page info</p>
+				<ul>
+					<li>@param {number} opts.page the page number to access (0 indexed, defaults to 0).</li>
+					<li>@param {number} opts.size the page size requested (defaults to 20).</li>
+					<li>@param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?<pre><code class="lang-js"><span class="hljs-keyword">let</span> size = <span class="hljs-number">13</span>;
+<span class="hljs-keyword">let</span> pageIndex = <span class="hljs-number">1</span>;
+Student.findAll({page: pageIndex, size: size, sort: <span class="hljs-string">'age,desc'</span>}).then(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">jsonArr</span>) </span>{
+  assert(<span class="hljs-built_in">Array</span>.isArray(jsonArr));
+  assert.equal(jsonArr.length, size);
+  assert.equal(spring.extend.isEntity(jsonArr[<span class="hljs-number">0</span>]), <span class="hljs-literal">true</span>);
+  assert.equal(jsonArr[<span class="hljs-number">0</span>].constructor, Student);
+  assert.equal(arr[<span class="hljs-string">'page'</span>], {size: size, totalElements: <span class="hljs-number">1</span>, totalPages: <span class="hljs-number">1</span>, number: <span class="hljs-number">0</span>});
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">1</span>; i &lt; size - <span class="hljs-number">2</span>; i++) {
+      assert.equal(jsonArr[i].get(<span class="hljs-string">'age'</span>) &gt; jsonArr[i + <span class="hljs-number">1</span>].get(<span class="hljs-string">'age'</span>), <span class="hljs-literal">true</span>);
+      assert.equal(jsonArr[i - <span class="hljs-number">1</span>].get(<span class="hljs-string">'age'</span>) &gt; jsonArr[i].get(<span class="hljs-string">'age'</span>), <span class="hljs-literal">true</span>);
+  }
+}).catch(req=&gt; {
+  done(req);
+});
+</code></pre>
+					</li>
+				</ul>
+				<h5 id="search">search</h5>
+				<p>search resource if the backing repository exposes query methods.
+					call query methods exposed by a repository. The path and name of the query method resources can be modified using @RestResource on the method declaration.
+				return entity array has <code>page</code> attr patch form response json data&#39;s page info</p>
+				<ul>
+					<li>@param {string} searchPath spring data rest searchMethod path string</li>
+					<li>@param {Object} opts search params, If the query method has pagination capabilities (indicated in the URI template pointing to the resource) the resource takes the following parameters:</li>
+					<li>@param {number} opts.page the page number to access (0 indexed, defaults to 0).</li>
+					<li>@param {number} opts.size the page size requested (defaults to 20).</li>
+					<li>@param {string} opts.sort a collection of sort directives in the format ($propertyName,)+[asc|desc]?<pre><code class="lang-js">Student.search(<span class="hljs-string">'ageGreaterThan'</span>, {age: <span class="hljs-number">1013</span>, page: <span class="hljs-number">1</span>, size: <span class="hljs-number">5</span>, sort: <span class="hljs-string">'age,desc'</span>}).then(entityList=&gt; {
+  assert.equal(entityList.length, <span class="hljs-number">5</span>);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; entityList.length - <span class="hljs-number">2</span>; i++) {
+      assert(entityList[i].get(<span class="hljs-string">'age'</span>) &gt; entityList[i + <span class="hljs-number">1</span>].get(<span class="hljs-string">'age'</span>));
+  }
+}).catch(err=&gt; {
+  done(err);
+});
+</code></pre>
+					</li>
+				</ul>
+				<h5 id="exposeproperty">exposeProperty</h5>
+				<p>expose entity instance properties in _data to entity itself use Object.defineProperty getter and setter
+					after expose,you can access property in entity by entity.property rather than access by entity.data().property.
+				example:</p>
+				<pre><code class="lang-js"><span class="hljs-keyword">let</span> StudentX = spring.extend(<span class="hljs-string">'students'</span>);
+StudentX.exposeProperty(<span class="hljs-string">'name'</span>);
+StudentX.exposeProperty(<span class="hljs-string">'age'</span>);
+<span class="hljs-keyword">let</span> student = <span class="hljs-keyword">new</span> StudentX({
+    name: <span class="hljs-string">'hal'</span>
+});
+assert.equal(student[<span class="hljs-string">'name'</span>], <span class="hljs-string">'hal'</span>);
+student[<span class="hljs-string">'age'</span>] = <span class="hljs-number">23</span>;
+assert.equal(student.get(<span class="hljs-string">'age'</span>), <span class="hljs-number">23</span>);
+</code></pre>
+				<p>implements source code:</p>
+				<pre><code class="lang-js"><span class="hljs-built_in">Object</span>.defineProperty(<span class="hljs-keyword">this</span>.prototype, propertyName, {
+    get: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.get(propertyName);
+    },
+    set: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">value</span>) </span>{
+        <span class="hljs-keyword">this</span>.set(propertyName, value);
+    },
+    enumerable: <span class="hljs-literal">true</span>
+})
+</code></pre>
+				<h2 id="error-handle">Error Handle</h2>
+				<p>all error will be reject by return promise,and the error object is instance of <code>Request</code> will <code>Request.error</code> properties store error reason</p>
+				<pre><code class="lang-js">Student.findOne(<span class="hljs-number">404</span>).then(()=&gt;{}).catch(req=&gt;{
+    <span class="hljs-built_in">console</span>.error(req.error);
+    <span class="hljs-built_in">console</span>.log(req.response.status);
+    <span class="hljs-built_in">console</span>.log(req.response.statusText);
+})
+</code></pre>
+				<h2 id="example-code">Example Code</h2>
+				<ul>
+					<li>unit test source code <a href="https://github.com/gwuhaolin/spring-data-rest-js/tree/master/test">javascript,typescript</a> <a href="https://github.com/gwuhaolin/spring-data-rest-js-backend">java</a></li>
+					<li>real app <a href="https://github.com/gwuhaolin/ourapp-web">typescript</a> <a href="https://github.com/gwuhaolin/ourapp-backend">java</a></li>
+				</ul>
+				<h2 id="browser-support">Browser Support</h2>
+				<p>this lib use es6 some feature:</p>
+				<ul>
+					<li>Promise <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">doc</a>  <a href="https://github.com/stefanpenner/es6-promise">polyfill</a></li>
+					<li>fetch <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API">doc</a>  <a href="https://github.com/github/fetch">polyfill</a></li>
+				</ul>
+				<p>for browser use, be sure browser must support this,in old browser you should include polyfill.
+					require es6 <code>Object.assign</code> and <code>Promise</code>,this lib build on the top of es6 fetch API.
+				In Node.js env,will use <a href="https://github.com/bitinn/node-fetch">node-fetch</a> as fetch polyfill.</p>
+				<h2 id="contributing">Contributing</h2>
+				<h5 id="dev">dev</h5>
+				<p>this lib write with typescript, run <code>typings install</code> to install require typescript d.ts file, edit *.ts file then test it,</p>
+				<h5 id="test">test</h5>
+				<p>test with <code>mocha</code>,run <code>npm run test</code> to test it</p>
+				<h5 id="commit-and-release">commit and release</h5>
+				<p>after test success,run <code>npm run release</code> to commit it to github and npm.</p>
+				<h5 id="require">require</h5>
+				<ul>
+					<li>spring java backend service <a href="https://github.com/gwuhaolin/spring-data-rest-js-backend">java code</a> for test use</li>
+					<li><strong>tsc</strong> to compile typescript file</li>
+					<li><strong>webpack</strong> for pack commonjs to browser</li>
+					<li><strong>mocha</strong> for test</li>
+					<li><strong>typings</strong> for install require typescript d.ts file</li>
+				</ul>
+				<h2 id="license">License</h2>
+				<p><a href="http://opensource.org/licenses/MIT">MIT</a></p>
+				<p>Copyright (c) 2016 HalWu</p>
+			</div>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_browser_.html">"browser"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_entity_.html">"entity"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_index_.html">"index"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_node_.html">"node"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_request_.html">"request"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_test_entity_test_.html">"test/entity.test"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_test_request_test_.html">"test/request.test"</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-module"><span class="tsd-kind-icon">Module</span></li>
+				<li class="tsd-kind-object-literal"><span class="tsd-kind-icon">Object literal</span></li>
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-index-signature"><span class="tsd-kind-icon">Index signature</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+				<li class="tsd-kind-enum-member"><span class="tsd-kind-icon">Enumeration member</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-enum"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-enum"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-interface"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-interface"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+				<li class="tsd-kind-class tsd-has-type-parameter"><span class="tsd-kind-icon">Class with type parameter</span></li>
+				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class"><span class="tsd-kind-icon">Accessor</span></li>
+				<li class="tsd-kind-index-signature tsd-parent-kind-class"><span class="tsd-kind-icon">Index signature</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-constructor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited constructor</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-protected"><span class="tsd-kind-icon">Protected accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+				<li class="tsd-kind-accessor tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private accessor</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static property</span></li>
+				<li class="tsd-kind-call-signature tsd-parent-kind-class tsd-is-static"><span class="tsd-kind-icon">Static method</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="http://typedoc.io" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="assets/js/main.js"></script>
+<script>if (location.protocol == 'file:') document.write('<script src="assets/js/search.js"><' + '/script>');</script>
+</body>
+</html>

@@ -4,6 +4,7 @@
 test/
 dist/
 typings/
+doc/
 .travis.yml
 .gitignore
 *.ts
