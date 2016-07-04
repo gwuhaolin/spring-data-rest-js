@@ -10,7 +10,7 @@ echo 'typedoc'
 typedoc --out doc **/*.ts
 echo 'commit'
 git add .
-git commit -m npm-release
+git commit -m $0
 npm version patch
 echo 'publish'
 git push origin master

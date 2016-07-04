@@ -248,7 +248,12 @@ export let requestConfig:{
      */
     fetchEndHook:(Request)=>void;
 } = {
-    globalFetchOptions: {},
+    globalFetchOptions: {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    },
     baseURL: '/',
     fetchStartHook: null,
     fetchEndHook: null

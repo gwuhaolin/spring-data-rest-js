@@ -281,7 +281,12 @@ var Request = (function () {
 }());
 exports.Request = Request;
 exports.requestConfig = {
-    globalFetchOptions: {},
+    globalFetchOptions: {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+    },
     baseURL: '/',
     fetchStartHook: null,
     fetchEndHook: null

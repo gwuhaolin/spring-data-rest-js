@@ -84,7 +84,12 @@ spring.request.config = {
     /**
      * options used to every fetch request
      */
-    globalFetchOptions: {},
+    globalFetchOptions: {
+         headers: {
+              'Content-Type': 'application/json'
+         },
+         credentials: 'same-origin'
+    },
 
     /**
      * fetch request base url
