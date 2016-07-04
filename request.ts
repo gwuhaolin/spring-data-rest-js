@@ -23,6 +23,34 @@ function buildHttpMethodFunction(method:string) {
     return httpRequest;
 }
 
+/**
+ * Object.assign like function to assign fetch options
+ * @param args
+ * @returns {SpringRequestInit}
+ */
+function assignFetchOption(...args:SpringRequestInit[]):SpringRequestInit {
+    let orgOption = args[0];
+    if (args.length > 1) {
+        for (let i = 1; i < args.length; i++) {
+            let options = args[i];
+            for (let key in options) {
+                if (options.hasOwnProperty(key)) {
+                    if (key == 'headers') {
+                        for (let key in options.headers) {
+                            if (options.headers.hasOwnProperty(key)) {
+                                orgOption.headers[key] = options.headers[key];
+                            }
+                        }
+                    } else {
+                        orgOption[key] = options[key];
+                    }
+                }
+            }
+        }
+    }
+    return orgOption;
+}
+
 export class Request {
 
     /**
@@ -57,7 +85,7 @@ export class Request {
      * @param fetchOptions
      */
     constructor(fetchOptions:SpringRequestInit) {
-        Object.assign(this.options, requestConfig.globalFetchOptions, fetchOptions);
+        assignFetchOption(this.options, requestConfig.globalFetchOptions, fetchOptions);
     }
 
     /**
