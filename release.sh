@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 
-# build
+echo 'build'
+echo 'tsc'
 tsc
+echo 'webpack'
 webpack
 webpack -p -d --config webpack.production.config.js
+echo 'typedoc'
 typedoc --out doc **/*.ts
-# commit
+echo 'commit'
 git add .
 git commit -m npm-release
 npm version patch
-# publish
+echo 'publish'
 git push origin master
 git subtree push --prefix doc origin gh-pages
 npm publish
