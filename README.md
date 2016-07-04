@@ -529,6 +529,7 @@ after test success,run `sh ./release.sh` to commit it to github and npm.
 - **webpack** for pack commonjs to browser
 - **mocha** for test
 - **typings** for install require typescript d.ts file
+- **typedoc** for build API doc
 
 ## License
 [MIT](http://opensource.org/licenses/MIT)
