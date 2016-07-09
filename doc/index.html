@@ -94,8 +94,8 @@ bower install spring-data-rest-js
 <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span>
 <span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span>
 </code></pre>
-				<h2 id="request">Request</h2>
-				<h4 id="build-request">Build Request</h4>
+				<h2 id="springrequest">SpringRequest</h2>
+				<h4 id="build-springrequest">Build SpringRequest</h4>
 				<p>#####add query param in url</p>
 				<pre><code class="lang-js"><span class="hljs-keyword">let</span> param1 = {name: <span class="hljs-string">'中'</span>};
 <span class="hljs-keyword">let</span> param2 = {age: <span class="hljs-number">23</span>, academy: <span class="hljs-string">'physics'</span>};
@@ -131,12 +131,17 @@ assert.equal(req.options.url, <span class="hljs-string">`http://localhost:8080/h
 <span class="hljs-keyword">let</span> req2 = spring.get(<span class="hljs-string">'https://google.com//hello/name'</span>);
 assert.equal(req2.options.url, <span class="hljs-string">`https://google.com/hello/name`</span>);
 </code></pre>
-				<h4 id="config-request">Config Request</h4>
+				<h4 id="config-springrequest">Config SpringRequest</h4>
 				<pre><code class="lang-js">spring.request.config = {
     <span class="hljs-comment">/**
      * options used to every fetch request
      */</span>
-    globalFetchOptions: {},
+    globalFetchOptions: {
+         headers: {
+              <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>
+         },
+         credentials: <span class="hljs-string">'same-origin'</span>
+    },
 
     <span class="hljs-comment">/**
      * fetch request base url
@@ -147,13 +152,13 @@ assert.equal(req2.options.url, <span class="hljs-string">`https://google.com/hel
     <span class="hljs-comment">/**
      * call before send fetch request
      * default do nothing
-     * @param {Request} request Request ref
+     * @param {SpringRequest} request SpringRequest ref
      */</span>
     fetchStartHook: <span class="hljs-literal">null</span>,
     <span class="hljs-comment">/**
      * call after fetch request end
      * default do nothing
-     * @param {Request} request Request ref
+     * @param {SpringRequest} request SpringRequest ref
      */</span>
     fetchEndHook: <span class="hljs-literal">null</span>
 };
@@ -175,7 +180,7 @@ assert.equal(req2.options.url, <span class="hljs-string">`https://google.com/hel
 }
 </code></pre>
 				<h4 id="get-response">Get Response</h4>
-				<p>request return response in <code>Promise</code>,if request success <code>Promise</code> will resolve json data,if will reject a <code>Request</code> object will <code>Request.error</code> store error reason</p>
+				<p>request return response in <code>Promise</code>,if request success <code>Promise</code> will resolve json data,if will reject a <code>SpringRequest</code> object will <code>SpringRequest.error</code> store error reason</p>
 				<h5 id="send-request-and-get-response-data">send request and get response data</h5>
 				<pre><code class="lang-js"><span class="hljs-keyword">let</span> classroom = <span class="hljs-keyword">new</span> Classroom({name: <span class="hljs-string">'D1143'</span>});
 <span class="hljs-keyword">let</span> request;
@@ -496,7 +501,7 @@ assert.equal(student.get(<span class="hljs-string">'age'</span>), <span class="h
 })
 </code></pre>
 				<h2 id="error-handle">Error Handle</h2>
-				<p>all error will be reject by return promise,and the error object is instance of <code>Request</code> will <code>Request.error</code> properties store error reason</p>
+				<p>all error will be reject by return promise,and the error object is instance of <code>SpringRequest</code> will <code>SpringRequest.error</code> properties store error reason</p>
 				<pre><code class="lang-js">Student.findOne(<span class="hljs-number">404</span>).then(()=&gt;{}).catch(req=&gt;{
     <span class="hljs-built_in">console</span>.error(req.error);
     <span class="hljs-built_in">console</span>.log(req.response.status);

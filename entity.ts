@@ -182,7 +182,7 @@ export class Entity {
     /**
      * update an entity
      * send HTTP PATCH request to update an entity(will watch change in data properties to track change fields)
-     * @returns {Promise} resolve(json), reject(Request)
+     * @returns {Promise} resolve(json), reject(SpringRequest)
      * @private
      */
     private update():Promise<{[key:string]:any}|void> {
@@ -235,7 +235,7 @@ export class Entity {
 
     /**
      * fetch entity data to keep updated to newest
-     * @returns {Promise} resolve(json), reject(Request)
+     * @returns {Promise} resolve(json), reject(SpringRequest)
      */
     fetch():Promise<{[key:string]:any}> {
         return new Promise((resole, reject) => {
@@ -253,7 +253,7 @@ export class Entity {
     /**
      * send request follow this entity's _links's href
      * @param {string[]} keys links href in order
-     * @returns {Promise} resolve(json), reject(Request)
+     * @returns {Promise} resolve(json), reject(SpringRequest)
      */
     follow(keys):Promise<{[key:string]:any}> {
         return new Promise((resole, reject) => {
@@ -358,7 +358,7 @@ export class Entity {
      * @param data entity's data properties can has Entity attr
      *
      * resolve: pure json data can send to spring data rest service as request body
-     * reject: Request with error prop
+     * reject: SpringRequest with error prop
      */
     private static translateRelationEntity(data:any):Promise<any> {
         return new Promise((resolve, reject)=> {

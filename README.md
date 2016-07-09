@@ -33,9 +33,9 @@ you also can include lib file in html file and then use it:
 </html>
 ```
 
-## Request
+## SpringRequest
 
-#### Build Request
+#### Build SpringRequest
 #####add query param in url
 ```js
 let param1 = {name: '中'};
@@ -78,7 +78,7 @@ let req2 = spring.get('https://google.com//hello/name');
 assert.equal(req2.options.url, `https://google.com/hello/name`);
 ```
 
-#### Config Request
+#### Config SpringRequest
 ```js
 spring.request.config = {
     /**
@@ -100,13 +100,13 @@ spring.request.config = {
     /**
      * call before send fetch request
      * default do nothing
-     * @param {Request} request Request ref
+     * @param {SpringRequest} request SpringRequest ref
      */
     fetchStartHook: null,
     /**
      * call after fetch request end
      * default do nothing
-     * @param {Request} request Request ref
+     * @param {SpringRequest} request SpringRequest ref
      */
     fetchEndHook: null
 };
@@ -131,7 +131,7 @@ spring.requestConfig.globalFetchOptions = {
 ```
 
 #### Get Response
-request return response in `Promise`,if request success `Promise` will resolve json data,if will reject a `Request` object will `Request.error` store error reason
+request return response in `Promise`,if request success `Promise` will resolve json data,if will reject a `SpringRequest` object will `SpringRequest.error` store error reason
 
 ##### send request and get response data
 ```js
@@ -494,7 +494,7 @@ Object.defineProperty(this.prototype, propertyName, {
 ```
 
 ## Error Handle
-all error will be reject by return promise,and the error object is instance of `Request` will `Request.error` properties store error reason
+all error will be reject by return promise,and the error object is instance of `SpringRequest` will `SpringRequest.error` properties store error reason
 ```js
 Student.findOne(404).then(()=>{}).catch(req=>{
     console.error(req.error);

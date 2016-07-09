@@ -75,7 +75,7 @@ function buildHttpMethodFunction(method) {
             url = exports.requestConfig.baseURL + '/' + path;
         }
         url = url.replace(/\/{2,}/g, '/').replace(/:\//g, '://');
-        return new Request({ url: url, method: method });
+        return new SpringRequest({ url: url, method: method });
     }
     return httpRequest;
 }
@@ -111,11 +111,11 @@ function assignFetchOption() {
     }
     return orgOption;
 }
-var Request = (function () {
+var SpringRequest = (function () {
     /**
      * @param fetchOptions
      */
-    function Request(fetchOptions) {
+    function SpringRequest(fetchOptions) {
         /**
          * store fetch options
          */
@@ -141,7 +141,7 @@ var Request = (function () {
      * reset query param in request url by append ? and query param to end of url
      * @param obj
      */
-    Request.prototype.queryParam = function (obj) {
+    SpringRequest.prototype.queryParam = function (obj) {
         if (obj != null) {
             var arr = [];
             for (var key in obj) {
@@ -158,7 +158,7 @@ var Request = (function () {
      * HTTP Header Content-Type will set as application/json
      * @param obj
      */
-    Request.prototype.jsonBody = function (obj) {
+    SpringRequest.prototype.jsonBody = function (obj) {
         this.options.body = JSON.stringify(obj);
         this.options.headers['Content-Type'] = 'application/json';
         return this;
@@ -169,7 +169,7 @@ var Request = (function () {
      * HTTP Header Content-Type will set as application/x-www-form-urlencoded
      * @param obj
      */
-    Request.prototype.formBody = function (obj) {
+    SpringRequest.prototype.formBody = function (obj) {
         var arr = [];
         for (var key in obj) {
             if (obj.hasOwnProperty(key)) {
@@ -188,7 +188,7 @@ var Request = (function () {
      *      if response content-type has string json,then read response data as json and resolve pure json
      *      else read response data as text and resolve plain text
      */
-    Request.prototype.send = function () {
+    SpringRequest.prototype.send = function () {
         var _this = this;
         return new Promise(function (resolve, reject) {
             if (_this.hasSend) {
@@ -244,7 +244,7 @@ var Request = (function () {
      *      if response content-type has string json,then read response data as json and resolve pure json
      *      else read response data as text and resolve plain text
      */
-    Request.prototype.follow = function (keys) {
+    SpringRequest.prototype.follow = function (keys) {
         var _this = this;
         var self = this;
         return new Promise(function (resolve, reject) {
@@ -277,9 +277,9 @@ var Request = (function () {
             });
         });
     };
-    return Request;
+    return SpringRequest;
 }());
-exports.Request = Request;
+exports.SpringRequest = SpringRequest;
 exports.requestConfig = {
     globalFetchOptions: {
         headers: {
@@ -323,7 +323,7 @@ exports.deleteMethod = buildHttpMethodFunction('DELETE');
  */
 function mockRequest(data) {
     var url = data['_links']['self']['href'];
-    var req = new Request({ url: url, method: 'GET' });
+    var req = new SpringRequest({ url: url, method: 'GET' });
     req.responseData = data;
     req.hasSend = true;
     return req;
@@ -539,7 +539,7 @@ var Entity = (function () {
     /**
      * update an entity
      * send HTTP PATCH request to update an entity(will watch change in data properties to track change fields)
-     * @returns {Promise} resolve(json), reject(Request)
+     * @returns {Promise} resolve(json), reject(SpringRequest)
      * @private
      */
     Entity.prototype.update = function () {
@@ -592,7 +592,7 @@ var Entity = (function () {
     };
     /**
      * fetch entity data to keep updated to newest
-     * @returns {Promise} resolve(json), reject(Request)
+     * @returns {Promise} resolve(json), reject(SpringRequest)
      */
     Entity.prototype.fetch = function () {
         var _this = this;
@@ -610,7 +610,7 @@ var Entity = (function () {
     /**
      * send request follow this entity's _links's href
      * @param {string[]} keys links href in order
-     * @returns {Promise} resolve(json), reject(Request)
+     * @returns {Promise} resolve(json), reject(SpringRequest)
      */
     Entity.prototype.follow = function (keys) {
         var _this = this;
@@ -708,7 +708,7 @@ var Entity = (function () {
      * @param data entity's data properties can has Entity attr
      *
      * resolve: pure json data can send to spring data rest service as request body
-     * reject: Request with error prop
+     * reject: SpringRequest with error prop
      */
     Entity.translateRelationEntity = function (data) {
         var _this = this;

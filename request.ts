@@ -11,13 +11,13 @@ function buildHttpMethodFunction(method:string) {
      * url string will been auto revised, etc: http://localhost/api//user///id/ will convert to http://localhost/api/user/id
      * @param path url path
      */
-    function httpRequest(path:string):Request {
+    function httpRequest(path:string):SpringRequest {
         let url = path;
         if (!/^https?:\/\/.+$/g.test(path)) {//path is not a full url
             url = requestConfig.baseURL + '/' + path;
         }
         url = url.replace(/\/{2,}/g, '/').replace(/:\//g, '://');
-        return new Request({url: url, method: method});
+        return new SpringRequest({url: url, method: method});
     }
 
     return httpRequest;
@@ -51,7 +51,7 @@ function assignFetchOption(...args:SpringRequestInit[]):SpringRequestInit {
     return orgOption;
 }
 
-export class Request {
+export class SpringRequest {
 
     /**
      * store fetch options
@@ -92,7 +92,7 @@ export class Request {
      * reset query param in request url by append ? and query param to end of url
      * @param obj
      */
-    queryParam(obj:{[key:string]:any}):Request {
+    queryParam(obj:{[key:string]:any}):SpringRequest {
         if (obj != null) {
             let arr = [];
             for (let key in obj) {
@@ -110,7 +110,7 @@ export class Request {
      * HTTP Header Content-Type will set as application/json
      * @param obj
      */
-    jsonBody(obj:{[key:string]:any}):Request {
+    jsonBody(obj:{[key:string]:any}):SpringRequest {
         this.options.body = JSON.stringify(obj);
         this.options.headers['Content-Type'] = 'application/json';
         return this;
@@ -122,7 +122,7 @@ export class Request {
      * HTTP Header Content-Type will set as application/x-www-form-urlencoded
      * @param obj
      */
-    formBody(obj:{[key:string]:any}):Request {
+    formBody(obj:{[key:string]:any}):SpringRequest {
         let arr = [];
         for (let key in obj) {
             if (obj.hasOwnProperty(key)) {
@@ -296,7 +296,7 @@ export const deleteMethod = buildHttpMethodFunction('DELETE');
  */
 export function mockRequest(data) {
     let url = data['_links']['self']['href'];
-    let req = new Request({url, method: 'GET'});
+    let req = new SpringRequest({url, method: 'GET'});
     req.responseData = data;
     req.hasSend = true;
     return req;
