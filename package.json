@@ -13,7 +13,7 @@
     "react angularjs angular2 vuejs",
     "typescript"
   ],
-  "version": "0.2.20",
+  "version": "0.2.21",
   "license": "MIT",
   "dependencies": {
     "node-fetch": "^1.5.3"
