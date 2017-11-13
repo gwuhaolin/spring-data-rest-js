@@ -8,10 +8,6 @@
 useful util to play with the service in js. It's a easy to use and lightweight (*2kb after min and gzip*) javascript lib can run in both node.js and browser,can be work with lib like AngularJS React Vue.
 support Typescript.
 
-<a target='_blank' rel='nofollow' href='https://app.codesponsor.io/link/3bvxELAxnq8r4wheFyRkED8U/gwuhaolin/chrome-runner'>
-  <img alt='Sponsor' width='888' height='68' src='https://app.codesponsor.io/embed/3bvxELAxnq8r4wheFyRkED8U/gwuhaolin/chrome-runner.svg' />
-</a>
-
 ## Installation
 ```sh
 # for npm
